@@ -5,14 +5,23 @@ minutes: 45
 ---
 
 ```{r, echo=FALSE, purl=FALSE, message=FALSE}
-source("setup.R")
+#source("setup.R")
 surveys <- read.csv("data/portal_data_joined.csv")
-suppressWarnings(surveys$date <- lubridate::ymd(paste(surveys$year,
-                                                      surveys$month,
-                                                      surveys$day,
-                                                      sep = "-")))
+# suppressWarnings(surveys$date <- lubridate::ymd(paste(surveys$year,
+#                                                       surveys$month,
+#                                                       surveys$day,
+#                                                       sep = "-")))
 ```
+```{r,echo=FALSE, purl=TRUE}
+################################################
+# Lesson 03 - Manipulating, analyzing and exporting data with tidyverse
+################################################
 
+
+
+
+
+```
 :::::::::::::::::::::::::::::::::::::::  objectives
 
 - Describe the purpose of the **`dplyr`** and **`tidyr`** packages.
@@ -92,6 +101,11 @@ If you haven't already done so, you can type `install.packages("tidyverse")` str
 
 ## What are **`dplyr`** and **`tidyr`**?
 
+```{r, echo=FALSE, purl=TRUE}
+
+### What are dplyr and tidyr
+```
+
 The package **`dplyr`** provides helper tools for the most common data manipulation
 tasks. It is built to work directly with data frames, with many common tasks
 optimized by being written in a compiled language (C++). An additional feature is the
@@ -145,6 +159,8 @@ Next, we're going to learn some of the most common **`dplyr`** functions:
 - `count()`: count discrete values
 
 ## Selecting columns and filtering rows
+
+
 <!-- Go through these slowly and make sure people understand -->
 To select columns of a data frame, use `select()`. The first argument
 to this function is the data frame (`surveys`), and the subsequent
@@ -171,6 +187,10 @@ filter(surveys, year == 1995)
 ```
 
 ## Pipes
+```{r, echo=FALSE, purl=TRUE}
+
+### Pipes
+```
 
 What if you want to select and filter at the same time? There are three
 ways to do this: use intermediate steps, nested functions, or pipes.
@@ -262,6 +282,10 @@ surveys %>%
 ```
 
 ### Mutate
+```{r, echo=FALSE, purl=TRUE}
+
+### Mutate
+```
 
 Frequently you'll want to create new columns based on the values in existing
 columns, for example to do unit conversions, or to find the ratio of values in two
@@ -344,6 +368,10 @@ surveys_hindfoot_cm <- surveys %>%
 ```
 
 ### Split-apply-combine data analysis and the `summarize()` function
+```{r, echo=FALSE, purl=TRUE}
+
+### Split-apply-combine data analysis
+```
 
 Many data analysis tasks can be approached using the *split-apply-combine*
 paradigm: split the data into groups, apply some analysis to each group, and
@@ -440,6 +468,10 @@ surveys %>%
 ```
 
 #### Counting
+```{r, echo=FALSE, purl=TRUE}
+
+### Counting
+```
 
 When working with data, we often want to know the number of observations found
 for each factor or combination of factors. For this task, **`dplyr`** provides
@@ -556,7 +588,14 @@ surveys %>%
 ```
 
 
-# Exporting data
+## Exporting data
+```{r, echo=FALSE, purl=TRUE}
+
+### Exporting data
+```
+
+**\<note>** This is very important so go slowly through this section
+**\</note>**  
 
 Now that you have learned how to use **`dplyr`** to extract information from
 or summarize your raw data, you may want to export these new data sets to share
@@ -583,8 +622,8 @@ surveys_complete <- surveys %>%
          !is.na(sex))                # remove missing sex
 ```
 
-Because we are interested in plotting how species abundances have changed
-through time, we are also going to remove observations for rare species (i.e.,
+We are interested in plotting how species abundances have changed
+through time, so we are also going to remove observations for rare species (i.e.,
 that have been observed less than 50 times). We will do this in two steps: first
 we are going to create a data set that counts how often each species has been
 observed, and filter out the rare species; then, we will extract only the
@@ -631,12 +670,12 @@ Now that our data set is ready, we can save it as a CSV file in our `data`
 folder.
 
 ```{r, purl=FALSE, eval=FALSE}
-write_csv(surveys_complete, file = "data/surveys_complete.csv")
+write_csv(surveys_complete, file = "data/portal_surveys_complete.csv")
 ```
 
 ```{r, purl=FALSE, eval=TRUE, echo=FALSE}
 if (!dir.exists("data")) dir.create("data")
-write_csv(surveys_complete, file = "data/surveys_complete.csv")
+write_csv(surveys_complete, file = "data/portal_surveys_complete.csv")
 ```
 
 

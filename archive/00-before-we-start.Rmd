@@ -8,9 +8,19 @@ editor_options:
 ---
 
 ```{r, echo=FALSE, purl=FALSE, message=FALSE}
-source("setup.R")
+#source("setup.R")
 ```
 
+```{r,echo=FALSE, purl=TRUE}
+################################################
+# Lesson 00 - Before we start
+################################################
+
+
+
+
+
+```
 ***
 :::::::::::::::::::::::::::::::::::::: questions 
 

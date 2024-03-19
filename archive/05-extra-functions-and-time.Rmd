@@ -10,6 +10,53 @@ knitr::opts_chunk$set(echo = TRUE)
 We're now going to go over extra topics here. Usually frequently asked about, but we
 usually dont have time to go over. THat or I've moved them out of the lesson
 for the sake of time.
+# Factors
+### Converting factors
+
+**\<note>**
+This is a little more complicated than we want to teach, but factors and how to handle them are a very important fundamental skill when 
+you move into doing statistics in R so we will spend some time here learning more.
+
+**\note<\note>**
+
+If you need to convert a factor to a character vector, you use
+`as.character(x)`.
+
+```{r, purl=TRUE}
+as.character(sex)
+```
+
+In some cases, you may have to convert factors where the levels appear
+as numbers (such as concentration levels or years) to a numeric vector.
+For instance, in one part of your analysis the years might need to be
+encoded as factors (e.g., comparing average weights across years) but in
+another part of your analysis they may need to be stored as numeric
+values (e.g., doing math operations on the years). This conversion from
+factor to numeric is a little trickier. The `as.numeric()` function
+returns the index values of the factor, not its levels, so it will
+result in an entirely new (and unwanted in this case) set of numbers.
+One method to avoid this is to convert factors to characters, and then
+to numbers.
+
+Another method is to use the `levels()` function. Compare:
+
+```{r, purl=TRUE}
+year_fct <- factor(c(1990, 1983, 1977, 1998, 1990))
+as.numeric(year_fct)               # Wrong! And there is no warning...
+as.numeric(as.character(year_fct)) # Works...
+as.numeric(levels(year_fct))[year_fct]    # The recommended way.
+```
+
+Notice that in the `levels()` approach, three important steps occur:
+
+-   We obtain all the factor levels using `levels(year_fct)`
+-   We convert these levels to numeric values using
+    `as.numeric(levels(year_fct))`
+-   We then access these numeric values using the underlying integers of
+    the vector `year_fct` inside the square brackets
+
+--------------------
+
 # Dates
 ## Formatting dates
 

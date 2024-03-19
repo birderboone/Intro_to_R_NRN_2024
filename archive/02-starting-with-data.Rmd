@@ -8,9 +8,18 @@ editor_options:
 ---
 
 ```{r, echo=FALSE, purl=FALSE, message=FALSE}
-source("setup.R")
+#source("setup.R")
 ```
+```{r,echo=FALSE, purl=TRUE}
+################################################
+# Lesson 02 - Starting with data
+################################################
 
+
+
+
+
+```
 ::::::::::::::::::::::::::::::::::::::: objectives
 -   Load external data from a .csv file into a data frame.
 -   Install and load packages.
@@ -85,20 +94,22 @@ preexisting folder named "data".
 
 **\<note>** check here that everyone has this file **\</note>**
 
-```{r, eval=FALSE, purl=TRUE}
+```{r echo=F,purl=TRUE}
 download.file(url = "https://ndownloader.figshare.com/files/2292169",
               destfile = "data/portal_data_joined.csv")
 ```
 
 ### Reading the data into R
-
+```{r, echo=FALSE, purl=TRUE}
+### Reading the data into R
+```
 The file has now been downloaded to the destination you specified, but R
 has not yet loaded the data from the file into memory. To do this, we
 can use the `read.csv()` function.
 
 
-```{r, eval=TRUE, purl=FALSE}
-surveys <- read.csv("data_raw/portal_data_joined.csv")
+```{r, purl=TRUE}
+surveys <- read.csv("data/portal_data_joined.csv")
 str(surveys)
 ```
 
@@ -112,7 +123,11 @@ the data type for a column manually by using the `colClasses` argument in
 <!-- not sure this is what it does in read.csv -->
 
 ::: callout
-### Note
+### Read CSV
+```{r, echo=FALSE, purl=TRUE}
+### Read CSV
+```
+
 
 `read.csv()` assumes that fields are delineated by commas. However, in
 several countries, the comma is used as a decimal separator and the
@@ -166,7 +181,9 @@ view(surveys)
 
 
 ## What are data frames?
-
+```{r, echo=FALSE, purl=TRUE}
+### Data frames
+```
 When we loaded the data into R, it got stored as an object of class
 `data frame` Data frames are the *de facto*
 data structure for most tabular data, and what we use for statistics and
@@ -228,6 +245,37 @@ of the data. Let's try them out!
 Note: most of these functions are "generic", they can be used on other
 types of objects besides `data.frame`.
 
+```{r, echo=F,purl=T}
+##################################
+# Functions to inspect data.frames
+##################################
+#-   Size:
+#
+#    -   `dim(surveys)` - returns a vector with the number of rows in the
+#        first element, and the number of columns as the second element
+#        (the **dim**ensions of the object)
+#    -   `nrow(surveys)` - returns the number of rows
+#     -   `ncol(surveys)` - returns the number of columns
+# 
+# -   Content:
+# 
+#     -   `head(surveys)` - shows the first 6 rows
+#     -   `tail(surveys)` - shows the last 6 rows
+# 
+# -   Names:
+# 
+#     -   `names(surveys)` - returns the column names (synonym of
+#         `colnames()` for `data.frame` objects)
+#     -   `rownames(surveys)` - returns the row names
+# 
+# -   Summary:
+# 
+#     -   `str(surveys)` - structure of the object and information about
+#         the class, length and content of each column
+#     -   `summary(surveys)` - summary statistics for each column
+#################################
+```
+
 ::: challenge
 ### Challenge
 
@@ -272,7 +320,7 @@ want to extract some specific data from it, we need to specify the
 column numbers. However, note that different ways of specifying these
 coordinates lead to results with different classes.
 
-```{r, purl=FALSE}
+```{r, eval=F,purl=FALSE}
 # We can extract specific values by specifying row and column indices
 # in the format: 
 # data_frame[row_index, column_index]
@@ -321,7 +369,7 @@ increasing or decreasing order, test `1:10` and `10:1` for instance.
 You can also exclude certain indices of a data frame using the "`-`"
 sign:
 
-```{r, purl=FALSE}
+```{r, eval=F,purl=FALSE}
 surveys[, -1]                 # The whole data frame, except the first column
 surveys[-(7:nrow(surveys)), ] # Equivalent to head(surveys)
 ```
@@ -411,6 +459,7 @@ surveys_head <- surveys[-(7:n_rows), ]
 ## Factors
 
 ```{r, echo=FALSE, purl=TRUE}
+
 ### Factors
 ```
 
@@ -432,6 +481,15 @@ A factor is essentially a character, but with two extra properties.
 - They have predefined values  
 - These values have levels.  
 - They have some order to them, whether its meaningful or not
+
+```{r, echo=F,purl=T}
+
+## Factors have:
+# - Predefined values  
+# - These values have levels.  
+# - The values some order to them, whether its meaningful or not
+
+```
 
 As we'll see this type of data is a mix of programming and scientific necessity. 
 They dont solely exist for programming reasons and theyre not insignificant from a scientific/statistical standpoint.
@@ -503,7 +561,7 @@ summary(surveys$sex)
 By default, R always sorts levels in alphabetical order. For instance,
 if you have a factor with 2 levels:
 
-```{r, purl=TRUE}
+```{r, purl=FALSE}
 sex <- factor(c("male", "female", "female", "male"))
 ```
 
@@ -574,51 +632,9 @@ nlevels(surveys$genus)
 
 ```
 
-### Converting factors
-
-**\<note>**
-This is a little more complicated than we want to teach, but factors and how to handle them are a very important fundamental skill when 
-you move into doing statistics in R so we will spend some time here learning more.
-
-**\note<\note>**
-
-If you need to convert a factor to a character vector, you use
-`as.character(x)`.
-
-```{r, purl=FALSE}
-as.character(sex)
-```
-
-In some cases, you may have to convert factors where the levels appear
-as numbers (such as concentration levels or years) to a numeric vector.
-For instance, in one part of your analysis the years might need to be
-encoded as factors (e.g., comparing average weights across years) but in
-another part of your analysis they may need to be stored as numeric
-values (e.g., doing math operations on the years). This conversion from
-factor to numeric is a little trickier. The `as.numeric()` function
-returns the index values of the factor, not its levels, so it will
-result in an entirely new (and unwanted in this case) set of numbers.
-One method to avoid this is to convert factors to characters, and then
-to numbers.
-
-Another method is to use the `levels()` function. Compare:
-
-```{r, purl=TRUE}
-year_fct <- factor(c(1990, 1983, 1977, 1998, 1990))
-as.numeric(year_fct)               # Wrong! And there is no warning...
-as.numeric(as.character(year_fct)) # Works...
-as.numeric(levels(year_fct))[year_fct]    # The recommended way.
-```
-
-Notice that in the `levels()` approach, three important steps occur:
-
--   We obtain all the factor levels using `levels(year_fct)`
--   We convert these levels to numeric values using
-    `as.numeric(levels(year_fct))`
--   We then access these numeric values using the underlying integers of
-    the vector `year_fct` inside the square brackets
-
-<!-- Still deciding if the above is necessary or not -->
+\<note>
+Converting factors was moved to extra lessons
+\<\note>
 
 ::: challenge
 ### Challenge
@@ -703,3 +719,11 @@ tutorial](https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data
 -   The **`lubridate`** package has many useful functions for working
     with dates.
 :::
+
+
+```{r eval=F, purl=TRUE}
+### Installing the tidyverse
+# Before we move onto the next lesson I want to make sure everyone has already installed the tidyverse package
+# Run this script below if you havent already
+install.packages("tidyverse")
+```

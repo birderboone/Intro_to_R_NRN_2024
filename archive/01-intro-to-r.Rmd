@@ -5,9 +5,19 @@ minutes: 75
 ---
 
 ```{r, echo=FALSE, purl=FALSE, message=FALSE}
-source("setup.R")
+#source("setup.R")
 ```
 
+```{r, purl=TRUE}
+################################################
+# Lesson 01 - Introduction to R
+################################################
+
+
+
+
+
+```
 ***
 ::::::::::::::::::::::::::::::::::::::: questions
 
@@ -37,7 +47,7 @@ source("setup.R")
 
 ## Creating objects in R
 
-```{r, echo=FALSE, purl=TRUE}
+```{r,echo=FALSE, purl=TRUE}
 ### Creating objects in R
 ```
 
@@ -260,6 +270,24 @@ Instructions
 - Serve!
 ```
 
+```{r, echo=FALSE,purl=TRUE}
+################################################
+# How to make a Peanut Butter and Jelly Sandwich
+################################################
+# Ingredients
+# - 2 slices of sandwich bread
+# - Jelly
+# - Peanut butter
+
+# Instructions
+# - Lay out two slices of bread
+# - Spread 2tbsp of peanut butter on one slice of bread
+# - Spread 2tbsp of grapy jelly on the other slice of bread
+# - Place the two pieces of bread together
+# - Cut diagonal with a knife
+# - Serve!
+```
+
 I can hand you this recipe and you'll know how to make a PB&J sandwich reliably. 
 This is your script. The script itself does not do the work. The script is just the recipe you hand over. The console is **you**, **you** are the one making the recipe.
 
@@ -373,7 +401,7 @@ either numbers or characters. We can assign a series of values to a vector using
 the `c()` function. For example we can create a vector of animal weights and assign
 it to a new object `weight_g`:
 
-```{r, purl=FALSE}
+```{r, purl=TRUE}
 weight_g <- c(50, 60, 65, 82)
 weight_g
 ```
@@ -391,6 +419,9 @@ don't exist in R's memory, there will be an error message.
 
 
 #### Characters, string, and quotation marks  
+```{r, echo=FALSE, purl=TRUE}
+#### Characters, string, and quotation marks 
+```
 
 **\<note>** 
 We usually lose some people here. Its good to pause here and go over what a character is and how R understands quotations.
@@ -400,11 +431,18 @@ We usually lose some people here. Its good to pause here and go over what a char
 In all programming languages you have to specify the kinds of data you're using. 
 
 In R, all R objects are built mainly from 4 **data types or atomic vector** :  
-- `"numeric"`  
-- `"character"`   
-- `"logical"` for `TRUE` and `FALSE` (the boolean data type)  
-- `"integer"` for integer numbers. Essentially a numeric with no decimal.  
+- `numeric`  
+- `character`   
+- `logical` for `TRUE` and `FALSE` (the boolean data type)  
+- `integer` for integer numbers. Essentially a numeric with no decimal.  
 
+```{r,echo=FALSE, purl=TRUE}
+# - numeric  :
+# - character :  
+# - logical for TRUE and FALSE (the boolean data type) :  
+# - integer 
+
+```
 Why is this important? Why do you have to tell R (or any programming language) what your data is. Well it has to know what you want it to do. And you dont want it to guess. 
 Programming languages largely dont like to guess, and they shouldnt. 
 If they do guess it should be well documented what and why. 
@@ -441,6 +479,10 @@ well...isn't very logical. You'd want R to probably stop and warn you something 
 So moving back to understanding objects..
 
 #### Objects
+
+```{r,echo=FALSE, purl=TRUE}
+#### Objects
+```
 
 There are many functions that allow you to inspect the content of a
 vector or an object. 
@@ -503,7 +545,7 @@ factors (`factor`) and arrays (`array`).
 :::::::::::::::::::::::::::::::::::::::  challenge
 
 ### Challenge
-<!-- rewrite this challenge to test how to subset vectors and use the %in% function then ask the bonus challege -->
+<!-- rewrite this challenge to test how to subset vectors and use the %in% function then ask the bonus challenge -->
 
 - We've seen that atomic vectors can be of type character,
   numeric (or double), integer, and logical. But what happens if we try to mix these types in
@@ -568,6 +610,7 @@ logical → numeric → character ← logical
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ```{r, echo=FALSE, eval=FALSE, purl=TRUE}
+## ### Challenge
 ## We've seen that atomic vectors can be of type character, numeric, integer, and
 ## logical. But what happens if we try to mix these types in a single
 ## vector?
@@ -599,6 +642,9 @@ combined_logical <- c(num_logical, char_logical)
 ```
 
 ## Subsetting vectors
+```{r, purl=T}
+#### Subsetting vectors
+```
 
 If we want to extract one or several values from a vector, we must provide one
 or several indices in square brackets. For instance:
@@ -703,6 +749,12 @@ Here "four" comes after "five", and therefore is "greater than" it.
 
 ## Missing data
 
+```{r, echo=FALSE,purl=TRUE}
+## Missing data
+
+
+```
+
 As R was designed to analyze datasets, it includes the concept of missing data
 (which is uncommon in other programming languages). Missing data are represented
 in vectors as `NA`.
@@ -756,7 +808,7 @@ Recall that you can use the `typeof()` function to find the type of your atomic 
 
 :::::::: solution
 
-```{r, answer=TRUE}
+```{r, purl=FALSE}
 heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
 
 # 1.
@@ -782,7 +834,7 @@ length(heights_above_67)
 ## ### Challenge
 ## 1. Using this vector of heights in inches, create a new vector with the NAs removed.
 ##
-##    heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
 ##
 ## 2. Use the function `median()` to calculate the median of the `heights` vector.
 ##
@@ -807,7 +859,15 @@ using in the other lessons, and learn about data frames.
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
-```{ purl=TRUE}
-Before we begin the next chapter I want everyone to make sure they've created a `data` folder in their working directory.
+```{r, purl=TRUE}
+
+
+################## *NOTE* ######################
+# Before we begin the next chapter I want everyone to make sure they've created a `data` folder in their working directory
+# Does this code return the value TRUE?
+
+length(list.files(pattern='data'))>0
+#################################################
+
 
 ```
