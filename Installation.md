@@ -146,13 +146,6 @@ To update the packages that you have installed, click `Update` in the
 `Packages` tab in the bottom right panel of RStudio, or go to
 `Tools > Check for Package Updates...`. 
 
-Sometimes, package updates introduce changes that break your old code, 
-which can be very frustrating. To avoid this problem, you can use a package 
-called `renv`. It locks the package versions you have used for a given project 
-and makes it straightforward to reinstall those exact package version in a 
-new environment, for example after updating your R version or on another 
-computer. However, the details are outside of the scope of this lesson.
-
 ### Download the data
 
 We will download the data directly from R during the lessons. However, if you 
