@@ -1,0 +1,497 @@
+---
+title: (Extras) Functions and Time and Pivot Wide/long
+author: Data Carpentry contributors
+minutes: 45
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+We're now going to go over extra topics here. Usually frequently asked about, but we
+usually dont have time to go over. THat or I've moved them out of the lesson
+for the sake of time.
+# Dates
+## Formatting dates
+
+A common issue that new (and experienced!) R users have is converting
+date and time information into a variable that is suitable for analyses.
+One way to store date information is to store each component of the date
+in a separate column. Using `str()`, we can confirm that our data frame
+does indeed have a separate column for day, month, and year, and that
+each of these columns contains integer values.
+
+```{r, eval=FALSE, purl=FALSE}
+str(surveys)
+```
+
+We are going to use the `ymd()` function from the package
+**`lubridate`** (which belongs to the **`tidyverse`**; learn more
+[here](https://www.tidyverse.org/)). **`lubridate`** gets installed as
+part as the **`tidyverse`** installation. When you load the
+**`tidyverse`** (`library(tidyverse)`), the core packages (the packages
+used in most data analyses) get loaded. **`lubridate`** however does not
+belong to the core tidyverse, so you have to load it explicitly with
+`library(lubridate)`
+
+Start by loading the required package:
+
+```{r load-package, message=FALSE, purl=FALSE}
+library(lubridate)
+```
+
+The **`lubridate`** package has many useful functions for working with
+dates. These can help you extract dates from different string
+representations, convert between timezones, calculate time differences
+and more. You can find an overview of them in the [lubridate cheat
+sheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/lubridate.pdf).
+
+Here we will use the function `ymd()`, which takes a vector representing
+year, month, and day, and converts it to a `Date` vector. `Date` is a
+class of data recognized by R as being a date and can be manipulated as
+such. The argument that the function requires is flexible, but, as a
+best practice, is a character vector formatted as "YYYY-MM-DD".
+
+Let's create a date object and inspect the structure:
+
+```{r, purl=FALSE}
+my_date <- ymd("2015-01-01")
+str(my_date)
+```
+
+Now let's paste the year, month, and day separately - we get the same
+result:
+
+```{r, purl=FALSE}
+# sep indicates the character to use to separate each component
+my_date <- ymd(paste("2015", "1", "1", sep = "-")) 
+str(my_date)
+```
+
+Now we apply this function to the surveys dataset. Create a character
+vector from the `year`, `month`, and `day` columns of `surveys` using
+`paste()`:
+
+```{r, purl=FALSE}
+paste(surveys$year, surveys$month, surveys$day, sep = "-")
+```
+
+This character vector can be used as the argument for `ymd()`:
+
+```{r, purl=FALSE}
+ymd(paste(surveys$year, surveys$month, surveys$day, sep = "-"))
+```
+
+There is a warning telling us that some dates could not be parsed
+(understood) by the `ymd()` function. For these dates, the function has
+returned `NA`, which means they are treated as missing values. We will
+deal with this problem later, but first we add the resulting `Date`
+vector to the `surveys` data frame as a new column called `date`:
+
+```{r, purl=FALSE}
+surveys$date <- ymd(paste(surveys$year, surveys$month, surveys$day, sep = "-"))
+str(surveys) # notice the new column, with 'date' as the class
+```
+
+Let's make sure everything worked correctly. One way to inspect the new
+column is to use `summary()`:
+
+```{r, results=TRUE, purl=FALSE}
+summary(surveys$date)
+```
+
+Let's investigate why some dates could not be parsed.
+
+We can use the functions we saw previously to deal with missing data to
+identify the rows in our data frame that are failing. If we combine them
+with what we learned about subsetting data frames earlier, we can
+extract the columns "year,"month", "day" from the records that have `NA`
+in our new column `date`. We will also use `head()` so we don't clutter
+the output:
+
+```{r, results=TRUE, purl=FALSE}
+missing_dates <- surveys[is.na(surveys$date), c("year", "month", "day")]
+
+head(missing_dates)
+```
+
+Why did these dates fail to parse? If you had to use these data for your
+analyses, how would you deal with this situation?
+
+The answer is because the dates provided as input for the `ymd()`
+function do not actually exist. If we refer to the output we got above,
+September and April only have 30 days, not 31 days as it is specified in
+our dataset.
+
+There are several ways you could deal with situation:
+
+-   If you have access to the raw data (e.g., field sheets) or
+    supporting information (e.g., field trip reports/logs), check them
+    and ensure the electronic database matches the information in the
+    original data source.
+-   If you are able to contact the person responsible for collecting the
+    data, you could refer to them and ask for clarification.
+-   You could also check the rest of the dataset for clues about the
+    correct value for the erroneous dates.
+-   If your project has guidelines on how to correct this sort of
+    errors, refer to them and apply any recommendations.
+-   If it is not possible to ascertain the correct value for these
+    observations, you may want to leave them as missing data.
+
+Regardless of the option you choose, it is important that you document
+the error and the corrections (if any) that you apply to your data.
+
+<Note> Do this section as time allows. Leave 1 hour minimum for ggplot. </note>
+### Reshaping with pivot\_longer and pivot\_wider
+
+In the [spreadsheet
+lesson](https://datacarpentry.org/spreadsheet-ecology-lesson/01-format-data/),
+we discussed how to structure our data leading to the four rules defining a tidy
+dataset:
+
+1. Each variable has its own column
+2. Each observation has its own row
+3. Each value must have its own cell
+4. Each type of observational unit forms a table
+
+Here we examine the fourth rule: Each type of observational unit forms a table.
+
+In `surveys`, the rows of `surveys` contain the values of variables associated
+with each record (the unit), values such as the weight or sex of each animal
+associated with each record. What if instead of comparing records, we
+wanted to compare the different mean weight of each genus between plots? (Ignoring `plot_type` for simplicity).
+
+We'd need to create a new table where each row (the unit) is comprised of values of variables associated with each plot. In practical terms this means the values
+in `genus` would become the names of column variables and the cells would contain the values of the mean weight observed on each plot.
+
+Having created a new table, it is therefore straightforward to explore the
+relationship between the weight of different genera within, and between, the
+plots. The key point here is that we are still following a tidy data structure,
+but we have **reshaped** the data according to the observations of interest:
+average genus weight per plot instead of recordings per date.
+
+The opposite transformation would be to transform column names into values of
+a variable.
+
+We can do both these of transformations with two `tidyr` functions, `pivot_wider()`
+and `pivot_longer()`.
+
+These may sound like dramatically different data layouts, but there are some tools that make transitions between these layouts more straightforward than you might think! The gif below shows how these two formats relate to each other, and gives you an idea of how we can use R to shift from one format to the other.
+
+![](fig/tidyr-pivot_wider_longer.gif)
+
+#### Pivoting from long to wide format
+
+`pivot_wider()` takes three principal arguments:
+
+1. the data
+2. the *names\_from* column variable whose values will become new column names.
+3. the *values\_from* column variable whose values will fill the new column variables.
+
+Further arguments include `values_fill` which, if set, fills in missing values with
+the value provided.
+
+Let's use `pivot_wider()` to transform surveys to find the mean weight of each
+genus in each plot over the entire survey period. We use `filter()`,
+`group_by()` and `summarize()` to filter our observations and variables of
+interest, and create a new variable for the `mean_weight`.
+
+```{r, purl=FALSE}
+surveys_gw <- surveys %>%
+  filter(!is.na(weight)) %>%
+  group_by(plot_id, genus) %>%
+  summarize(mean_weight = mean(weight))
+
+str(surveys_gw)
+```
+
+This yields `surveys_gw` where the observations for each plot are distributed across
+multiple rows, 196 observations of 3 variables.
+Using `pivot_wider()` with the names from `genus` and with values from `mean_weight` this becomes
+24 observations of 11 variables, one row for each plot.
+
+```{r, purl=FALSE}
+surveys_wide <- surveys_gw %>%
+  pivot_wider(names_from = genus, values_from = mean_weight)
+
+str(surveys_wide)
+```
+
+![](fig/pivot_wider_graphic.png)
+
+We could now plot comparisons between the weight of genera (one is called a genus, multiple are called genera) in different plots,
+although we may wish to fill in the missing values first.
+
+```{r, purl=FALSE}
+surveys_gw %>%
+  pivot_wider(names_from = genus, values_from = mean_weight, values_fill = 0) %>%
+  head()
+```
+
+#### Pivoting from wide to long format
+
+The opposing situation could occur if we had been provided with data in the
+form of `surveys_wide`, where the genus names are column names, but we
+wish to treat them as values of a genus variable instead.
+
+In this situation we are reshaping the column names and turning them into a
+pair of new variables. One variable represents the column names as values, and
+the other variable contains the values previously associated with the column names.
+
+`pivot_longer()` takes four principal arguments:
+
+1. the data
+2. the *names\_to* column variable we wish to create from column names.
+3. the *values\_to* column variable we wish to create and fill with values.
+4. *cols* are the name of the columns we use to make this pivot (or to drop).
+
+To recreate `surveys_gw` from `surveys_wide` we would create a names variable called
+`genus` and value variable called `mean_weight`.
+
+In pivoting longer, we also need to specify what columns to reshape. If the columns are directly adjacent as they are here, we don't even need to list the all out: we can just use the `:` operator!
+
+```{r, purl=FALSE}
+surveys_long <- surveys_wide %>%
+  pivot_longer(names_to = "genus", values_to = "mean_weight", cols = -plot_id)
+
+str(surveys_long)
+```
+
+![](fig/pivot_longer_graphic.png)
+
+Note that now the `NA` genera are included in the long format data frame. Pivoting wider
+and then longer can be a useful way to balance out a dataset so that every
+replicate has the same composition
+
+We could also have used a specification for what columns to exclude. In this example,
+we will use all columns *except* `plot_id` for the names variable. By using the minus sign in the `cols` argument,
+we omit `plot_id` from being reshaped
+
+```{r, purl=FALSE}
+surveys_wide %>%
+  pivot_longer(names_to = "genus", values_to = "mean_weight", cols = -plot_id) %>%
+  head()
+```
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+### Challenge {.challenge}
+
+1. Reshape the `surveys` data frame with `year` as columns, `plot_id`
+  as rows, and the
+  number of genera per plot as the values. You will need to summarize before
+  reshaping, and use the function `n_distinct()` to get the number of unique
+  genera within a particular chunk of data. It's a powerful function! See
+  `?n_distinct` for more.
+
+:::::::: solution
+
+```{r, answer=TRUE, purl=FALSE}
+surveys_wide_genera <- surveys %>%
+  group_by(plot_id, year) %>%
+  summarize(n_genera = n_distinct(genus)) %>%
+  pivot_wider(names_from = year, values_from = n_genera)
+
+head(surveys_wide_genera)
+```
+
+:::::::::::::::::
+
+2. Now take that data frame and `pivot_longer()` it, so each row is a unique
+  `plot_id` by `year` combination.
+
+:::::::: solution
+
+```{r, answer=TRUE, purl=FALSE}
+surveys_wide_genera %>%
+  pivot_longer(names_to = "year", values_to = "n_genera", cols = -plot_id)
+```
+
+:::::::::::::::::
+
+3. The `surveys` data set has
+  two measurement columns: `hindfoot_length` and `weight`. This makes it
+  difficult to do things like look at the relationship between mean values of
+  each measurement per year in different plot types. Let's walk through a
+  common solution for this type of problem. First, use `pivot_longer()` to create a
+  dataset where we have a names column called `measurement` and a
+  `value` column that takes on the value of either `hindfoot_length` or
+  `weight`. *Hint*: You'll need to specify which columns will be part of the reshape.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::  blockquote
+
+:::::::: solution
+
+```{r, answer=TRUE, purl=FALSE}
+surveys_long <- surveys %>%
+  pivot_longer(names_to = "measurement", values_to = "value", cols = c(hindfoot_length, weight))
+```
+
+:::::::::::::::::
+
+4. With this new data set, calculate the average of each
+  `measurement` in each `year` for each different `plot_type`. Then
+  `pivot_wider()` them into a data set with a column for `hindfoot_length` and
+  `weight`. *Hint*: You only need to specify the names and values
+  columns for `pivot_wider()`.
+
+:::::::: solution
+
+```{r, answer=TRUE, purl=FALSE}
+surveys_long %>%
+  group_by(year, measurement, plot_type) %>%
+  summarize(mean_value = mean(value, na.rm=TRUE)) %>%
+  pivot_wider(names_from = measurement, values_from = mean_value)
+```
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+## Reshaping challenges
+
+## 1. Reshape the `surveys` data frame with `year` as columns, `plot_id` as rows, and the number of genera per plot as the values. You will need to summarize before reshaping, and use the function `n_distinct()` to get the number of unique genera within a particular chunk of data. It's a powerful function! See `?n_distinct` for more.
+
+## 2. Now take that data frame and `pivot_longer()` it, so each row is a unique `plot_id` by `year` combination.
+
+## 3. The `surveys` data set has two measurement columns: `hindfoot_length` and `weight`. This makes it difficult to do things like look at the relationship between mean values of each measurement per year in different plot types. Let's walk through a common solution for this type of problem. First, use `pivot_longer()` to create a dataset where we have a names column called `measurement` and a `value` column that takes on the value of either `hindfoot_length` or `weight`. *Hint*: You'll need to specify which columns will be part of the reshape.
+
+## 4. With this new data set, calculate the average of each `measurement` in each `year` for each different `plot_type`. Then `pivot_wider()` them into a data set with a column for `hindfoot_length` and `weight`. *Hint*: You only need to specify the names and values columns for `pivot_wider()`.
+```
+
+#
+### Renaming factors
+
+When your data is stored as a factor, you can use the `plot()` function
+to get a quick glance at the number of observations represented by each
+factor level. Let's look at the number of males and females captured
+over the course of the experiment:
+
+```{r, purl=TRUE}
+## bar plot of the number of females and males captured during the experiment:
+plot(surveys$sex)
+```
+
+<!-- Check whether this is necessary, it seems needlessly complex -->
+
+However, as we saw when we used `summary(surveys$sex)`, there are about
+1700 individuals for which the sex information hasn't been recorded. To
+show them in the plot, we can turn the missing values into a factor
+level with the `addNA()` function. We will also have to give the new
+factor level a label. We are going to work with a copy of the `sex`
+column, so we're not modifying the working copy of the data frame:
+
+```{r, results=TRUE, purl=FALSE}
+sex <- surveys$sex
+levels(sex)
+sex <- addNA(sex)
+levels(sex)
+head(sex)
+levels(sex)[3] <- "undetermined"
+levels(sex)
+head(sex)
+```
+
+Now we can plot the data again, using `plot(sex)`.
+
+```{r, echo=FALSE, purl=FALSE, results=TRUE}
+plot(sex)
+```
+
+::: challenge
+### Challenge
+
+-   Rename "F" and "M" to "female" and "male" respectively.
+-   Now that we have renamed the factor level to "undetermined", can you
+    recreate the barplot such that "undetermined" is first (before
+    "female")?
+
+::: solution
+```{r, answer=TRUE, purl=FALSE}
+levels(sex)[1:2] <- c("female", "male")
+sex <- factor(sex, levels = c("undetermined", "female", "male"))
+plot(sex)
+```
+:::
+:::
+
+```{r wrong-order, results="show", echo=FALSE, purl=TRUE}
+## Challenges
+##
+## * Rename "F" and "M" to "female" and "male" respectively.
+## * Now that we have renamed the factor level to "undetermined", can you recreate the
+##   barplot such that "undetermined" is first (before "female")
+```
+
+### 4 GGplot
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+### Challenge (optional)
+
+Scatter plots can be useful exploratory tools for small datasets. For data
+sets with large numbers of observations, such as the `surveys_complete` data
+set, overplotting of points can be a limitation of scatter plots. One strategy
+for handling such settings is to use hexagonal binning of observations. The
+plot space is tessellated into hexagons. Each hexagon is assigned a color
+based on the number of observations that fall within its boundaries.  To use
+hexagonal binning with **`ggplot2`**, first install the R package `hexbin`
+from CRAN:
+
+```{r, eval=FALSE}
+install.packages("hexbin")
+library(hexbin)
+```
+
+Then use the `geom_hex()` function:
+
+```{r, eval=FALSE}
+surveys_plot +
+ geom_hex()
+```
+
+- What are the relative strengths and weaknesses of a hexagonal bin plot
+  compared to a scatter plot? Examine the above scatter plot and compare it
+  with the hexagonal bin plot that you created.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+<!-- This is extra innings mode here. People can read this later. -->
+## Arranging plots
+
+Faceting is a great tool for splitting one plot into multiple plots, but
+sometimes you may want to produce a single figure that contains multiple plots
+using different variables or even different data frames. The **`patchwork`**
+package allows us to combine separate ggplots into a single figure while keeping
+everything aligned properly. Like most R packages, we can install `patchwork`
+from CRAN, the R package repository:
+
+```{r patchwork-install, eval=FALSE}
+install.packages("patchwork")
+```
+
+After you have loaded the `patchwork` package you can use `+` to place plots
+next to each other, `/` to arrange them vertically, and `plot_layout()` to
+determine how much space each plot uses:
+
+```{r patchwork-example, message=FALSE, purl=FALSE, fig.width=10}
+library(patchwork)
+
+plot_weight <- ggplot(data = surveys_complete, aes(x = species_id, y = weight)) +
+  geom_boxplot() +
+  labs(x = "Species", y = expression(log[10](Weight))) +
+  scale_y_log10()
+
+plot_count <- ggplot(data = yearly_counts, aes(x = year, y = n, color = genus)) +
+  geom_line() +
+  labs(x = "Year", y = "Abundance")
+
+plot_weight / plot_count + plot_layout(heights = c(3, 2))
+```
+
+You can also use parentheses `()` to create more complex layouts. There are
+many useful examples on the [patchwork website](https://patchwork.data-imaginist.com/)
+
+
+# Function lesson
