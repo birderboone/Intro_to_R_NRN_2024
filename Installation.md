@@ -120,7 +120,7 @@ then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS)
 to execute the command.
 
 ```{r eval=FALSE}
-install.packages(c("tidyverse"))
+install.packages("tidyverse")
 ```
 
 Alternatively, you can install the packages using RStudio's graphical user 
