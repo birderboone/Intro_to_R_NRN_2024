@@ -11,6 +11,8 @@ who are lost can just load the data set -->
 
 
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE, purl=FALSE}
+knitr::opts_chunk$set(results='hide', # fig.path='img/R-ecology-',
+                      comment = "#>", purl = FALSE)
 #source("setup.R")
 #surveys_complete <- read_csv(file = "data/portal_data_joined.csv", col_types = cols()) %>% drop_na(weight, hindfoot_length, sex) %>% group_by(species_id) %>% filter(n() >= 50) %>% ungroup()
 #write_csv(surveys_complete,'data/portal_surveys_complete.csv')

@@ -6,6 +6,8 @@ minutes: 75
 
 ```{r, echo=FALSE, purl=FALSE, message=FALSE}
 #source("setup.R")
+knitr::opts_chunk$set(results='hide', # fig.path='img/R-ecology-',
+                      comment = "#>", purl = FALSE)
 ```
 
 ```{r, purl=TRUE}

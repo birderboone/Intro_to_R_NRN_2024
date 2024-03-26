@@ -477,20 +477,6 @@ but R has not yet loaded the data from the file into memory. To do this,
 we can use the <code>read.csv()</code> function.</p>
 <pre class="r"><code>surveys &lt;- read.csv(&quot;data/portal_data_joined.csv&quot;)
 str(surveys)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    34786 obs. of  13 variables:
-##  $ record_id      : int  1 72 224 266 349 363 435 506 588 661 ...
-##  $ month          : int  7 8 9 10 11 11 12 1 2 3 ...
-##  $ day            : int  16 19 13 16 12 12 10 8 18 11 ...
-##  $ year           : int  1977 1977 1977 1977 1977 1977 1977 1978 1978 1978 ...
-##  $ plot_id        : int  2 2 2 2 2 2 2 2 2 2 ...
-##  $ species_id     : chr  &quot;NL&quot; &quot;NL&quot; &quot;NL&quot; &quot;NL&quot; ...
-##  $ sex            : chr  &quot;M&quot; &quot;M&quot; &quot;&quot; &quot;&quot; ...
-##  $ hindfoot_length: int  32 31 NA NA NA NA NA NA NA NA ...
-##  $ weight         : int  NA NA NA NA NA NA NA NA 218 NA ...
-##  $ genus          : chr  &quot;Neotoma&quot; &quot;Neotoma&quot; &quot;Neotoma&quot; &quot;Neotoma&quot; ...
-##  $ species        : chr  &quot;albigula&quot; &quot;albigula&quot; &quot;albigula&quot; &quot;albigula&quot; ...
-##  $ taxa           : chr  &quot;Rodent&quot; &quot;Rodent&quot; &quot;Rodent&quot; &quot;Rodent&quot; ...
-##  $ plot_type      : chr  &quot;Control&quot; &quot;Control&quot; &quot;Control&quot; &quot;Control&quot; ...</code></pre>
 <p>When you execute <code>read.csv</code> on a data file, it looks
 through the first 1000 rows of each column and guesses its data type.
 For example, in this dataset, <code>read.csv()</code> reads
@@ -529,20 +515,20 @@ first 50 rows, you could type <code>print(surveys, n = 50)</code></p>
 <p>We can also extract the first few lines of this data using the
 function <code>head()</code>:</p>
 <pre class="r"><code>head(surveys)</code></pre>
-<pre><code>##   record_id month day year plot_id species_id sex hindfoot_length weight
-## 1         1     7  16 1977       2         NL   M              32     NA
-## 2        72     8  19 1977       2         NL   M              31     NA
-## 3       224     9  13 1977       2         NL                  NA     NA
-## 4       266    10  16 1977       2         NL                  NA     NA
-## 5       349    11  12 1977       2         NL                  NA     NA
-## 6       363    11  12 1977       2         NL                  NA     NA
-##     genus  species   taxa plot_type
-## 1 Neotoma albigula Rodent   Control
-## 2 Neotoma albigula Rodent   Control
-## 3 Neotoma albigula Rodent   Control
-## 4 Neotoma albigula Rodent   Control
-## 5 Neotoma albigula Rodent   Control
-## 6 Neotoma albigula Rodent   Control</code></pre>
+<pre><code>#&gt;   record_id month day year plot_id species_id sex hindfoot_length weight
+#&gt; 1         1     7  16 1977       2         NL   M              32     NA
+#&gt; 2        72     8  19 1977       2         NL   M              31     NA
+#&gt; 3       224     9  13 1977       2         NL                  NA     NA
+#&gt; 4       266    10  16 1977       2         NL                  NA     NA
+#&gt; 5       349    11  12 1977       2         NL                  NA     NA
+#&gt; 6       363    11  12 1977       2         NL                  NA     NA
+#&gt;     genus  species   taxa plot_type
+#&gt; 1 Neotoma albigula Rodent   Control
+#&gt; 2 Neotoma albigula Rodent   Control
+#&gt; 3 Neotoma albigula Rodent   Control
+#&gt; 4 Neotoma albigula Rodent   Control
+#&gt; 5 Neotoma albigula Rodent   Control
+#&gt; 6 Neotoma albigula Rodent   Control</code></pre>
 <p>Unlike the <code>print()</code> function, <code>head()</code> returns
 the extracted data. You could use it to assign the first 100 rows of
 <code>surveys</code> to an object using
@@ -574,20 +560,6 @@ vector.</p>
 <p>We can see this also when inspecting the <b>str</b>ucture of a data
 frame with the function <code>str()</code>:</p>
 <pre class="r"><code>str(surveys)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    34786 obs. of  13 variables:
-##  $ record_id      : int  1 72 224 266 349 363 435 506 588 661 ...
-##  $ month          : int  7 8 9 10 11 11 12 1 2 3 ...
-##  $ day            : int  16 19 13 16 12 12 10 8 18 11 ...
-##  $ year           : int  1977 1977 1977 1977 1977 1977 1977 1978 1978 1978 ...
-##  $ plot_id        : int  2 2 2 2 2 2 2 2 2 2 ...
-##  $ species_id     : chr  &quot;NL&quot; &quot;NL&quot; &quot;NL&quot; &quot;NL&quot; ...
-##  $ sex            : chr  &quot;M&quot; &quot;M&quot; &quot;&quot; &quot;&quot; ...
-##  $ hindfoot_length: int  32 31 NA NA NA NA NA NA NA NA ...
-##  $ weight         : int  NA NA NA NA NA NA NA NA 218 NA ...
-##  $ genus          : chr  &quot;Neotoma&quot; &quot;Neotoma&quot; &quot;Neotoma&quot; &quot;Neotoma&quot; ...
-##  $ species        : chr  &quot;albigula&quot; &quot;albigula&quot; &quot;albigula&quot; &quot;albigula&quot; ...
-##  $ taxa           : chr  &quot;Rodent&quot; &quot;Rodent&quot; &quot;Rodent&quot; &quot;Rodent&quot; ...
-##  $ plot_type      : chr  &quot;Control&quot; &quot;Control&quot; &quot;Control&quot; &quot;Control&quot; ...</code></pre>
 <p>This info can also be seen by looking in the environment frame of
 RStudio and clicking on the arrow button. You can also open and View the
 data.frame by clicking on the spreadsheet icon.</p>
@@ -638,20 +610,20 @@ following questions?</p>
 </ul>
 <div class="solution">
 <pre class="r"><code>str(surveys)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    34786 obs. of  13 variables:
-##  $ record_id      : int  1 72 224 266 349 363 435 506 588 661 ...
-##  $ month          : int  7 8 9 10 11 11 12 1 2 3 ...
-##  $ day            : int  16 19 13 16 12 12 10 8 18 11 ...
-##  $ year           : int  1977 1977 1977 1977 1977 1977 1977 1978 1978 1978 ...
-##  $ plot_id        : int  2 2 2 2 2 2 2 2 2 2 ...
-##  $ species_id     : chr  &quot;NL&quot; &quot;NL&quot; &quot;NL&quot; &quot;NL&quot; ...
-##  $ sex            : chr  &quot;M&quot; &quot;M&quot; &quot;&quot; &quot;&quot; ...
-##  $ hindfoot_length: int  32 31 NA NA NA NA NA NA NA NA ...
-##  $ weight         : int  NA NA NA NA NA NA NA NA 218 NA ...
-##  $ genus          : chr  &quot;Neotoma&quot; &quot;Neotoma&quot; &quot;Neotoma&quot; &quot;Neotoma&quot; ...
-##  $ species        : chr  &quot;albigula&quot; &quot;albigula&quot; &quot;albigula&quot; &quot;albigula&quot; ...
-##  $ taxa           : chr  &quot;Rodent&quot; &quot;Rodent&quot; &quot;Rodent&quot; &quot;Rodent&quot; ...
-##  $ plot_type      : chr  &quot;Control&quot; &quot;Control&quot; &quot;Control&quot; &quot;Control&quot; ...</code></pre>
+<pre><code>#&gt; &#39;data.frame&#39;:    34786 obs. of  13 variables:
+#&gt;  $ record_id      : int  1 72 224 266 349 363 435 506 588 661 ...
+#&gt;  $ month          : int  7 8 9 10 11 11 12 1 2 3 ...
+#&gt;  $ day            : int  16 19 13 16 12 12 10 8 18 11 ...
+#&gt;  $ year           : int  1977 1977 1977 1977 1977 1977 1977 1978 1978 1978 ...
+#&gt;  $ plot_id        : int  2 2 2 2 2 2 2 2 2 2 ...
+#&gt;  $ species_id     : chr  &quot;NL&quot; &quot;NL&quot; &quot;NL&quot; &quot;NL&quot; ...
+#&gt;  $ sex            : chr  &quot;M&quot; &quot;M&quot; &quot;&quot; &quot;&quot; ...
+#&gt;  $ hindfoot_length: int  32 31 NA NA NA NA NA NA NA NA ...
+#&gt;  $ weight         : int  NA NA NA NA NA NA NA NA 218 NA ...
+#&gt;  $ genus          : chr  &quot;Neotoma&quot; &quot;Neotoma&quot; &quot;Neotoma&quot; &quot;Neotoma&quot; ...
+#&gt;  $ species        : chr  &quot;albigula&quot; &quot;albigula&quot; &quot;albigula&quot; &quot;albigula&quot; ...
+#&gt;  $ taxa           : chr  &quot;Rodent&quot; &quot;Rodent&quot; &quot;Rodent&quot; &quot;Rodent&quot; ...
+#&gt;  $ plot_type      : chr  &quot;Control&quot; &quot;Control&quot; &quot;Control&quot; &quot;Control&quot; ...</code></pre>
 <pre class="r"><code>## * class: data frame
 ## * how many rows: 34786,  how many columns: 13</code></pre>
 </div>
@@ -845,8 +817,6 @@ do the conversion using the <code>factor()</code> function:</p>
 <code>summary()</code> function again. This produces a table with the
 counts for each factor level:</p>
 <pre class="r"><code>summary(surveys$sex)</code></pre>
-<pre><code>##           F     M 
-##  1748 15690 17348</code></pre>
 <p>By default, R always sorts levels in alphabetical order. For
 instance, if you have a factor with 2 levels:</p>
 <pre class="r"><code>sex &lt;- factor(c(&quot;male&quot;, &quot;female&quot;, &quot;female&quot;, &quot;male&quot;))</code></pre>
@@ -856,22 +826,20 @@ comes before <code>m</code>, even though the first element in this
 vector is <code>&quot;male&quot;</code>). You can see this by using the function
 <code>levels()</code> and you can find the number of levels using
 <code>nlevels()</code>:</p>
-<pre class="r"><code>levels(sex)</code></pre>
-<pre><code>## [1] &quot;female&quot; &quot;male&quot;</code></pre>
-<pre class="r"><code>nlevels(sex)</code></pre>
-<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>levels(sex)
+nlevels(sex)</code></pre>
 <p>Sometimes, the order of the factors does not matter, other times you
 might want to specify the order because it is meaningful (e.g., “low”,
 “medium”, “high”), it improves your visualization, or it is required by
 a particular type of analysis. Here, one way to reorder our levels in
 the <code>sex</code> vector would be:</p>
 <pre class="r"><code>sex # current order</code></pre>
-<pre><code>## [1] male   female female male  
-## Levels: female male</code></pre>
+<pre><code>#&gt; [1] male   female female male  
+#&gt; Levels: female male</code></pre>
 <pre class="r"><code>sex &lt;- factor(sex, levels = c(&quot;male&quot;, &quot;female&quot;))
 sex # after re-ordering</code></pre>
-<pre><code>## [1] male   female female male  
-## Levels: male female</code></pre>
+<pre><code>#&gt; [1] male   female female male  
+#&gt; Levels: male female</code></pre>
 <p>In R’s memory, these factors are represented by integers (1, 2, 3),
 but are more informative than integers because factors are self
 describing: <code>&quot;female&quot;</code>, <code>&quot;male&quot;</code> is more
@@ -896,34 +864,10 @@ out…</p></li>
 <div class="solution">
 <pre class="r"><code>surveys$taxa &lt;- factor(surveys$taxa)
 surveys$genus &lt;- factor(surveys$genus)
-summary(surveys)</code></pre>
-<pre><code>##    record_id         month             day            year         plot_id     
-##  Min.   :    1   Min.   : 1.000   Min.   : 1.0   Min.   :1977   Min.   : 1.00  
-##  1st Qu.: 8964   1st Qu.: 4.000   1st Qu.: 9.0   1st Qu.:1984   1st Qu.: 5.00  
-##  Median :17762   Median : 6.000   Median :16.0   Median :1990   Median :11.00  
-##  Mean   :17804   Mean   : 6.474   Mean   :16.1   Mean   :1990   Mean   :11.34  
-##  3rd Qu.:26655   3rd Qu.:10.000   3rd Qu.:23.0   3rd Qu.:1997   3rd Qu.:17.00  
-##  Max.   :35548   Max.   :12.000   Max.   :31.0   Max.   :2002   Max.   :24.00  
-##                                                                                
-##   species_id        sex       hindfoot_length     weight      
-##  Length:34786        : 1748   Min.   : 2.00   Min.   :  4.00  
-##  Class :character   F:15690   1st Qu.:21.00   1st Qu.: 20.00  
-##  Mode  :character   M:17348   Median :32.00   Median : 37.00  
-##                               Mean   :29.29   Mean   : 42.67  
-##                               3rd Qu.:36.00   3rd Qu.: 48.00  
-##                               Max.   :70.00   Max.   :280.00  
-##                               NA&#39;s   :3348    NA&#39;s   :2503    
-##              genus         species               taxa        plot_type        
-##  Dipodomys      :16167   Length:34786       Bird   :  450   Length:34786      
-##  Chaetodipus    : 6029   Class :character   Rabbit :   75   Class :character  
-##  Onychomys      : 3267   Mode  :character   Reptile:   14   Mode  :character  
-##  Reithrodontomys: 2694                      Rodent :34247                     
-##  Peromyscus     : 2234                                                        
-##  Perognathus    : 1629                                                        
-##  (Other)        : 2766</code></pre>
-<pre class="r"><code>nlevels(surveys$genus)</code></pre>
-<pre><code>## [1] 26</code></pre>
-<pre class="r"><code>## * how many genera: There are 26 unique genera in the `genus` column.
+summary(surveys)
+nlevels(surveys$genus)
+
+## * how many genera: There are 26 unique genera in the `genus` column.
 ## * how many rabbts: There are 75 rabbits in the `taxa` column.</code></pre>
 </div>
 </div>
@@ -981,7 +925,10 @@ summarizing data in data frames.</li>
 functions for working with dates.</li>
 </ul>
 </div>
-<pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
+<pre class="r"><code>### Installing the tidyverse
+# Before we move onto the next lesson I want to make sure everyone has already installed the tidyverse package
+# Run this script below if you havent already
+install.packages(&quot;tidyverse&quot;)</code></pre>
 </div>
 
 

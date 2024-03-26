@@ -6,6 +6,8 @@ minutes: 45
 
 ```{r, echo=FALSE, purl=FALSE, message=FALSE}
 #source("setup.R")
+knitr::opts_chunk$set(results='hide', # fig.path='img/R-ecology-',
+                      comment = "#>", purl = FALSE)
 surveys <- read.csv("data/portal_data_joined.csv")
 # suppressWarnings(surveys$date <- lubridate::ymd(paste(surveys$year,
 #                                                       surveys$month,
