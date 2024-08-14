@@ -522,8 +522,6 @@ But if I'm graphing it I want a way to tell the program which comes first.
 
 Now in some analysis lets say you had 1 plot and 3 treatments and you applied each treatment
 one at a time and measured some value after each treatment. 
-Or going back to our PB&J recipe and each ingredient is a treatment. 
-Say the measured variable is **deliciousness** of the sandwich.  
 
 Is the order meaningful in those examples? Yes.
 
@@ -560,82 +558,9 @@ level:
 summary(surveys$sex)
 ```
 
-By default, R always sorts levels in alphabetical order. For instance,
-if you have a factor with 2 levels:
-
-```{r, purl=FALSE}
-sex <- factor(c("male", "female", "female", "male"))
-```
-
-R will assign `1` to the level `"female"` and `2` to the level `"male"`
-(because `f` comes before `m`, even though the first element in this
-vector is `"male"`). You can see this by using the function `levels()`
-and you can find the number of levels using `nlevels()`:
-
-```{r, purl=FALSE}
-levels(sex)
-nlevels(sex)
-```
-
-Sometimes, the order of the factors does not matter, other times you
-might want to specify the order because it is meaningful (e.g., "low",
-"medium", "high"), it improves your visualization, or it is required by
-a particular type of analysis. Here, one way to reorder our levels in
-the `sex` vector would be:
-
-```{r, results=TRUE, purl=FALSE}
-sex # current order
-sex <- factor(sex, levels = c("male", "female"))
-sex # after re-ordering
-```
-
-In R's memory, these factors are represented by integers (1, 2, 3), but
-are more informative than integers because factors are self describing:
-`"female"`, `"male"` is more descriptive than `1`, `2`. Which one is
-"male"? You wouldn't be able to tell just from the integer data.
-Factors, on the other hand, have this information built in. It is
-particularly helpful when there are many levels (like the species names
-in our example dataset).
-
-::: challenge
-### Challenge
-
-1.  Change the columns `taxa` and `genus` in the `surveys` data frame
-    into a factor.
-
-2.  Using the functions you learned before, can you find out...
-
--   How many rabbits were observed?
--   How many different genera are in the `genus` column?
-
-::: solution
-```{r, answer=TRUE, purl=FALSE}
-surveys$taxa <- factor(surveys$taxa)
-surveys$genus <- factor(surveys$genus)
-summary(surveys)
-nlevels(surveys$genus)
-
-## * how many genera: There are 26 unique genera in the `genus` column.
-## * how many rabbts: There are 75 rabbits in the `taxa` column.
-```
-:::
-:::
-
-```{r, echo=FALSE, purl=TRUE}
-### Challenges:
-###
-### 1. Change the columns `taxa` and `genus` in the `surveys` data frame into a 
-###    factor.
-###
-### 2. Using the functions you learned before, can you find out...
-###
-###      * How many rabbits were observed?
-###      * How many different genera are in the `genus` column?
-
-```
 
 \<note>
-Converting factors was moved to extra lessons
+Working with factors and converting factors was moved to extra lessons
 \<\note>
 
 ::: challenge

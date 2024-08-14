@@ -284,18 +284,16 @@ Instructions
 # Instructions
 # - Lay out two slices of bread
 # - Spread 2tbsp of peanut butter on one slice of bread
-# - Spread 2tbsp of grapy jelly on the other slice of bread
+# - Spread 2tbsp of grape jelly on the other slice of bread
 # - Place the two pieces of bread together
 # - Cut diagonal with a knife
 # - Serve!
 ```
 
 I can hand you this recipe and you'll know how to make a PB&J sandwich reliably. 
-This is your script. The script itself does not do the work. The script is just the recipe you hand over. The console is **you**, **you** are the one making the recipe.
+You take your ingredients and follow the recipe. 
 
-We'll play with this concept as we go.
-
-Now whats a function? Well its basically a PB&J cookbook. Its a package of recipes. The R console can use those recipes, take the ingredients you give it, and pop out a metaphorical sandwich.  It makes the same sandwich every single time.
+In this example the ingredients are our **arguments** and the recipe is our **script**. The console is **you**, **you** are the one making the recipe. We can wrap both of these things together into a function. A function is like a recipe card.
 
 Lets look at the standard deviation function
 
@@ -306,7 +304,7 @@ sd
 **\<note>** Heres where we can explain that a function without the parenthesis works differently than with parenthesis **\</note>**
 
 
-When you print out a function without giving the parenthesis it will show you the **script** or the **recipe** it uses. This is one of the most simple functions. If you ignore the 'is.___' and you know that sqrt is the square root function and var is the variance function. Then it takes an input and calculates the square root of the variance.
+When you print out a function without giving the parenthesis it will show you the **script** (the **recipe**) it uses. This is one of the most simple functions. If you ignore the 'is.___' and you know that sqrt is the square root function and var is the variance function. Then it takes an input and calculates the square root of the variance.
 
 Let's try a simple function that can take multiple arguments: `round()`.
 
@@ -315,37 +313,11 @@ round
 ?round
 ```
 
-It has two arguments, x and digits. These are the ingredients to your round function. `x` is a common variable term for the data, in order to calculate the standard deviation it obviously needs **the data**. 
+It has two arguments, x and digits. These are the ingredients to your round function. `x` is a common variable term for the "data", in order to calculate the standard deviation it obviously needs **the data**. 
 
 It also is telling us it needs something else, digits. I know from the return and from the help file, that this argument is telling us how many digits to round our number to. This digits argument is set equal to 0. What does that mean? When you're running a function, the = means you're assigning a value to that argument. This is how we tell the function what ingredient we want to use. Maybe you want to give it wheat bread, not white bread, maybe grape jelly not strawberry. etc.
 
-In our theoretical PB&J function this is what our arguments would be:
-
-```
-pbj(bread = "white bread", jelly="smuckers grape jelly", peanut_butter = "jif smooth peanut butter")
-```
-
-So what the round function is trying to tell us with digits=0 is it's telling us the default answer its going to use if you dont give it one. If we don't tell it what kind of peanut butter or jelly we want to use, it will use the default: JIF smooth peanut butter and Smuckers grape jelly.
-
-We can rewrite our PB&J recipe to match this concept like this:
-```
-Peanut Butter and Jelly Sandwich
-Ingredients
-- 2 slices of sandwich bread
-- Jelly (Smuckers Grape Jelly)
-- Peanut butter (JIF Smooth Peanut Butter)
-
-Instructions
-- Lay out two slices of bread
-- Spread 2tbsp of peanut butter on one slice of bread
-- Spread 2tbsp of grapy jelly on the other slice of bread
-- Place the two pieces of bread together (peanut butter to jelly)
-- Cut diagonal with a knife
-- Serve!
-```
-
-And in our round function, its telling us if we don't assign a value to `digits` its going to use its default '0' meaning round to 0 decimals.
-
+So what the round function is trying to tell us with digits=0 is it's telling us the default answer its going to use if you don't give it one. In our round function, its telling us if we don't assign a value to `digits` its going to use its default '0' meaning round to 0 decimals.
 
 
 ```{r, results="show", purl=FALSE}
@@ -429,7 +401,7 @@ don't exist in R's memory, there will be an error message.
 We usually lose some people here. Its good to pause here and go over what a character is and how R understands quotations.
 **\</note>**
 
-#### data types
+#### Data Types
 In all programming languages you have to specify the kinds of data you're using. 
 
 In R, all R objects are built mainly from 4 **data types or atomic vector** :  
@@ -457,14 +429,14 @@ sure that R runs smoothly and reliably every time.
 
 '1' can be all 4 data types
 
-- 1 is a number. Its the first number!. It can also have a certain accuracy.  
-- 1 is also an integer. Its a non-decimal exact number. Its 1!.  
-- 1 is also used in logical. Well known in programming, but less known outside.  
+- 1 is a number. Its the first number! It can also have a certain precision (think 1.000).  
+- 1 is also an integer. Its a non-decimal exact number. Its 1!  
+- 1 is also used in logical. Well known in programming, but lesser known outside of programmin.  
 
 A common way to write or understand true and false is also 1 and 0. 
 It either is or isnt. Off or on. The absolute foundation of programming and electronics itself!  
 
-- 1 can also be a character. "1" its not the first its not the measured value of 1.  
+- 1 can also be a character. "1" its not the first and its not the measured value of 1.  
 It is simply maybe your first plot. Number 1 because maybe an arbitrary reason. It was the first plot you went to.  
 
 Now if youre trying to make a recipe and you gave it a value of 1, you can argue that
@@ -672,6 +644,9 @@ simpler for computers to do.
 
 ### Conditional subsetting
 
+**\<note>** Go slow here and make sure each example is explained and makes sense
+**\</note>** 
+
 Another common way of subsetting is by using a logical vector. `TRUE` will
 select the element with the same index, while `FALSE` will not:
 
@@ -727,10 +702,41 @@ animals[animals %in% c("rat", "cat", "dog", "duck", "goat", "bird", "fish")]
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-<!--  we need another challenge here. Do an actual challenge and then at the
-end have an option challenge -->
+### Challenge
 
-### Challenge (optional){.challenge}
+Lets test how much this subsetting lesson made sense
+
+- Using our `weight_g` vector can you subset only the values that are less than or equal to 34?
+
+weight_g <- c(21, 34, 39, 54, 55)
+
+::::::: solution
+
+```
+weight_g[weight_g<=34]
+```
+
+::::::::::::::::
+
+- Using our `weights_g` and the function `mean` calculate the mean weight with the 21 and 55 values **not included** 
+  
+::::::: solution
+
+```
+ mean(weight_g[weight_g>21 & weight_g<55])
+```
+
+::::::::::::::::
+
+- Using our `animals` vector return where the values equal rat, dog, or cat
+
+::::::: solution
+
+```
+animals[animals%in%c('rat','dog,'cat')]
+```
+
+### Optional Challenge optional)
 
 - Can you figure out why `"four" > "five"` returns `TRUE`?
 
@@ -747,6 +753,17 @@ Here "four" comes after "five", and therefore is "greater than" it.
 ### Challenge (optional)
 ##
 ## * Can you figure out why `"four" > "five"` returns `TRUE`?
+```
+
+```{r, echo=FALSE, purl=TRUE}
+## ### Challenge
+## 1. Using our `weight_g` vector can you subset only the values that are less than or equal to 34?
+weight_g <- c(21, 34, 39, 54, 55)
+##
+## 2. Using our `weights_g` and the function `mean` calculate the mean weight with the 21 and 55 values **not included** 
+##
+## 3. Using our `animals` vector return where the values equal rat, dog, or cat
+animals <- c("mouse", "rat", "dog", "cat", "cat")
 ```
 
 ## Missing data
@@ -796,7 +813,7 @@ Recall that you can use the `typeof()` function to find the type of your atomic 
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-### Challenge
+### Challenge (go through together)
 
 1. Using this vector of heights in inches, create a new vector, `heights_no_na`, with the NAs removed.
   
