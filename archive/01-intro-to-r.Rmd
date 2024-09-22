@@ -10,7 +10,7 @@ knitr::opts_chunk$set(results='hide', # fig.path='img/R-ecology-',
                       comment = "#>", purl = FALSE)
 ```
 
-```{r, purl=TRUE}
+```{r, echo=F, purl=TRUE}
 ################################################
 # Lesson 01 - Introduction to R
 ################################################
@@ -208,18 +208,31 @@ mass_index <- mass/age  # mass_index?
 ## mass <- mass * 2.0      # mass?
 ## age  <- age - 20        # age?
 ## mass_index <- mass/age  # mass_index?
+
+
+
 ```
 
 ### Functions and their arguments
 
-Functions are "canned scripts" that automate more complicated sets of commands
-including operations assignments, etc. Many functions are predefined, or can be
+Functions are "canned scripts" that automate more complicated sets of commands. Many functions are predefined, or can be
 made available by importing R *packages* (more on that later). A function
 usually takes one or more inputs called *arguments*. Functions often (but not
 always) return a *value*. A typical example would be the function `sqrt()`. The
 input (the argument) must be a number, and the return value (in fact, the
 output) is the square root of that number. Executing a function ('running it')
 is called *calling* the function. An example of a function call is:
+
+```{r, echo=FALSE, purl=TRUE}
+### Functions and their arguments
+# - Functions are canned scripts that run all at once
+# - A function has arguments as inputs
+# - A function often returns a value
+# - Functions can be imported via *packages*
+
+
+```
+
 
 ```{r, eval=FALSE, purl=FALSE}
 weight_kg <- sqrt(10)
@@ -295,6 +308,14 @@ You take your ingredients and follow the recipe.
 
 In this example the ingredients are our **arguments** and the recipe is our **script**. The console is **you**, **you** are the one making the recipe. We can wrap both of these things together into a function. A function is like a recipe card.
 
+If this was a function it, it would look like this:
+```
+my_sandwich <- make_pbj(bread='white bread', jelly='grape', peanut_butter='smooth')
+
+```
+
+We *input* the arguments `bread`, `jelly`, `peanut butter` and the function returns an *output* which we save a variable (`my_sandwich`) 
+
 Lets look at the standard deviation function
 
 ```{r,results="show"}
@@ -360,7 +381,7 @@ arguments.  If you don't, someone reading your code might have to look up the
 definition of a function with unfamiliar arguments to understand what you're
 doing.
 
-**\<note>** I've heard the rule of thumb to name your arguments if its more than 3 **\</note>**
+**\<note>** I've heard the rule of thumb to name your arguments tgere are more than 3 **\</note>**
 
 
 ## Vectors and data types
@@ -404,13 +425,14 @@ We usually lose some people here. Its good to pause here and go over what a char
 #### Data Types
 In all programming languages you have to specify the kinds of data you're using. 
 
-In R, all R objects are built mainly from 4 **data types or atomic vector** :  
+In R, all R objects are built mainly from 4 **data types or vector** :  
 - `numeric`  
 - `character`   
 - `logical` for `TRUE` and `FALSE` (the boolean data type)  
 - `integer` for integer numbers. Essentially a numeric with no decimal.  
 
 ```{r,echo=FALSE, purl=TRUE}
+# 4 main data types in R
 # - numeric  :
 # - character :  
 # - logical for TRUE and FALSE (the boolean data type) :  
@@ -504,7 +526,7 @@ We can do this over and over again to grow a vector, or assemble a dataset.
 As we program, this may be useful to add results that we are collecting or
 calculating.
 
-An **atomic vector** is the simplest R **data type** and is a linear vector of a single type.
+An **vector** is the simplest R **data type** and is a linear vector of a single type.
 
 You can check the type of your vector using the `typeof()` function and inputting your vector as the argument.
 
@@ -521,7 +543,7 @@ factors (`factor`) and arrays (`array`).
 ### Challenge
 <!-- rewrite this challenge to test how to subset vectors and use the %in% function then ask the bonus challenge -->
 
-- We've seen that atomic vectors can be of type character,
+- We've seen that vectors can be of type character,
   numeric (or double), integer, and logical. But what happens if we try to mix these types in
   a single vector?
 
@@ -585,7 +607,7 @@ logical → numeric → character ← logical
 
 ```{r, echo=FALSE, eval=FALSE, purl=TRUE}
 ## ### Challenge
-## We've seen that atomic vectors can be of type character, numeric, integer, and
+## We've seen that vectors can be of type character, numeric, integer, and
 ## logical. But what happens if we try to mix these types in a single
 ## vector?
 
@@ -801,15 +823,15 @@ examples.
 heights[!is.na(heights)]
 
 ## Returns the object with incomplete cases removed.
-#The returned object is an atomic vector of type `"numeric"` (or #`"double"`).
+#The returned object is an vector of type `"numeric"` (or #`"double"`).
 na.omit(heights)
 
 ## Extract those elements which are complete cases.
-#The returned object is an atomic vector of type `"numeric"` (or #`"double"`).
+#The returned object is an vector of type `"numeric"` (or #`"double"`).
 heights[complete.cases(heights)]
 ```
 
-Recall that you can use the `typeof()` function to find the type of your atomic vector.
+Recall that you can use the `typeof()` function to find the type of your vector.
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 

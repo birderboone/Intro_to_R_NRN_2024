@@ -355,9 +355,6 @@ display: none;
 </div>
 
 
-<pre class="r"><code>################################################
-# Lesson 01 - Introduction to R
-################################################</code></pre>
 <hr />
 <div class="questions">
 <ul>
@@ -515,15 +512,14 @@ mass_index &lt;- mass/age  # mass_index?</code></pre>
 <div id="functions-and-their-arguments" class="section level3">
 <h3>Functions and their arguments</h3>
 <p>Functions are “canned scripts” that automate more complicated sets of
-commands including operations assignments, etc. Many functions are
-predefined, or can be made available by importing R <em>packages</em>
-(more on that later). A function usually takes one or more inputs called
-<em>arguments</em>. Functions often (but not always) return a
-<em>value</em>. A typical example would be the function
-<code>sqrt()</code>. The input (the argument) must be a number, and the
-return value (in fact, the output) is the square root of that number.
-Executing a function (‘running it’) is called <em>calling</em> the
-function. An example of a function call is:</p>
+commands. Many functions are predefined, or can be made available by
+importing R <em>packages</em> (more on that later). A function usually
+takes one or more inputs called <em>arguments</em>. Functions often (but
+not always) return a <em>value</em>. A typical example would be the
+function <code>sqrt()</code>. The input (the argument) must be a number,
+and the return value (in fact, the output) is the square root of that
+number. Executing a function (‘running it’) is called <em>calling</em>
+the function. An example of a function call is:</p>
 <pre class="r"><code>weight_kg &lt;- sqrt(10)</code></pre>
 <p>Here, the value of 10 is given to the <code>sqrt()</code> function,
 the <code>sqrt()</code> function calculates the square root, and returns
@@ -574,27 +570,31 @@ Instructions
 - Cut diagonal with a knife
 - Serve!</code></pre>
 <p>I can hand you this recipe and you’ll know how to make a PB&amp;J
-sandwich reliably. This is your script. The script itself does not do
-the work. The script is just the recipe you hand over. The console is
+sandwich reliably. You take your ingredients and follow the recipe.</p>
+<p>In this example the ingredients are our <strong>arguments</strong>
+and the recipe is our <strong>script</strong>. The console is
 <strong>you</strong>, <strong>you</strong> are the one making the
-recipe.</p>
-<p>We’ll play with this concept as we go.</p>
-<p>Now whats a function? Well its basically a PB&amp;J cookbook. Its a
-package of recipes. The R console can use those recipes, take the
-ingredients you give it, and pop out a metaphorical sandwich. It makes
-the same sandwich every single time.</p>
+recipe. We can wrap both of these things together into a function. A
+function is like a recipe card.</p>
+<p>If this was a function it, it would look like this:</p>
+<pre><code>my_sandwich &lt;- make_pbj(bread=&#39;white bread&#39;, jelly=&#39;grape&#39;, peanut_butter=&#39;smooth&#39;)
+</code></pre>
+<p>We <em>input</em> the arguments <code>bread</code>,
+<code>jelly</code>, <code>peanut butter</code> and the function returns
+an <em>output</em> which we save a variable
+(<code>my_sandwich</code>)</p>
 <p>Lets look at the standard deviation function</p>
 <pre class="r"><code>sd</code></pre>
 <pre><code>#&gt; function (x, na.rm = FALSE) 
 #&gt; sqrt(var(if (is.vector(x) || is.factor(x)) x else as.double(x), 
 #&gt;     na.rm = na.rm))
-#&gt; &lt;bytecode: 0x000001993afa42c8&gt;
+#&gt; &lt;bytecode: 0x000001c869b34b20&gt;
 #&gt; &lt;environment: namespace:stats&gt;</code></pre>
 <p><strong>&lt;note&gt;</strong> Heres where we can explain that a
 function without the parenthesis works differently than with parenthesis
 <strong>&lt;/note&gt;</strong></p>
 <p>When you print out a function without giving the parenthesis it will
-show you the <strong>script</strong> or the <strong>recipe</strong> it
+show you the <strong>script</strong> (the <strong>recipe</strong>) it
 uses. This is one of the most simple functions. If you ignore the
 ’is.___’ and you know that sqrt is the square root function and var is
 the variance function. Then it takes an input and calculates the square
@@ -605,7 +605,7 @@ root of the variance.</p>
 ?round</code></pre>
 <pre><code>#&gt; starting httpd help server ... done</code></pre>
 <p>It has two arguments, x and digits. These are the ingredients to your
-round function. <code>x</code> is a common variable term for the data,
+round function. <code>x</code> is a common variable term for the “data”,
 in order to calculate the standard deviation it obviously needs
 <strong>the data</strong>.</p>
 <p>It also is telling us it needs something else, digits. I know from
@@ -615,32 +615,11 @@ many digits to round our number to. This digits argument is set equal to
 you’re assigning a value to that argument. This is how we tell the
 function what ingredient we want to use. Maybe you want to give it wheat
 bread, not white bread, maybe grape jelly not strawberry. etc.</p>
-<p>In our theoretical PB&amp;J function this is what our arguments would
-be:</p>
-<pre><code>pbj(bread = &quot;white bread&quot;, jelly=&quot;smuckers grape jelly&quot;, peanut_butter = &quot;jif smooth peanut butter&quot;)</code></pre>
 <p>So what the round function is trying to tell us with digits=0 is it’s
-telling us the default answer its going to use if you dont give it one.
-If we don’t tell it what kind of peanut butter or jelly we want to use,
-it will use the default: JIF smooth peanut butter and Smuckers grape
-jelly.</p>
-<p>We can rewrite our PB&amp;J recipe to match this concept like
-this:</p>
-<pre><code>Peanut Butter and Jelly Sandwich
-Ingredients
-- 2 slices of sandwich bread
-- Jelly (Smuckers Grape Jelly)
-- Peanut butter (JIF Smooth Peanut Butter)
-
-Instructions
-- Lay out two slices of bread
-- Spread 2tbsp of peanut butter on one slice of bread
-- Spread 2tbsp of grapy jelly on the other slice of bread
-- Place the two pieces of bread together (peanut butter to jelly)
-- Cut diagonal with a knife
-- Serve!</code></pre>
-<p>And in our round function, its telling us if we don’t assign a value
-to <code>digits</code> its going to use its default ‘0’ meaning round to
-0 decimals.</p>
+telling us the default answer its going to use if you don’t give it one.
+In our round function, its telling us if we don’t assign a value to
+<code>digits</code> its going to use its default ‘0’ meaning round to 0
+decimals.</p>
 <pre class="r"><code>round(3.14159)</code></pre>
 <pre><code>#&gt; [1] 3</code></pre>
 <p>Here, we’ve called <code>round()</code> with just one argument,
@@ -650,7 +629,7 @@ about the <code>round</code> function. We can use
 <code>args(round)</code> to find what arguments it takes, or look at the
 help for this function using <code>?round</code>.</p>
 <pre class="r"><code>args(round)</code></pre>
-<pre><code>#&gt; function (x, digits = 0) 
+<pre><code>#&gt; function (x, digits = 0, ...) 
 #&gt; NULL</code></pre>
 <p>We see that if we want a different number of digits, we can type
 <code>digits = 2</code> or however many we want.</p>
@@ -669,7 +648,7 @@ names of all optional arguments. If you don’t, someone reading your code
 might have to look up the definition of a function with unfamiliar
 arguments to understand what you’re doing.</p>
 <p><strong>&lt;note&gt;</strong> I’ve heard the rule of thumb to name
-your arguments if its more than 3 <strong>&lt;/note&gt;</strong></p>
+your arguments tgere are more than 3 <strong>&lt;/note&gt;</strong></p>
 </div>
 </div>
 <div id="vectors-and-data-types" class="section level2">
@@ -696,11 +675,11 @@ good to pause here and go over what a character is and how R understands
 quotations. <strong>&lt;/note&gt;</strong></p>
 </div>
 <div id="data-types" class="section level4">
-<h4>data types</h4>
+<h4>Data Types</h4>
 <p>In all programming languages you have to specify the kinds of data
 you’re using.</p>
 <p>In R, all R objects are built mainly from 4 <strong>data types or
-atomic vector</strong> :<br />
+vector</strong> :<br />
 - <code>numeric</code><br />
 - <code>character</code><br />
 - <code>logical</code> for <code>TRUE</code> and <code>FALSE</code> (the
@@ -721,19 +700,19 @@ reliably every time.</p>
 sheet.</h5>
 <p>‘1’ can be all 4 data types</p>
 <ul>
-<li>1 is a number. Its the first number!. It can also have a certain
-accuracy.<br />
+<li>1 is a number. Its the first number! It can also have a certain
+precision (think 1.000).<br />
 </li>
-<li>1 is also an integer. Its a non-decimal exact number. Its 1!.<br />
+<li>1 is also an integer. Its a non-decimal exact number. Its 1!<br />
 </li>
-<li>1 is also used in logical. Well known in programming, but less known
-outside.</li>
+<li>1 is also used in logical. Well known in programming, but lesser
+known outside of programmin.</li>
 </ul>
 <p>A common way to write or understand true and false is also 1 and 0.
 It either is or isnt. Off or on. The absolute foundation of programming
 and electronics itself!</p>
 <ul>
-<li>1 can also be a character. “1” its not the first its not the
+<li>1 can also be a character. “1” its not the first and its not the
 measured value of 1.<br />
 It is simply maybe your first plot. Number 1 because maybe an arbitrary
 reason. It was the first plot you went to.</li>
@@ -785,7 +764,7 @@ beginning, again saving the result back into <code>weight_g</code>.</p>
 <p>We can do this over and over again to grow a vector, or assemble a
 dataset. As we program, this may be useful to add results that we are
 collecting or calculating.</p>
-<p>An <strong>atomic vector</strong> is the simplest R <strong>data
+<p>An <strong>vector</strong> is the simplest R <strong>data
 type</strong> and is a linear vector of a single type.</p>
 <p>You can check the type of your vector using the <code>typeof()</code>
 function and inputting your vector as the argument.</p>
@@ -799,7 +778,7 @@ uses. Other important ones are lists (<code>list</code>), matrices
 <h3>Challenge</h3>
 <!-- rewrite this challenge to test how to subset vectors and use the %in% function then ask the bonus challenge -->
 <ul>
-<li>We’ve seen that atomic vectors can be of type character, numeric (or
+<li>We’ve seen that vectors can be of type character, numeric (or
 double), integer, and logical. But what happens if we try to mix these
 types in a single vector?</li>
 </ul>
@@ -867,6 +846,8 @@ typically do. Languages in the C family (including C++, Java, Perl, and
 Python) count from 0 because that’s simpler for computers to do.</p>
 <div id="conditional-subsetting" class="section level3">
 <h3>Conditional subsetting</h3>
+<p><strong>&lt;note&gt;</strong> Go slow here and make sure each example
+is explained and makes sense <strong>&lt;/note&gt;</strong></p>
 <p>Another common way of subsetting is by using a logical vector.
 <code>TRUE</code> will select the element with the same index, while
 <code>FALSE</code> will not:</p>
@@ -914,11 +895,35 @@ animals %in% c(&quot;rat&quot;, &quot;cat&quot;, &quot;dog&quot;, &quot;duck&quo
 # that are found in the character vector
 animals[animals %in% c(&quot;rat&quot;, &quot;cat&quot;, &quot;dog&quot;, &quot;duck&quot;, &quot;goat&quot;, &quot;bird&quot;, &quot;fish&quot;)]</code></pre>
 <pre><code>#&gt; [1] &quot;rat&quot; &quot;dog&quot; &quot;cat&quot; &quot;cat&quot;</code></pre>
-<div class="challenge">
-<!--  we need another challenge here. Do an actual challenge and then at the
-end have an option challenge -->
-<div id="challenge-optional" class="section level3 challenge">
-<h3 class="challenge">Challenge (optional)</h3>
+<p>::::::::::::::::::::::::::::::::::::::: challenge</p>
+</div>
+<div id="challenge-2" class="section level3">
+<h3>Challenge</h3>
+<p>Lets test how much this subsetting lesson made sense</p>
+<ul>
+<li>Using our <code>weight_g</code> vector can you subset only the
+values that are less than or equal to 34?</li>
+</ul>
+<p>weight_g &lt;- c(21, 34, 39, 54, 55)</p>
+<div class="solution">
+<pre><code>weight_g[weight_g&lt;=34]</code></pre>
+</div>
+<ul>
+<li>Using our <code>weights_g</code> and the function <code>mean</code>
+calculate the mean weight with the 21 and 55 values <strong>not
+included</strong></li>
+</ul>
+<div class="solution">
+<pre><code> mean(weight_g[weight_g&gt;21 &amp; weight_g&lt;55])</code></pre>
+</div>
+<ul>
+<li>Using our <code>animals</code> vector return where the values equal
+rat, dog, or cat</li>
+</ul>
+<div class="solution">
+<pre><code>animals[animals%in%c(&#39;rat&#39;,&#39;dog,&#39;cat&#39;)]</code></pre>
+<div id="optional-challenge-optional" class="section level3">
+<h3>Optional Challenge optional)</h3>
 <ul>
 <li>Can you figure out why <code>&quot;four&quot; &gt; &quot;five&quot;</code> returns
 <code>TRUE</code>?</li>
@@ -955,16 +960,16 @@ with the functions <code>is.na()</code>, <code>na.omit()</code>, and
 heights[!is.na(heights)]
 
 ## Returns the object with incomplete cases removed.
-#The returned object is an atomic vector of type `&quot;numeric&quot;` (or #`&quot;double&quot;`).
+#The returned object is an vector of type `&quot;numeric&quot;` (or #`&quot;double&quot;`).
 na.omit(heights)
 
 ## Extract those elements which are complete cases.
-#The returned object is an atomic vector of type `&quot;numeric&quot;` (or #`&quot;double&quot;`).
+#The returned object is an vector of type `&quot;numeric&quot;` (or #`&quot;double&quot;`).
 heights[complete.cases(heights)]</code></pre>
 <p>Recall that you can use the <code>typeof()</code> function to find
-the type of your atomic vector.</p>
-<div id="challenge-2" class="section level3 challenge">
-<h3>Challenge</h3>
+the type of your vector.</p>
+<div id="challenge-go-through-together" class="section level3 challenge">
+<h3>Challenge (go through together)</h3>
 <ol style="list-style-type: decimal">
 <li>Using this vector of heights in inches, create a new vector,
 <code>heights_no_na</code>, with the NAs removed.</li>

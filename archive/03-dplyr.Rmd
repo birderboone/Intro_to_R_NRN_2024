@@ -1,5 +1,4 @@
 ---
-title: Manipulating, analyzing and exporting data with tidyverse
 author: Data Carpentry contributors
 minutes: 45
 ---
@@ -51,20 +50,11 @@ surveys <- read.csv("data/portal_data_joined.csv")
 Packages in R are basically sets of additional functions that let you do
 more stuff. The functions we've been using so far, like `round()`,
 `sqrt()`, or `c()` come built into R. Packages give you access to
-additional functions beyond base R. A similar function to `read.csv()`
-is `read_csv()` from the tidyverse package which we will mention in the next lesson. We don't have time to cover their differences but notice that the exact spelling
-determines which function is used. Before you use a package for the
+additional functions beyond base R. Before you use a package for the
 first time you need to install it on your machine, and then you should
 import it in every subsequent R session when you need it.
 
-Packages in our pb&j example is kind of like giving somebody a
-box full of 'sandwich making' tools and machines.
-Maybe you wanna give them a box pb&j machine, a bread maker, a bread knife
-etc. All these things are related to making a sandwich, some of them,
-like the bread knife is actually used in our theoretical pb&j machine.
-
-Thats all packages R a related set of functions written and built by some
-developer
+Packages are just related set of functions 'packaged up' in one place.
 
 To install the **`tidyverse`** package, we can type
 `install.packages("tidyverse")` straight into the console. In fact, it's
@@ -77,14 +67,13 @@ Then, to load the package type:
 library(tidyverse)
 ```
 
-Now we can use the functions from the **`tidyverse`** package. Let's use
-`read.csv()` to read the data into a data frame (we will learn more
-about data frames later):
+Now we can use the functions from the **`tidyverse`** package.
+
 # Data manipulation using **`dplyr`** and **`tidyr`**
 
 Bracket subsetting is handy, but it can be cumbersome and difficult to read,
 especially for complicated operations. Enter **`dplyr`**. **`dplyr`** is a package for
-helping with tabular data manipulation. It pairs nicely with **`tidyr`** which enables you to swiftly convert between different data formats for plotting and analysis.
+helping with tabular data manipulation. 
 
 The **`tidyverse`** package is an
 "umbrella-package" that installs **`tidyr`**, **`dplyr`**, and several other useful packages for data analysis, such as  **`ggplot2`**, **`tibble`**, etc.
@@ -101,16 +90,16 @@ doing data analysis in R:
 You should already have installed and loaded the **`tidyverse`** package.
 If you haven't already done so, you can type `install.packages("tidyverse")` straight into the console. Then, type `library(tidyverse)` to load the package.
 
-## What are **`dplyr`** and **`tidyr`**?
+## What is **`dplyr`**?
 
 ```{r, echo=FALSE, purl=TRUE}
 
-### What are dplyr and tidyr
+### What is dplyr
 ```
 
 The package **`dplyr`** provides helper tools for the most common data manipulation
 tasks. It is built to work directly with data frames, with many common tasks
-optimized by being written in a compiled language (C++). An additional feature is the
+optimized. An additional feature is the
 ability to work directly with data stored in an external database. The benefits of
 doing this are that the data can be managed natively in a relational database,
 queries can be conducted on that database, and only the results of the query are
@@ -122,23 +111,20 @@ memory. The database connections essentially remove that limitation in that you
 can connect to a database of many hundreds of GB, conduct queries on it directly, and pull
 back into R only what you need for analysis.
 
-The package **`tidyr`** addresses the common problem of wanting to reshape your data for
-plotting and usage by different R functions. For example, sometimes we want data sets where we have one
-row per measurement. Other times we want a data frame where each measurement type has its
-own column, and rows are instead more aggregated groups
-(e.g., a time period, an experimental unit like a plot or a batch number).
-Moving back and forth between these formats is non-trivial, and **`tidyr`** gives you tools
-for this and more sophisticated  data manipulation.
+To learn more about **`dplyr`** after the workshop, you may want to check out this
+[handy data transformation with **`dplyr`** cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf). It is also in the Help -> Cheatsheet tab on Rstudio now!
 
-To learn more about **`dplyr`** and **`tidyr`** after the workshop, you may want to check out this
-[handy data transformation with **`dplyr`** cheatsheet](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf)
-and this [one about **`tidyr`**](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-import.pdf).
+```{purl=T}
+# You can check out more transformations not covered here by going to the dplyr cheatsheet:
+# https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf
 
-As before, we'll read in our data using the `read_csv()` function from the
+```
+
+As before, we'll read in our data using the `read.csv()` function from the
 tidyverse package **`readr`**.
 
 ```{r, results="hide", purl=FALSE}
-surveys <- read_csv("data/portal_data_joined.csv")
+surveys <- read.csv("data/portal_data_joined.csv")
 ```
 
 ```{r, results="hide", purl=FALSE}
@@ -603,8 +589,8 @@ Now that you have learned how to use **`dplyr`** to extract information from
 or summarize your raw data, you may want to export these new data sets to share
 them with your collaborators or for archival.
 
-Similar to the `read_csv()` function used for reading CSV files into R, there is
-a `write_csv()` function that generates CSV files from data frames.
+Similar to the `read.csv()` function used for reading CSV files into R, there is
+a `write.csv()` function that generates CSV files from data frames.
 
 For this workshop we're going to save things in the same folder: `data`,
 but remember it's good practice to keep them separate. Ideally you
@@ -612,8 +598,28 @@ should create a `data_raw` folder that should only contain the raw,
 unaltered data. So that even if the files it contains are deleted, we can always
 re-generate them.
 
-In preparation for our next lesson on plotting, we are going to prepare a
-cleaned up version of the data set that doesn't include any missing data.
+When youre read to save a data set we'll use write.csv() which has only 2 required
+arguments:  
+- The data object we want to save  
+- Where want to save it (using full or relative file paths)
+
+Lets take our last output and save it as an object, then write it to a csv
+```{r purl=F}
+surveys_max_wt <- surveys %>%
+    filter(!is.na(weight)) %>%
+    group_by(year) %>%
+    filter(weight == max(weight)) %>%
+    select(year, genus, species, weight) %>%
+    arrange(year)
+
+write.csv(surveys_max_wt,'data/portal_surveys_max_wt.csv')
+```
+
+### Final *together* challenge
+
+In preparation for our next lesson on plotting, we are going to use a cleaned up version of our
+portal data set. In the lesson we'll read in a cleaned data set so everyone has the same copy, 
+but I want to show you how the data set can be made.
 
 Let's start by removing observations of animals for which `weight` and `hindfoot_length` are missing, or the `sex` has not been determined:
 
@@ -624,14 +630,25 @@ surveys_complete <- surveys %>%
          !is.na(sex))                # remove missing sex
 ```
 
-We are interested in plotting how species abundances have changed
-through time, so we are also going to remove observations for rare species (i.e.,
+We are interested in plotting **how species abundances have changed
+through time**, so we are also going to remove observations for rare species (i.e.,
 that have been observed less than 50 times). We will do this in two steps: first
 we are going to create a data set that counts how often each species has been
 observed, and filter out the rare species; then, we will extract only the
 observations for these more common species:
 
-```{r, purl=FALSE}
+```{r purl=T}
+# We are interested in plotting **how species abundances have changed
+# through time**, so we are also going to remove observations for rare species (i.e.,
+# that have been observed less than 50 times). We will do this in two steps: first
+# we are going to create a data set that counts how often each species has been
+# observed, and filter out the rare species; then, we will extract only the
+# observations for these more common species:
+
+```
+
+
+```{r, purl=TRUE}
 ## Extract the most common species_id
 species_counts <- surveys_complete %>%
     count(species_id) %>%
@@ -664,20 +681,11 @@ surveys_complete <- surveys_complete %>%
     filter(species_id %in% species_counts$species_id)
 ```
 
-To make sure that everyone has the same data set, check that `surveys_complete`
-has `r nrow(surveys_complete)` rows and `r ncol(surveys_complete)` columns by
-typing `dim(surveys_complete)`.
-
-Now that our data set is ready, we can save it as a CSV file in our `data`
+Now that our data set is ready, we could save it as a CSV file in our `data`
 folder.
 
-```{r, purl=FALSE, eval=FALSE}
-write_csv(surveys_complete, file = "data/portal_surveys_complete.csv")
-```
-
-```{r, purl=FALSE, eval=TRUE, echo=FALSE}
-if (!dir.exists("data")) dir.create("data")
-write_csv(surveys_complete, file = "data/portal_surveys_complete.csv")
+```{r, purl=T, eval=FALSE}
+write.csv(surveys_complete, file = "data/portal_surveys_complete.csv")
 ```
 
 

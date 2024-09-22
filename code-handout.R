@@ -2,6 +2,13 @@
 # Lesson 00 - Before we start
 ################################################
 
+# 1. Start RStudio.
+# 2. Under the `File` menu, click on `New Project`. Choose `New Directory`, then `New Project`.
+# 3. Enter a name for this new folder (or "directory"), and choose the folder where you downloaded our workshop files.
+#    This will be your **working directory** for the rest of the day (e.g., `~/Intro_to_R_NRN_2024`).
+# 4. Click on `Create Project`.
+# 5. Open the 'code_handout.R' file. This will be our code sheet for the workshop
+# 6. (Optional) Set Preferences to 'Never' save workspace in RStudio.
 
 
 
@@ -45,6 +52,17 @@
 
 
 
+
+### Functions and their arguments
+# - Functions are canned scripts that run all at once
+# - A function has arguments as inputs
+# - A function often returns a value
+# - Functions can be imported via *packages*
+
+
+
+
+
 ################################################
 # How to make a Peanut Butter and Jelly Sandwich
 ################################################
@@ -56,7 +74,7 @@
 # Instructions
 # - Lay out two slices of bread
 # - Spread 2tbsp of peanut butter on one slice of bread
-# - Spread 2tbsp of grapy jelly on the other slice of bread
+# - Spread 2tbsp of grape jelly on the other slice of bread
 # - Place the two pieces of bread together
 # - Cut diagonal with a knife
 # - Serve!
@@ -85,6 +103,7 @@ weight_g
 
 #### Characters, string, and quotation marks 
 
+# 4 main data types in R
 # - numeric  :
 # - character :  
 # - logical for TRUE and FALSE (the boolean data type) :  
@@ -151,6 +170,15 @@ typeof(weight_g)
 ##
 ## * Can you figure out why `"four" > "five"` returns `TRUE`?
 
+## ### Challenge
+## 1. Using our `weight_g` vector can you subset only the values that are less than or equal to 34?
+weight_g <- c(21, 34, 39, 54, 55)
+##
+## 2. Using our `weights_g` and the function `mean` calculate the mean weight with the 21 and 55 values **not included** 
+##
+## 3. Using our `animals` vector return where the values equal rat, dog, or cat
+animals <- c("mouse", "rat", "dog", "cat", "cat")
+
 ## Missing data
 
 
@@ -191,8 +219,10 @@ length(list.files(pattern='data'))>0
 
 ### Loading the survey data
 
-download.file(url = "https://ndownloader.figshare.com/files/2292169",
-              destfile = "data/portal_data_joined.csv")
+
+
+library(ratdat)
+complete_old
 
 ### Reading the data into R
 
@@ -293,25 +323,6 @@ str(surveys)
 
 
 
-
-
-
-
-
-
-
-
-
-
-### Challenges:
-###
-### 1. Change the columns `taxa` and `genus` in the `surveys` data frame into a 
-###    factor.
-###
-### 2. Using the functions you learned before, can you find out...
-###
-###      * How many rabbits were observed?
-###      * How many different genera are in the `genus` column?
 
 
 
@@ -481,6 +492,13 @@ str(surveys)
 ## ##  Second, keep only those species:
 ## surveys_complete <- surveys_complete %>%
 ##     filter(species_id %in% species_counts$species_id)
+knitr::opts_chunk$set(dpi = 200, out.height = 600, out.width = 600, R.options = list(max.print = 100))
+
+library(ggplot2)
+
+library(ratdat)
+surveys_complete <- complete_old
+# surveys_complete <- read.csv("data/portal_surveys_complete.csv")
 ################################################
 # Lesson 04 - Data visualization with ggplot2
 ################################################

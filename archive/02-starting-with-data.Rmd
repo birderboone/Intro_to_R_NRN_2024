@@ -72,7 +72,7 @@ animal, and the columns represent:
 | taxon           | e.g. Rodent, Reptile, Bird, Rabbit           |
 | plot_type       | type of plot                                 |
 
-### Downloading the data
+### Loading in the data
 
 We created the folder that will store the downloaded data (`data`)
 in the chapter ["Before we
@@ -80,10 +80,10 @@ start"](https://datacarpentry.org/R-ecology-lesson/00-before-we-start.html#Organ
 If you skipped that part, it may be a good idea to have a look now, to
 make sure your working directory is set up properly.
 
-We are going to use the R function `download.file()` to download the CSV
-file that contains the survey data from Figshare, and we will use
-`read.csv()` to load the content of the CSV file into R.
+We are going to use the R function `read.csv()` to load the content of the CSV file into R. 
 
+<!--
+IF 
 Inside the `download.file` command, the first entry is a character
 string with the source URL
 ("<https://ndownloader.figshare.com/files/2292169>"). This source URL
@@ -93,13 +93,22 @@ your local machine. You'll need to have a folder on your machine called
 "data" where you'll download the file. So this command downloads a
 file from Figshare, names it "portal_data_joined.csv" and adds it to a
 preexisting folder named "data".
+-->
+**\<note>** check here that everyone has this file if you prefer to use the download method 
 
-**\<note>** check here that everyone has this file **\</note>**
-
-```{r echo=F,purl=TRUE}
+```{r echo=F,purl=F}
 download.file(url = "https://ndownloader.figshare.com/files/2292169",
               destfile = "data/portal_data_joined.csv")
 ```
+
+Or load it via the ratdat package
+
+```{r}
+library(ratdat)
+complete_old
+```
+**\</note>**
+
 
 ### Reading the data into R
 ```{r, echo=FALSE, purl=TRUE}
@@ -133,12 +142,7 @@ the data type for a column manually by using the `colClasses` argument in
 
 `read.csv()` assumes that fields are delineated by commas. However, in
 several countries, the comma is used as a decimal separator and the
-semicolon (;) is used as a field delineator. If you want to read in this
-type of files in R, you can use the `read.csv2()` function. It behaves
-like `read.csv()` but uses different parameters for the decimal and the
-field separators. There is also the `read.delim()` for tab separated data
-files. Check out the help for
-`read.table()` by typing `?read.table` to learn more.
+semicolon (;) is used as a field delineator. If you want to read in files with other structures check out `?read.table` for more.
 
 
 **\<note>** You can just skip the following section in in class, but leave it in notes for others to read later 
@@ -630,10 +634,6 @@ that data you import in R are of the correct type within your data
 frame. If not, use it to your advantage to detect mistakes that might
 have been introduced during data entry (for instance, a letter in a
 column that should only contain numbers).
-
-Learn more in this [RStudio
-tutorial](https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio)
-
 
 
 ::: keypoints

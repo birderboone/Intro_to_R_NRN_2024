@@ -12,7 +12,7 @@
 <meta name="author" content="Data Carpentry contributors" />
 
 
-<title>Manipulating, analyzing and exporting data with tidyverse</title>
+<title>03-dplyr.knit</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -349,9 +349,6 @@ display: none;
 
 
 
-<h1 class="title toc-ignore">Manipulating, analyzing and exporting data
-with tidyverse</h1>
-<h4 class="author">Data Carpentry contributors</h4>
 
 </div>
 
@@ -396,20 +393,11 @@ dataframe?</li>
 do more stuff. The functions we’ve been using so far, like
 <code>round()</code>, <code>sqrt()</code>, or <code>c()</code> come
 built into R. Packages give you access to additional functions beyond
-base R. A similar function to <code>read.csv()</code> is
-<code>read_csv()</code> from the tidyverse package which we will mention
-in the next lesson. We don’t have time to cover their differences but
-notice that the exact spelling determines which function is used. Before
-you use a package for the first time you need to install it on your
-machine, and then you should import it in every subsequent R session
-when you need it.</p>
-<p>Packages in our pb&amp;j example is kind of like giving somebody a
-box full of ‘sandwich making’ tools and machines. Maybe you wanna give
-them a box pb&amp;j machine, a bread maker, a bread knife etc. All these
-things are related to making a sandwich, some of them, like the bread
-knife is actually used in our theoretical pb&amp;j machine.</p>
-<p>Thats all packages R a related set of functions written and built by
-some developer</p>
+base R. Before you use a package for the first time you need to install
+it on your machine, and then you should import it in every subsequent R
+session when you need it.</p>
+<p>Packages are just related set of functions ‘packaged up’ in one
+place.</p>
 <p>To install the <strong><code>tidyverse</code></strong> package, we
 can type <code>install.packages(&quot;tidyverse&quot;)</code> straight into the
 console. In fact, it’s better to write this in the console than in our
@@ -418,17 +406,15 @@ time we run the script. Then, to load the package type:</p>
 <pre class="r"><code>## load the tidyverse packages, incl. dplyr
 library(tidyverse)</code></pre>
 <p>Now we can use the functions from the
-<strong><code>tidyverse</code></strong> package. Let’s use
-<code>read.csv()</code> to read the data into a data frame (we will
-learn more about data frames later): # Data manipulation using
-<strong><code>dplyr</code></strong> and
-<strong><code>tidyr</code></strong></p>
+<strong><code>tidyverse</code></strong> package.</p>
+</div>
+<div id="data-manipulation-using-dplyr-and-tidyr" class="section level1">
+<h1>Data manipulation using <strong><code>dplyr</code></strong> and
+<strong><code>tidyr</code></strong></h1>
 <p>Bracket subsetting is handy, but it can be cumbersome and difficult
 to read, especially for complicated operations. Enter
 <strong><code>dplyr</code></strong>. <strong><code>dplyr</code></strong>
-is a package for helping with tabular data manipulation. It pairs nicely
-with <strong><code>tidyr</code></strong> which enables you to swiftly
-convert between different data formats for plotting and analysis.</p>
+is a package for helping with tabular data manipulation.</p>
 <p>The <strong><code>tidyverse</code></strong> package is an
 “umbrella-package” that installs <strong><code>tidyr</code></strong>,
 <strong><code>dplyr</code></strong>, and several other useful packages
@@ -449,50 +435,33 @@ learners are not aware of.</li>
 done so, you can type <code>install.packages(&quot;tidyverse&quot;)</code>
 straight into the console. Then, type <code>library(tidyverse)</code> to
 load the package.</p>
-<div id="what-are-dplyr-and-tidyr" class="section level2">
-<h2>What are <strong><code>dplyr</code></strong> and
-<strong><code>tidyr</code></strong>?</h2>
+<div id="what-is-dplyr" class="section level2">
+<h2>What is <strong><code>dplyr</code></strong>?</h2>
 <p>The package <strong><code>dplyr</code></strong> provides helper tools
 for the most common data manipulation tasks. It is built to work
-directly with data frames, with many common tasks optimized by being
-written in a compiled language (C++). An additional feature is the
-ability to work directly with data stored in an external database. The
-benefits of doing this are that the data can be managed natively in a
-relational database, queries can be conducted on that database, and only
-the results of the query are returned.</p>
+directly with data frames, with many common tasks optimized. An
+additional feature is the ability to work directly with data stored in
+an external database. The benefits of doing this are that the data can
+be managed natively in a relational database, queries can be conducted
+on that database, and only the results of the query are returned.</p>
 <p>This addresses a common problem with R in that all operations are
 conducted in-memory and thus the amount of data you can work with is
 limited by available memory. The database connections essentially remove
 that limitation in that you can connect to a database of many hundreds
 of GB, conduct queries on it directly, and pull back into R only what
 you need for analysis.</p>
-<p>The package <strong><code>tidyr</code></strong> addresses the common
-problem of wanting to reshape your data for plotting and usage by
-different R functions. For example, sometimes we want data sets where we
-have one row per measurement. Other times we want a data frame where
-each measurement type has its own column, and rows are instead more
-aggregated groups (e.g., a time period, an experimental unit like a plot
-or a batch number). Moving back and forth between these formats is
-non-trivial, and <strong><code>tidyr</code></strong> gives you tools for
-this and more sophisticated data manipulation.</p>
-<p>To learn more about <strong><code>dplyr</code></strong> and
-<strong><code>tidyr</code></strong> after the workshop, you may want to
-check out this <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf">handy
+<p>To learn more about <strong><code>dplyr</code></strong> after the
+workshop, you may want to check out this <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf">handy
 data transformation with <strong><code>dplyr</code></strong>
-cheatsheet</a> and this <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-import.pdf">one
-about <strong><code>tidyr</code></strong></a>.</p>
-<p>As before, we’ll read in our data using the <code>read_csv()</code>
+cheatsheet</a>. It is also in the Help -&gt; Cheatsheet tab on Rstudio
+now!</p>
+<pre purl="T"><code># You can check out more transformations not covered here by going to the dplyr cheatsheet:
+# https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf
+</code></pre>
+<p>As before, we’ll read in our data using the <code>read.csv()</code>
 function from the tidyverse package
 <strong><code>readr</code></strong>.</p>
-<pre class="r"><code>surveys &lt;- read_csv(&quot;data/portal_data_joined.csv&quot;)</code></pre>
-<pre><code>#&gt; Rows: 34786 Columns: 13
-#&gt; ── Column specification ────────────────────────────────────────────────────────
-#&gt; Delimiter: &quot;,&quot;
-#&gt; chr (6): species_id, sex, genus, species, taxa, plot_type
-#&gt; dbl (7): record_id, month, day, year, plot_id, hindfoot_length, weight
-#&gt; 
-#&gt; ℹ Use `spec()` to retrieve the full column specification for this data.
-#&gt; ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>surveys &lt;- read.csv(&quot;data/portal_data_joined.csv&quot;)</code></pre>
 <pre class="r"><code>## inspect the data
 str(surveys)</code></pre>
 <pre class="r"><code>## preview the data
@@ -834,17 +803,34 @@ through this section <strong>&lt;/note&gt;</strong></p>
 <strong><code>dplyr</code></strong> to extract information from or
 summarize your raw data, you may want to export these new data sets to
 share them with your collaborators or for archival.</p>
-<p>Similar to the <code>read_csv()</code> function used for reading CSV
-files into R, there is a <code>write_csv()</code> function that
+<p>Similar to the <code>read.csv()</code> function used for reading CSV
+files into R, there is a <code>write.csv()</code> function that
 generates CSV files from data frames.</p>
 <p>For this workshop we’re going to save things in the same folder:
 <code>data</code>, but remember it’s good practice to keep them
 separate. Ideally you should create a <code>data_raw</code> folder that
 should only contain the raw, unaltered data. So that even if the files
 it contains are deleted, we can always re-generate them.</p>
-<p>In preparation for our next lesson on plotting, we are going to
-prepare a cleaned up version of the data set that doesn’t include any
-missing data.</p>
+<p>When youre read to save a data set we’ll use write.csv() which has
+only 2 required arguments:<br />
+- The data object we want to save<br />
+- Where want to save it (using full or relative file paths)</p>
+<p>Lets take our last output and save it as an object, then write it to
+a csv</p>
+<pre class="r"><code>surveys_max_wt &lt;- surveys %&gt;%
+    filter(!is.na(weight)) %&gt;%
+    group_by(year) %&gt;%
+    filter(weight == max(weight)) %&gt;%
+    select(year, genus, species, weight) %&gt;%
+    arrange(year)
+
+write.csv(surveys_max_wt,&#39;data/portal_surveys_max_wt.csv&#39;)</code></pre>
+<div id="final-together-challenge" class="section level3">
+<h3>Final <em>together</em> challenge</h3>
+<p>In preparation for our next lesson on plotting, we are going to use a
+cleaned up version of our portal data set. In the lesson we’ll read in a
+cleaned data set so everyone has the same copy, but I want to show you
+how the data set can be made.</p>
 <p>Let’s start by removing observations of animals for which
 <code>weight</code> and <code>hindfoot_length</code> are missing, or the
 <code>sex</code> has not been determined:</p>
@@ -852,13 +838,19 @@ missing data.</p>
   filter(!is.na(weight),           # remove missing weight
          !is.na(hindfoot_length),  # remove missing hindfoot_length
          !is.na(sex))                # remove missing sex</code></pre>
-<p>We are interested in plotting how species abundances have changed
-through time, so we are also going to remove observations for rare
-species (i.e., that have been observed less than 50 times). We will do
-this in two steps: first we are going to create a data set that counts
-how often each species has been observed, and filter out the rare
-species; then, we will extract only the observations for these more
-common species:</p>
+<p>We are interested in plotting <strong>how species abundances have
+changed through time</strong>, so we are also going to remove
+observations for rare species (i.e., that have been observed less than
+50 times). We will do this in two steps: first we are going to create a
+data set that counts how often each species has been observed, and
+filter out the rare species; then, we will extract only the observations
+for these more common species:</p>
+<pre class="r"><code># We are interested in plotting **how species abundances have changed
+# through time**, so we are also going to remove observations for rare species (i.e.,
+# that have been observed less than 50 times). We will do this in two steps: first
+# we are going to create a data set that counts how often each species has been
+# observed, and filter out the rare species; then, we will extract only the
+# observations for these more common species:</code></pre>
 <pre class="r"><code>## Extract the most common species_id
 species_counts &lt;- surveys_complete %&gt;%
     count(species_id) %&gt;%
@@ -867,12 +859,9 @@ species_counts &lt;- surveys_complete %&gt;%
 ## Only keep the most common species
 surveys_complete &lt;- surveys_complete %&gt;%
   filter(species_id %in% species_counts$species_id)</code></pre>
-<p>To make sure that everyone has the same data set, check that
-<code>surveys_complete</code> has 30463 rows and 13 columns by typing
-<code>dim(surveys_complete)</code>.</p>
-<p>Now that our data set is ready, we can save it as a CSV file in our
+<p>Now that our data set is ready, we could save it as a CSV file in our
 <code>data</code> folder.</p>
-<pre class="r"><code>write_csv(surveys_complete, file = &quot;data/portal_surveys_complete.csv&quot;)</code></pre>
+<pre class="r"><code>write.csv(surveys_complete, file = &quot;data/portal_surveys_complete.csv&quot;)</code></pre>
 <div class="keypoints">
 <ul>
 <li>Use the <code>dplyr</code> package to manipulate data frames.</li>
@@ -883,6 +872,7 @@ frame.</li>
 <li>Use <code>group_by()</code> and <code>summarize()</code> to work
 with subsets of data.</li>
 </ul>
+</div>
 </div>
 </div>
 </div>

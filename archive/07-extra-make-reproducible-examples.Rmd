@@ -1,0 +1,51 @@
+---
+title: "Untitled"
+output: html_document
+date: "2024-09-01"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# How to describe your code problems and get help online.
+
+The key to receiving help from someone is for them to rapidly grasp your
+problem. Thus, you should be as precise as possible when describing your problem
+and help others to pinpoint where the issue might be. Try to...
+
+- Use the correct words to describe your problem. Otherwise you might get an
+  answer pointing to the misuse of your words rather than answering your
+  question.
+
+- Generalize what you are trying to do, so people outside your field can
+  understand the question.
+
+- Reduce what does not work to a simple *reproducible example*. For instance,
+  instead of using your real data set, create a small generic one. For more
+  information on how to write a reproducible example see [this article from
+  the reprex
+  package](https://reprex.tidyverse.org/articles/reprex-dos-and-donts.html).
+  Learning how to use the [reprex](https://cran.r-project.org/package=reprex)
+  package is also very helpful for this.
+
+- Include the output of `sessionInfo()` in your question. It provides
+  information about your platform, the versions of R and the packages that you
+  are using. As an example, here you can see the versions of R and all the
+  packages that we are using to run the code in this lesson:
+
+
+
+```{r, results="show", purl=FALSE}
+sessionInfo()
+```
+
+#### How to ask good programming questions?
+
+- The rOpenSci community call "How to ask questions so they get answered",
+  ([rOpenSci site](https://ropensci.org/commcalls/2017-03-07/) and [video
+  recording](https://vimeo.com/208749032)) includes a presentation of the
+  reprex package and of its philosophy.
+- [blog.Revolutionanalytics.com](https://blog.revolutionanalytics.com/2014/01/how-to-ask-for-r-help.html)
+  and [this blog post by Jon Skeet](https://codeblog.jonskeet.uk/2010/08/29/writing-the-perfect-question/)
+  have comprehensive advice on how to ask programming questions.
