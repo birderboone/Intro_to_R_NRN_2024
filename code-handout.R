@@ -2,13 +2,13 @@
 # Lesson 00 - Before we start
 ################################################
 
-# 1. Start RStudio.
-# 2. Under the `File` menu, click on `New Project`. Choose `New Directory`, then `New Project`.
-# 3. Enter a name for this new folder (or "directory"), and choose the folder where you downloaded our workshop files.
-#    This will be your **working directory** for the rest of the day (e.g., `~/Intro_to_R_NRN_2024`).
-# 4. Click on `Create Project`.
-# 5. Open the 'code_handout.R' file. This will be our code sheet for the workshop
-# 6. (Optional) Set Preferences to 'Never' save workspace in RStudio.
+# 1. Start RStudio (you should see a view similar to the screenshot above).
+# 2. In the top right, you will see a blue 3D cube and the words "Project: (None)". Click on this icon.
+# 3. Click **New Project** from the dropdown menu.
+# 4. Click **New Directory**, then **New Project**.
+# 5. Type out a name for the project, we recommend `R-Ecology-Workshop`.
+# 6. Put it in a convenient location using the "Create project as a subdirectory of:" section. We recommend your `Desktop`. You can always move the project somewhere else later, because it will be self-contained.
+# 7. Click **Create Project** and your new project will open.
 
 
 
@@ -123,7 +123,7 @@ weight_g
 typeof(weight_g)
 
 ## ## ### Challenge
-## ## We've seen that atomic vectors can be of type character, numeric, integer, and
+## ## We've seen that vectors can be of type character, numeric, integer, and
 ## ## logical. But what happens if we try to mix these types in a single
 ## ## vector?
 ## 
@@ -367,7 +367,7 @@ str(surveys)
 
 
 
-### What are dplyr and tidyr
+### What is dplyr
 
 
 
@@ -473,6 +473,23 @@ str(surveys)
 
 
 
+# We are interested in plotting **how species abundances have changed
+# through time**, so we are also going to remove observations for rare species (i.e.,
+# that have been observed less than 50 times). We will do this in two steps: first
+# we are going to create a data set that counts how often each species has been
+# observed, and filter out the rare species; then, we will extract only the
+# observations for these more common species:
+
+
+## Extract the most common species_id
+species_counts <- surveys_complete %>%
+    count(species_id) %>%
+    filter(n >= 50)
+
+## Only keep the most common species
+surveys_complete <- surveys_complete %>%
+  filter(species_id %in% species_counts$species_id)
+
 ## ### Create the dataset for exporting:
 ## ##  Start by removing observations for which the `species_id`, `weight`,
 ## ##  `hindfoot_length`, or `sex` data are missing:
@@ -492,13 +509,8 @@ str(surveys)
 ## ##  Second, keep only those species:
 ## surveys_complete <- surveys_complete %>%
 ##     filter(species_id %in% species_counts$species_id)
-knitr::opts_chunk$set(dpi = 200, out.height = 600, out.width = 600, R.options = list(max.print = 100))
 
-library(ggplot2)
-
-library(ratdat)
-surveys_complete <- complete_old
-# surveys_complete <- read.csv("data/portal_surveys_complete.csv")
+## write.csv(surveys_complete, file = "data/portal_surveys_complete.csv")
 ################################################
 # Lesson 04 - Data visualization with ggplot2
 ################################################
@@ -510,25 +522,16 @@ surveys_complete <- complete_old
 
 
 
+library(ggplot2)
 
-
+library(ratdat)
+surveys_complete <- complete_old
+# surveys_complete <- read.csv("data/portal_surveys_complete.csv")
 
 ### Plotting with ggplot2
 
-
-
-
-
-
-
-
-
-## ## Create a ggplot and draw it.
-## surveys_plot <- ggplot(data = surveys_complete,
-##                        aes(x = weight, y = hindfoot_length))
-## 
-## surveys_plot +
-##   geom_point()
+# For every plot we use the following structure: 
+# ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) + <GEOM_FUNCTION>()
 
 
 
@@ -540,50 +543,21 @@ surveys_complete <- complete_old
 
 
 
+### Adding another variable
 
 
-## ### Challenge with scatter plot:
+
+## ### Challenge 1: Modifying plots:
 ## ##
-## ##  Use what you just learned to create a scatter plot of `weight`
-## ## over `species_id` with the plot types showing in different colors.
-## ## Is this a good way to show this type of data?
-
-
-### Boxplots
-
-
-
-
-
-
-
-
-
-
-
-## ## Challenge with boxplots:
-## ##  Start with the boxplot we created:
-## ggplot(data = surveys_complete, mapping = aes(x = species_id, y = weight)) +
-##   geom_jitter(alpha = 0.3, color = "tomato") +
-##   geom_boxplot(outlier.shape = NA)
-## ## By ordering the geom layers like this, we can make sure that the boxplot is
-## ## layered over the jittered points.
+## ## 1. Try modifying the plot so that the `shape` of the point varies by `sex`.
+## ## You will set the `shape` the same way you set the `color`.
 ## 
-## ##  1. Replace the box plot with a violin plot; see `geom_violin()`.
+## ## Do you think this is a good way to represent `sex` with these data?
 ## 
-## ##  2. Represent weight on the log10 scale; see `scale_y_log10()`.
-## 
-## ##  3. Create boxplot for `hindfoot_length` overlaid on a jitter layer.
-## 
-## ##  4. Add color to the data points on your boxplot according to the
-## ##  plot from which the sample was taken (`plot_id`).
-## ##  *Hint:* Check the class for `plot_id`. Consider changing the class
-## ##  of `plot_id` from integer to factor. Why does this change how R
-## ##  makes the graph?
-## 
-
-
-### Plotting time series data
+## ## ##
+## ## 2. Now try changing the plot so that the `color` of the points vary by `year`.
+## ## Do you notice a difference in the color scale compared to changing color
+## ## by plot type? Why do you think this happened?
 
 
 
@@ -593,15 +567,21 @@ surveys_complete <- complete_old
 
 
 
-
-### The pipe operator with ggplot2
-
+## Boxplot
 
 
 
 
 
-### Quick challenge together
+
+
+
+
+
+
+
+
+## Adding geoms 
 
 
 
@@ -618,15 +598,59 @@ surveys_complete <- complete_old
 
 
 
-
-## ### Plotting time series challenge:
+## ### Challenge 2: Modifying plots:
 ## ##
-## ##  Use what you just learned to create a plot that depicts how the
-## ##  average weight of each species changes through the years.
+## ## 1. Violin plots are similar to boxplots- try making one using `plot_type`
+## ## and `hindfoot_length` as the x and y variables. Remember that all geom
+## ## functions start with `geom_`, followed by the type of geom.
+## 
+## ## It is often useful to search for `R package_name stuff you want to search`.
+## ## So for this example we might search for `R ggplot2 violin plot`.
+## 
+## ## ##
+## ## 2. Make the color of the points and outlines of the violins vary by
+## ## `plot_type`, and set the fill of the violins to white. Try playing with
+## ## the order of the layers to see what looks best.
+
+
+
+
+
+## Changing themes
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Changing labels
+
+
+
+
+## ### Challenge 3: Customizing a plot:
+## ##
+## ## 1. Modify the previous plot by adding a descriptive subtitle.
+## ## Increase the font size of the plot title and make it bold.
+## 
+## ## **Hint**: "bold" is referred to as a font "face"
 ## 
 
 
-### Customization
+
+## Faceting
+
+
+
+
+## Exporting plots
 
 
 
@@ -634,34 +658,16 @@ surveys_complete <- complete_old
 
 
 
-
-
-
-
-## ### Final plotting challenge:
-## ##  With all of this information in hand, please take another five
-## ##  minutes to either improve one of the plots generated in this
-## ##  exercise or create a beautiful graph of your own. Use the RStudio
-## ##  ggplot2 cheat sheet for inspiration:
-## ##  https://posit.co/wp-content/uploads/2022/10/data-visualization-1.pdf
-
-
-ggplot(data = yearly_counts, aes(x = year, y = n)) +
-    geom_line() +
-    facet_wrap(facets = vars(genus))+
-  ylab("n")+
-  theme(axis.text.x = element_text(size = 15, ang=90, color = "purple"), 
-        axis.text.y = element_text(size = 2, color = "red"), 
-        axis.title.y = element_text(size = 20), 
-        plot.background = element_rect(fill="green"), 
-        panel.background = element_rect(fill="red", color="black"), 
-        panel.grid.major = element_line(colour = "red"), 
-        panel.grid.minor = element_line(colour = "purple"), 
-        title = element_text(size = 1), 
-#        axis.line.x = element_line(colour = "black"), 
-#        axis.line.y = element_line(colour = "black"), 
-        strip.background = element_rect(fill = "orange", color = "black"), 
-        strip.text = element_text(size = 15, color="red"),
-        legend.background = element_rect(fill="black"),
-        legend.text = element_text(color="gray"),
-        legend.key=element_rect(fill="white"))
+## ### Challenge 4: Make your own plot:
+## ##
+## ## Try making your own plot! You can run `str(surveys_complete)` or
+## ## `?surveys_complete` to explore variables you might use in your new plot.
+## ## Feel free to use variables we have already seen, or some we haven't explored yet.
+## 
+## ## ##
+## ## Here are a couple ideas to get you started:
+## ##
+## ##  - make a histogram of one of the numeric variables
+## ##  - try using a different color `scale_`
+## ##  - try changing the size of points or thickness of lines in a `geom`
+## 
