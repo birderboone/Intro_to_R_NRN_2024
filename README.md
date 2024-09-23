@@ -10,7 +10,7 @@ students and professionals. However, new users are often intimidated by the lear
 with studying a programming language and novices tend to lose interest if they do not benefit from their new skills. This introduction to R is designed for participants with no programming experience and assumes no prior knowledge of R or RStudio. The first half of the workshop will begin with the basics of R syntax, the RStudio interface, and then introduce importing files and explore your data. 
 The second half will introduce you how to manipulate data, create summary statistics, and plot and visualize your data.
 
-To ask any follow-up questions related to the workshop or general help in R, post in the [Issues](https://github.com/birderboone/Intro_to_R-ICTWS-2024/issues) tab.
+To ask any follow-up questions related to the workshop or general help in R, post in the [Issues](https://github.com/birderboone/Intro_to_R-NRN-2024/issues) tab.
 
 # Before the workshop begins
 
@@ -65,4 +65,11 @@ You can check if the packages installed correctly by typing in the console and p
 If your packages loaded correctly your console should look roughly like this:
 <img src="archive/fig/libary_loaded.png" width="100%"/>
 
+# Download this repository
+
+We're going to use resources in this repository for our workshop, so you'll need to download the repository to your desktop.
+
+- Go to `Code` and then click `Download ZIP`
+
+<img src="archive/fig/download-repo.png" width="50%"/>
 
