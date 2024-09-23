@@ -71,5 +71,5 @@ We're going to use resources in this repository for our workshop, so you'll need
 
 - Go to `Code` and then click `Download ZIP`
 
-<img src="archive/fig/download-repo.png" width="50%"/>
+<img src="archive/fig/download-repo.PNG" width="50%"/>
 
