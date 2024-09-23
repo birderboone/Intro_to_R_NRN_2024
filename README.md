@@ -1,7 +1,7 @@
 # Data Analysis and Visualization in Ecology with R
 
 <img src="archive/fig/NRN_logo.png" width="25%"/>
-<img src="https://www.rstudio.com/wp-content/uploads/2018/10/RStudio-Logo-Flat.png" width="25%"/>
+<img src="archive/fig/Rlogo.png" width="25%"/>
 
 This depository contains code and resources associated with the 2024 Neotropical Raptor Network, Oct. 1 2024. 
 
