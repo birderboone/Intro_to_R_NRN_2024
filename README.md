@@ -35,7 +35,45 @@ To ask any follow-up questions related to the workshop or general help in R, pos
 - Under Installers select RStudio x.yy.zzz - Mac OS X 10.6+ (64-bit) (where x, y, and z represent version numbers)
 - Double click the file to install RStudio
 - Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.
+# Install packages
 
+- Open RStudio. 
+- In the "console" on the bottom left type `install.packages(c("tidyverse", "lubridate", "ratdat"))` and press enter.
+
+
+*OR*  
+
+You can install it using rstudios point and click interface clicking on `Packages` then `Install` on the bottom right panel:  
+<img src="archive/fig/install_package.png" width="50%"/>
+
+--------------
+
+Then typing in the package name and click `Install`  
+<img src="archive/fig/install_package2.png" width="50%"/>
+
+--------------
+
+** Note: If you are on windows you may be prompted while installing packages to install R tools. You can do so by going to the 'Install R Tools' here:
+https://cran.r-project.org/bin/windows/Rtools/rtools44/rtools.html **  
+
+## Check that packages installed correctly
+
+You can check if the packages installed correctly by typing in the console and pressing enter: `library(tidyverse)`, `library(lubridate)`, `library(ratdat)`  
+
+If your packages loaded correctly your console should look roughly like this:
+<img src="archive/fig/libary_loaded.png" width="100%"/>
+
+# Download this repository
+
+We're going to use resources in this repository for our workshop, so you'll need to download it to your desktop.
+
+- Go to `Code` and then click `Download ZIP`
+
+<img src="archive/fig/download-repo.PNG" width="50%"/>
+
+----------------
+
+# Instrucciones en español
 
 ## Instalación de R y RStudio
 
