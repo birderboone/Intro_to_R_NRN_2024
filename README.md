@@ -67,7 +67,7 @@ If your packages loaded correctly your console should look roughly like this:
 
 # Download this repository
 
-We're going to use resources in this repository for our workshop, so you'll need to download the it to your desktop.
+We're going to use resources in this repository for our workshop, so you'll need to download it to your desktop.
 
 - Go to `Code` and then click `Download ZIP`
 
