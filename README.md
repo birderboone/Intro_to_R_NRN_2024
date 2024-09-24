@@ -37,39 +37,57 @@ To ask any follow-up questions related to the workshop or general help in R, pos
 - Once it’s installed, open RStudio to make sure it works and you don’t get any error messages.
 
 
-# Install packages
+## Instalación de R y RStudio
 
-- Open RStudio. 
-- In the "console" on the bottom left type `install.packages(c("tidyverse", "lubridate", "ratdat"))` and press enter.
+*Instrucciones para Windows*
 
+- R se puede descargar aquí: [Sitio web de CRAN](https://cran.r-project.org/bin/windows/base/).
+- Ejecute el archivo .exe.
+- RStudio se puede descargar aquí: [Página de descarga de RStudio](https://posit.co/download/rstudio-desktop/#download).
+- Ejecute el archivo llamado RStudio x.yy.zzz - Windows Vista/7/8/10 (x, y, z son los números de versión).
+- Después de la instalación, abra RStudio para verificar que funcione.
 
-*OR*  
+*Instrucciones para Mac*
 
-You can install it using rstudios point and click interface clicking on `Packages` then `Install` on the bottom right panel:  
+- R se puede descargar aquí: [Sitio web de CRAN](https://cran.r-project.org/bin/macosx/).  
+- Ejecute la última versión .pkg.
+- También es recomendable descargar el software [XQuartz](https://www.xquartz.org/) (necesario para algunos paquetes).  
+- RStudio se puede descargar aquí: [Página de descarga de RStudio](https://posit.co/download/rstudio-desktop/#download).  
+- Ejecute el archivo llamado RStudio x.yy.zzz - Mac OS X 10.6+ (64-bit) (x, y, z son los números de versión).  
+- Después de la instalación, abra RStudio para verificar que funcione.
+
+## Instalar los paquetes
+
+- Abra RStudio.  
+- En la "consola", en la esquina inferior izquierda, escriba `install.packages(c("tidyverse", "lubridate", "ratdat"))` y pulse "enter".
+
+*O*  
+
+Instale usando RStudio. Pulse `Packages` y luego `Install` en la esquina inferior derecha:  
 <img src="archive/fig/install_package.png" width="50%"/>
 
 --------------
 
-Then typing in the package name and click `Install`  
+Escriba el nombre del paquete y pulse `Install`:  
 <img src="archive/fig/install_package2.png" width="50%"/>
 
 --------------
 
-** Note: If you are on windows you may be prompted while installing packages to install R tools. You can do so by going to the 'Install R Tools' here:
-https://cran.r-project.org/bin/windows/Rtools/rtools44/rtools.html **  
+**Nota: Para Windows, también debe instalar 'RTools'. Puede descargar 'RTools' aquí:  
+https://cran.r-project.org/bin/windows/Rtools/rtools44/rtools.html**  
 
-## Check that packages installed correctly
+## Verificar si los paquetes se instalaron correctamente
 
-You can check if the packages installed correctly by typing in the console and pressing enter: `library(tidyverse)`, `library(lubridate)`, `library(ratdat)`  
+Escriba en la consola y pulse 'Enter': `library(tidyverse)`, `library(lubridate)`, `library(ratdat)`.  
 
-If your packages loaded correctly your console should look roughly like this:
+La consola se verá así:  
 <img src="archive/fig/libary_loaded.png" width="100%"/>
 
-# Download this repository
+## Descargar el repositorio
 
-We're going to use resources in this repository for our workshop, so you'll need to download the it to your desktop.
+Descárguelo para usarlo en el taller:
 
-- Go to `Code` and then click `Download ZIP`
+- Pulse `Code` y luego `Download ZIP`.
 
 <img src="archive/fig/download-repo.PNG" width="50%"/>
 
