@@ -511,6 +511,8 @@ surveys_complete <- surveys_complete %>%
 ##     filter(species_id %in% species_counts$species_id)
 
 ## write.csv(surveys_complete, file = "data/portal_surveys_complete.csv")
+
+
 ################################################
 # Lesson 04 - Data visualization with ggplot2
 ################################################
