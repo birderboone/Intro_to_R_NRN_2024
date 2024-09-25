@@ -1,9 +1,3 @@
----
-output:
-  html_document: default
-  word_document: default
-  pdf_document: default
----
 # Data Analysis and Visualization in Ecology with R
 
 <img src="archive/fig/NRN_logo.png" width="25%"/>
