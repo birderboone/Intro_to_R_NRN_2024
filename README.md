@@ -67,7 +67,7 @@ If your packages loaded correctly your console should look roughly like this:
 
 We're going to use resources in this repository for our workshop, so you'll need to download it to your desktop.
 
-- Go to `Code` and then click `Download ZIP`
+- At the top of the [repository page](https://github.com/birderboone/Intro_to_R_NRN_2024) click `Code` and then click `Download ZIP`
 
 <img src="archive/fig/download-repo.PNG" width="50%"/>
 
@@ -125,7 +125,7 @@ La consola se verá así:
 
 Descárguelo para usarlo en el taller:
 
-- Pulse `Code` y luego `Download ZIP`.
+- En la parte superior de la página del [repositorio](https://github.com/birderboone/Intro_to_R_NRN_2024), pulse `Code` y luego `Download ZIP`.
 
 <img src="archive/fig/download-repo.PNG" width="50%"/>
 
