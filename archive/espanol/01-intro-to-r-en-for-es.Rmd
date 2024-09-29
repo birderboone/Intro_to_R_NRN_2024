@@ -1,0 +1,775 @@
+---
+title: "Lección 01 - Introducción a R"
+author: "Data Carpentry contributors"
+minutes: 75
+---
+
+```{r, echo=FALSE, purl=FALSE, message=FALSE}
+#source("setup.R")
+knitr::opts_chunk$set(results='hide', # fig.path='img/R-ecology-',
+                      comment = "#>", purl = FALSE)
+```
+
+```{r, echo=F, purl=TRUE}
+################################################
+# Lección 01 - Introducción a R
+################################################
+
+
+
+
+
+```
+***
+::::::::::::::::::::::::::::::::::::::: preguntas
+
+- ¿Cómo se crean objetos en R? 
+- ¿Cómo guardas código R para uso posterior? 
+- ¿Cómo manipulas datos en R?
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::: objetivos
+
+- Definir los siguientes términos en relación con R: objeto, asignar, llamar,
+  función, argumentos, opciones.
+- Crear objetos y asignarles valores en R.
+- Aprender a *nombrar* objetos.
+- Guardar un archivo de script para uso posterior.
+- Usar comentarios para informar el script.
+- Resolver operaciones aritméticas simples en R.
+- Llamar funciones y usar argumentos para cambiar sus opciones predeterminadas.
+- Inspeccionar el contenido de vectores y manipular su contenido.
+- Subconjuntar y extraer valores de vectores.
+- Analizar vectores con datos faltantes.
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+***
+
+## Creando objetos en R
+
+```{r,echo=FALSE, purl=TRUE}
+### Creando objetos en R
+```
+
+Puedes obtener resultados de R simplemente escribiendo operaciones matemáticas en la consola:
+
+```{r, purl=FALSE}
+3 + 5
+12 / 7
+```
+
+Sin embargo, para hacer cosas útiles e interesantes, necesitamos asignar *valores* a *objetos*. Para crear un objeto, necesitamos darle un nombre seguido del operador de asignación `<-`, y el valor que queremos asignarle:
+
+
+```{r, purl=FALSE}
+weight_kg <- 55
+```
+`<-` es el operador de asignación que utilizaremos en este curso. Asigna los valores a la derecha a los objetos a la izquierda. Así, después de ejecutar `x <- 3`, el valor de `x` es `3`. Por razones históricas, también puedes usar `=` para asignaciones, pero no en todos los contextos. Debido a las 
+[diferencias](https://blog.revolutionanalytics.com/2008/12/use-equals-or-arrow-for-assignment.html) [ligeras](https://renkun.me/2014/01/28/difference-between-assignment-operators-in-r/) en la sintaxis, es una buena práctica usar siempre `<-` para asignaciones.
+
+En RStudio, escribir <kbd>Alt</kbd> + <kbd>\-</kbd> (mantén presionado <kbd>Alt</kbd> al mismo tiempo que la tecla <kbd>\-</kbd>) escribirá `<-` en una sola pulsación de tecla en una PC, mientras que escribir <kbd>Opción</kbd> + <kbd>\-</kbd> (mantén presionado <kbd>Opción</kbd> al mismo tiempo que la tecla <kbd>\-</kbd>) hace lo mismo en un Mac.
+
+Los objetos pueden recibir casi cualquier nombre, como `x`, `temperatura_actual`, o `id_sujeto`. Aquí hay algunas pautas adicionales sobre cómo nombrar objetos:
+
+- Quieres que los nombres de tus objetos sean explícitos y no demasiado largos.
+- No pueden comenzar con un número (`2x` no es válido, pero `x2` sí).
+- R es sensible a mayúsculas, así que, por ejemplo, `peso_kg` es diferente de `Peso_kg`.
+- Hay algunos nombres que no se pueden usar porque son los nombres de funciones fundamentales en R (por ejemplo, `if`, `else`, `for`, consulta [aquí](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html) para una lista completa). En general, incluso si está permitido, es mejor no usar otros nombres de funciones (por ejemplo, `c`, `T`, `mean`, `data`, `df`, `weights`). Si tienes dudas, consulta la ayuda para ver si el nombre ya está en uso.
+- Es mejor evitar los puntos (`.`) dentro de los nombres. Muchos nombres de funciones en R tienen puntos y los puntos también tienen un significado especial (métodos) en R y otros lenguajes de programación. Para evitar confusiones, no incluyas puntos en los nombres.
+- Se recomienda usar sustantivos para nombres de objetos y verbos para nombres de funciones.
+- Sé consistente en el estilo de tu código, como dónde pones espacios, cómo nombras objetos, etc. Los estilos pueden incluir "lower\_snake", "UPPER\_SNAKE", "lowerCamelCase", "UpperCamelCase", etc. Usar un estilo de codificación consistente hace que tu código sea más claro de leer para tu futuro yo y tus colaboradores. En R, tres guías de estilo populares provienen de [Google](https://google.github.io/styleguide/Rguide.xml), [Jean Fan](https://jef.works/R-style-guide/) y el [tidyverse](https://style.tidyverse.org/). El estilo tidyverse es muy completo y puede parecer abrumador al principio. Puedes instalar el paquete [**`lintr`**](https://github.com/jimhester/lintr) para verificar automáticamente si hay problemas en el estilo de tu código.
+
+:::::::::::::::::::::::::::::::::::::::::  callout
+
+### Objetos vs. variables
+
+Lo que se conoce como `objetos` en `R` se conoce como `variables` en muchos otros lenguajes de programación. Dependiendo del contexto, `objeto` y `variable` pueden tener significados drásticamente diferentes. Sin embargo, en esta lección, las dos palabras se utilizan sinónimamente. Para más información, consulta:
+[https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects](https://cran.r-project.org/doc/manuals/r-release/R-lang.html#Objects)
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+Al asignar un valor a un objeto, R no imprime nada. Puedes obligar a R a imprimir el valor utilizando paréntesis o escribiendo el nombre del objeto:
+
+```{r, purl=FALSE}
+peso_kg <- 55    # no imprime nada
+peso_kg          # simplemente escribir el nombre del objeto lo imprimirá en la consola
+print(peso_kg)   # hace lo mismo
+```
+
+Ahora que R tiene `peso_kg` en memoria, podemos hacer cálculos aritméticos con él. Por ejemplo, es posible que queramos convertir este peso a libras (el peso en libras es 2.2 veces el peso en kg):
+
+
+```{r, purl=FALSE}
+2.2 * weight_kg
+```
+
+También podemos cambiar el valor de un objeto asignándole uno nuevo:
+
+
+```{r, purl=FALSE}
+weight_kg <- 57.5
+2.2 * weight_kg
+```
+
+Esto significa que asignar un valor a un objeto no cambia los valores de otros objetos. Por ejemplo, vamos a almacenar el peso del animal en libras en un nuevo objeto, `weight_lb`:
+
+
+```{r, purl=FALSE}
+weight_lb <- 2.2 * weight_kg
+```
+
+y luego cambiar `weight_kg` a 100.
+
+```{r, purl=FALSE}
+weight_kg <- 100
+```
+¿Qué crees que es el contenido actual del objeto `weight_lb`? ¿126.5 o 220?
+
+### Guardando tu código
+
+Hasta ahora, tu código ha estado en la consola. Esto es útil para consultas rápidas, pero no tan útil si deseas volver a visitar tu trabajo por alguna razón. Puedes abrir un script en la pestaña <kbd>Archivo</kbd>.  
+Es recomendable guardar tu archivo de script de inmediato. Para hacer esto, presiona <kbd>Ctrl</kbd> + <kbd>S</kbd>. Esto abrirá un cuadro de diálogo donde puedes decidir dónde guardar tu archivo de script y cómo nombrarlo. La extensión de archivo `.R` se añade automáticamente y asegura que tu archivo se abra con RStudio.
+
+No olvides guardar tu trabajo periódicamente presionando <kbd>Ctrl</kbd> + <kbd>S</kbd>.
+
+### Comentarios
+
+El carácter de comentario en R es `#`. Cualquier cosa a la derecha de un `#` en un script será ignorada por R. Es útil dejar notas y explicaciones en tus scripts. Para conveniencia, RStudio proporciona un atajo de teclado para comentar o descomentar un párrafo: después de seleccionar las líneas que deseas comentar, presiona al mismo tiempo en tu teclado <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>. Si solo deseas comentar una línea, puedes colocar el cursor en cualquier lugar de esa línea (es decir, no es necesario seleccionar toda la línea), luego presiona <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>.
+
+:::::::::::::::::::::::::::::::::::::::  desafío
+
+### Desafío
+
+¿Cuáles son los valores después de cada declaración en lo siguiente?
+
+```{r, purl=FALSE}
+mass <- 47.5            # masa?
+age  <- 122             # edad?
+mass <- mass * 2.0      # masa?
+age  <- age - 20        # edad?
+mass_index <- mass/age  # índice de masa?
+```
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r, echo=FALSE, purl=TRUE}
+### Desafío
+##
+## ¿Cuáles son los valores después de cada declaración en lo siguiente?
+##
+## mass <- 47.5            # masa?
+## age  <- 122             # edad?
+## mass <- mass * 2.0      # masa?
+## age  <- age - 20        # edad?
+## mass_index <- mass/age  # índice de masa?
+```
+
+### Funciones y sus argumentos
+
+Las funciones son "scripts enlatados" que automatizan conjuntos de comandos más complicados. Muchas funciones están predefinidas, o pueden estar disponibles al importar *paquetes* de R (más sobre eso más adelante). Una función generalmente toma una o más entradas llamadas *argumentos*. Las funciones a menudo (pero no siempre) devuelven un *valor*. Un ejemplo típico sería la función `sqrt()`. La entrada (el argumento) debe ser un número, y el valor de retorno (de hecho, la salida) es la raíz cuadrada de ese número. Ejecutar una función ('ejecutarla') se llama *llamar* a la función. Un ejemplo de una llamada a función es:
+
+```{r, echo=FALSE, purl=TRUE}
+### Funciones y sus argumentos
+# - Las funciones son scripts enlatados que se ejecutan todo de una vez
+# - Una función tiene argumentos como entradas
+# - Una función a menudo devuelve un valor
+# - Las funciones se pueden importar a través de *paquetes*
+```
+
+
+```{r, eval=FALSE, purl=FALSE}
+weight_kg <- sqrt(10)
+```
+
+Aquí, el valor de 10 se le da a la función `sqrt()`, la función `sqrt()` calcula la raíz cuadrada y devuelve el valor que luego se asigna al objeto `weight_kg`. Esta función toma un argumento, mientras que otras funciones pueden tomar varios.
+
+El 'valor' de retorno de una función no tiene que ser numérico (como el de `sqrt()`), y tampoco tiene que ser un solo ítem: puede ser un conjunto de cosas o incluso un conjunto de datos. Veremos eso cuando leamos archivos de datos en R.
+
+Los argumentos pueden ser cualquier cosa, no solo números o nombres de archivos, sino también otros objetos. Exactamente lo que significa cada argumento difiere según la función y debe ser consultado en la documentación (ver abajo). Algunas funciones toman argumentos que pueden ser especificados por el usuario o, si se omiten, toman un valor *predeterminado*: estos se llaman *opciones*. Las opciones se utilizan típicamente para alterar la forma en que opera la función, como si ignora 'valores no válidos', o qué símbolo usar en un gráfico. Sin embargo, si deseas algo específico, puedes especificar un valor de tu elección que se utilizará en lugar del valor predeterminado.
+
+### Cómo hacer un sándwich de mantequilla de maní y mermelada con R
+
+Ahora, un hecho importante aquí es que las funciones son solo un montón de código agrupado. Es solo una receta enlatada con requisitos/ingredientes establecidos y siempre hace lo mismo. Es como decir: quiero hacer un sándwich de mantequilla de maní y mermelada. Pero quiero hacerlo exactamente igual cada vez. ¿Cómo le instruirías a alguien sobre cómo hacer un sándwich de mantequilla de maní y mermelada y garantizar que lo haga igual cada vez?
+
+Bueno, puedes escribirles una receta o un 'libro de cocina de PB&J' completo. En R tenemos las mismas opciones. Podemos compartir scripts o convertirlos en funciones/paquetes.
+
+Así que empecemos a escribir una receta. ¿Cómo escribirías una receta para un PB&J que pudieras compartir con alguien?  
+Probablemente se vería algo así:
+
+```
+Sándwich de mantequilla de maní y mermelada  
+Ingredientes  
+- 2 rebanadas de pan para sándwich  
+- Mermelada  
+- Mantequilla de maní  
+
+Instrucciones  
+- Coloca dos rebanadas de pan  
+- Unta 2 cucharadas de mantequilla de maní en una rebanada de pan  
+- Unta 2 cucharadas de mermelada de uva en la otra rebanada de pan  
+- Coloca las dos piezas de pan juntas  
+- Corta en diagonal con un cuchillo  
+- ¡Sirve!  
+```
+
+```{r, echo=FALSE, purl=TRUE}
+################################################
+# Cómo hacer un sándwich de mantequilla de maní y mermelada
+################################################
+# Ingredientes
+# - 2 rebanadas de pan para sándwich
+# - Mermelada
+# - Mantequilla de maní
+
+# Instrucciones
+# - Coloca dos rebanadas de pan
+# - Unta 2 cucharadas de mantequilla de maní en una rebanada de pan
+# - Unta 2 cucharadas de mermelada de uva en la otra rebanada de pan
+# - Coloca las dos piezas de pan juntas
+# - Corta en diagonal con un cuchillo
+# - ¡Sirve!
+```
+
+Puedo darte esta receta y sabrás cómo hacer un sándwich de mantequilla de maní y mermelada de manera confiable. 
+Tomas tus ingredientes y sigues la receta. 
+
+En este ejemplo, los ingredientes son nuestros **argumentos** y la receta es nuestro **script**. La consola eres **tú**, **tú** eres quien hace la receta. Podemos agrupar ambas cosas en una función. Una función es como una tarjeta de receta.
+
+Si esto fuera una función, se vería así:
+
+```
+my_sandwich <- make_pbj(bread='white bread', jelly='grape', peanut_butter='smooth')
+
+```
+
+*Entramos* los argumentos `pan`, `mermelada` y `mantequilla de maní`, y la función devuelve un *resultado* que guardamos en una variable (`mi_sandwich`).
+
+Veamos la función de desviación estándar.
+
+
+```{r,results="show"}
+sd
+```
+
+Cuando imprimes una función sin dar los paréntesis, te mostrará el **script** (la **receta**) que utiliza. Esta es una de las funciones más simples. Si ignoras el 'is.___' y sabes que `sqrt` es la función de la raíz cuadrada y `var` es la función de varianza, entonces toma una entrada y calcula la raíz cuadrada de la varianza.
+
+Probemos una función simple que puede tomar múltiples argumentos: `round()`.
+
+
+```{r,results="hide"}
+round
+?round
+```
+
+Tiene dos argumentos, `x` y `digits`. Estos son los ingredientes para tu función de redondeo. `x` es un término variable común para los "datos"; para calcular la desviación estándar, obviamente necesita **los datos**.
+
+También nos dice que necesita algo más: `digits`. Sé por el retorno y por el archivo de ayuda que este argumento nos indica cuántos dígitos redondear en nuestro número. Este argumento de `digits` se establece igual a 0. ¿Qué significa eso? Cuando ejecutas una función, el `=` significa que estás asignando un valor a ese argumento. Así es como le decimos a la función qué ingrediente queremos usar. Tal vez quieras darle pan integral, no pan blanco; tal vez mermelada de uva, no de fresa, etc.
+
+Entonces, lo que la función `round` intenta decirnos con `digits=0` es que nos está indicando la respuesta predeterminada que va a usar si no le das una. En nuestra función de redondeo, nos está diciendo que si no asignamos un valor a `digits`, utilizará su predeterminado '0', lo que significa redondear a 0 decimales.
+
+```{r, results="show", purl=FALSE}
+round(3.14159)
+```
+
+Aquí, hemos llamado a `round()` con solo un argumento, `3.14159`, y ha devuelto el valor `3`. Si queremos más dígitos, podemos ver cómo hacerlo obteniendo información sobre la función `round`. Podemos usar `args(round)` para encontrar qué argumentos toma, o consultar la ayuda para esta función utilizando `?round`.
+
+
+```{r, results="show", purl=FALSE}
+args(round)
+```
+
+Vemos que si queremos un número diferente de dígitos, podemos escribir `digits = 2` o la cantidad que deseemos.
+
+
+```{r, results="show", purl=FALSE}
+round(3.14159, digits = 2)
+```
+
+Si proporcionas los argumentos en el mismo orden exacto en que están definidos, no es necesario nombrarlos:
+
+
+```{r, results="show", purl=FALSE}
+round(3.14159, 2)
+```
+
+Y si nombras los argumentos, puedes cambiar su orden:
+
+
+```{r, results="show", purl=FALSE}
+round(digits = 2, x = 3.14159)
+```
+
+Es una buena práctica colocar los argumentos no opcionales (como el número que estás redondeando) primero en tu llamada a la función y luego especificar los nombres de todos los argumentos opcionales. Si no lo haces, alguien que lea tu código podría tener que consultar la definición de una función con argumentos desconocidos para entender lo que estás haciendo.
+
+**<nota>** He escuchado la regla general de nombrar tus argumentos cuando hay más de 3. **</nota>**
+
+## Vectores y tipos de datos
+
+```{r, echo=FALSE, purl=TRUE}
+### Vectores y tipos de datos
+```
+
+Un vector es el tipo de dato más común y básico en R, y es prácticamente el caballo de batalla de R. Un vector está compuesto por una serie de valores, que pueden ser números o caracteres. Podemos asignar una serie de valores a un vector utilizando la función `c()`. Por ejemplo, podemos crear un vector de pesos de animales y asignarlo a un nuevo objeto `weight_g`:
+
+
+```{r, purl=TRUE}
+weight_g <- c(50, 60, 65, 82)
+weight_g
+```
+
+Un vector también puede contener caracteres:
+
+
+```{r, purl=FALSE}
+animals <- c("mouse", "rat", "dog")
+animals
+```
+
+Las comillas alrededor de "mouse", "rat", etc. son esenciales aquí. Sin las comillas, R asumirá que se han creado objetos llamados `mouse`, `rat` y `dog`. Como estos objetos no existen en la memoria de R, habrá un mensaje de error.
+
+#### Caracteres, cadenas y comillas  
+```{r, echo=FALSE, purl=TRUE}
+#### Caracteres, cadenas y comillas 
+```
+
+#### Tipos de Datos
+En todos los lenguajes de programación, debes especificar los tipos de datos que estás utilizando.
+
+En R, todos los objetos de R se construyen principalmente a partir de 4 **tipos de datos o vectores**:  
+- `numérico`  
+- `carácter`  
+- `lógico` para `TRUE` y `FALSE` (el tipo de dato booleano)  
+- `entero` para números enteros. Esencialmente, un numérico sin decimales.  
+
+```{r, echo=FALSE, purl=TRUE}
+# 4 tipos de datos principales en R
+# - numérico  :
+# - carácter :  
+# - lógico para TRUE y FALSE (el tipo de dato booleano) :  
+# - entero 
+```
+¿Por qué es esto importante? ¿Por qué tienes que decirle a R (o a cualquier lenguaje de programación) qué tipo de dato es? Bueno, tiene que saber lo que quieres que haga. Y no quieres que adivine.  
+Los lenguajes de programación, en gran medida, no les gusta adivinar, y no deberían hacerlo.  
+Si lo hacen, debería estar bien documentado qué es y por qué.  
+La forma más fácil y segura de escribir lenguajes es tener estándares y convenciones.  
+Esto generalmente significa la molesta tarea de tener que definir qué tipo de dato es algo.  
+Pero tener estos tipos de datos es una manera de asegurarte de que R funcione sin problemas y de manera confiable cada vez.
+
+##### Este ejemplo más fácil es '1' tal como está escrito en una hoja de datos científicos.
+
+'1' puede ser los 4 tipos de datos
+
+- 1 es un número. ¡Es el primer número! También puede tener cierta precisión (piensa en 1.000).  
+- 1 también es un entero. Es un número exacto sin decimales. ¡Es 1!  
+- 1 también se usa en lógico. Bien conocido en programación, pero menos conocido fuera de la programación.  
+
+Una forma común de escribir o entender verdadero y falso también es 1 y 0.  
+O es o no es. Apagado o encendido. ¡La base absoluta de la programación y la electrónica misma!  
+
+- 1 también puede ser un carácter. "1", no es el primero y no es el valor medido de 1.  
+Es simplemente, tal vez, tu primer gráfico. Número 1 porque quizás por alguna razón arbitraria. Fue el primer gráfico al que fuiste.  
+
+Ahora, si estás tratando de hacer una receta y le diste un valor de 1, puedes argumentar que los primeros tres ejemplos son más o menos los mismos y no deberían importar.  
+Ya sea una representación numérica, entera o lógica de 1,  
+siempre deberías calcular la desviación estándar, la raíz cuadrada, la media,  
+lo mismo. Un valor lógico podría significar que estás haciendo algo mal.  
+Ya que eso no tiene **mucho sentido**.  
+
+Pero, ¿qué pasa si 1 realmente significaba 'Gráfico 1'? En ese caso, tomar la media de 'Gráfico 1'  
+bueno... no es muy lógico. Probablemente querrías que R se detuviera y te advirtiera que algo es raro. Y eso es exactamente lo que hace R. ¡Otra razón para tener estos estándares de datos!
+
+<!-- Podrías poner un RETO aquí -->
+Entonces, volviendo a entender los objetos...
+
+#### Objetos
+
+```{r, echo=FALSE, purl=TRUE}
+#### Objetos
+```
+
+
+Hay muchas funciones que te permiten inspeccionar el contenido de un vector o un objeto.  
+`length()` te dice cuántos elementos hay en un vector particular:
+
+
+```{r,purl=FALSE}
+length(weight_g)
+length(animals)
+```
+
+Inspeccionar objetos y sus propiedades puede ayudar a solucionar problemas o a comprender cómo usar nuevas funciones.
+
+Por ejemplo, una característica importante de un vector es que todos los elementos son del mismo tipo de dato.  
+La función `class()` indica con qué tipo de objeto estás trabajando:
+
+
+```{r, purl=FALSE}
+class(weight_g)
+class(animals)
+```
+
+La función `str()` proporciona una visión general de la estructura de un objeto y sus elementos. Es una función útil cuando se trabaja con objetos grandes y complejos:
+
+
+```{r, purl=FALSE}
+str(weight_g)
+str(animals)
+```
+
+Puedes usar la función `c()` para agregar otros elementos a tu vector:
+
+
+```{r, purl=FALSE}
+weight_g <- c(weight_g, 90) # agregar al final del vector
+weight_g <- c(30, weight_g) # agregar al principio del vector
+weight_g
+```
+
+En la primera línea, tomamos el vector original `weight_g`, agregamos el valor `90` al final y guardamos el resultado de nuevo en `weight_g`. Luego, agregamos el valor `30` al principio, guardando nuevamente el resultado en `weight_g`.
+
+Podemos hacer esto una y otra vez para hacer crecer un vector o ensamblar un conjunto de datos. A medida que programamos, esto puede ser útil para agregar resultados que estamos recopilando o calculando.
+
+Un **vector** es el tipo de dato más simple en R y es un vector lineal de un solo tipo.
+
+Puedes verificar el tipo de tu vector utilizando la función `typeof()` e introduciendo tu vector como argumento.
+
+```{r}
+typeof(weight_g)
+```
+
+Los vectores son una de las muchas **estructuras de datos** que utiliza R. Otras importantes son las listas (`list`), las matrices (`matrix`), los data frames (`data.frame`), los factores (`factor`) y los arreglos (`array`).
+
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+### Challenge
+We've seen that vectors can be of type character, numeric (or double), integer, and logical. But what happens if we try to mix these types in a single vector? 
+
+Try to subset vectors and use the `%in%` function to see how R handles mixed types.
+
+#### Bonus Challenge
+- What will happen in each of these examples? (hint: use `class()` to check the data type of your objects):
+
+  ```r
+  num_char <- c(1, 2, 3, "a")
+  num_logical <- c(1, 2, 3, TRUE)
+  char_logical <- c("a", "b", "c", TRUE)
+  tricky <- c(1, 2, 3, "4")
+```
+- Why do you think it happens?
+
+::::::: solution
+
+Vectors can be of only one data type. R tries to convert (coerce) the content of this vector to find a "common denominator" that doesn't lose any information.
+
+::::::::::::::::
+
+- How many values in `combined_logical` are `"TRUE"` (as a character) in the following example (reusing the 2 `..._logical`s from above):
+
+  ```r
+  combined_logical <- c(num_logical, char_logical)
+```
+
+::::::: solution
+
+Only one. There is no memory of past data types, and the coercion happens the first time the vector is evaluated. Therefore, the `TRUE` in `num_logical` gets converted into a `1` before it gets converted into `"1"` in `combined_logical`.
+
+::::::::::::::::
+
+- You've probably noticed that objects of different types get converted into a single, shared type within a vector. In R, we call converting objects from one class into another class *coercion*. These conversions happen according to a hierarchy, whereby some types get preferentially coerced into other types. Can you draw a diagram that represents the hierarchy of how these data types are coerced?
+
+::::::: solution
+
+logical → numeric → character
+
+::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r, echo=FALSE, eval=FALSE, purl=TRUE}
+## ### Challenge
+## We've seen that vectors can be of type character, numeric, integer, and
+## logical. But what happens if we try to mix these types in a single
+## vector?
+
+## What will happen in each of these examples? (hint: use `class()` to
+## check the data type of your object)
+num_char <- c(1, 2, 3, "a")
+
+num_logical <- c(1, 2, 3, TRUE)
+
+char_logical <- c("a", "b", "c", TRUE)
+
+tricky <- c(1, 2, 3, "4")
+
+## Why do you think it happens?
+
+
+## How many values in `combined_logical` are `"TRUE"` (as a character) in the
+## following example:
+combined_logical <- c(num_logical, char_logical)
+
+## You've probably noticed that objects of different types get
+## converted into a single, shared type within a vector. In R, we call
+## converting objects from one class into another class
+## _coercion_. These conversions happen according to a hierarchy,
+## whereby some types get preferentially coerced into other types. Can
+## you draw a diagram that represents the hierarchy of how these data
+## types are coerced?
+```
+
+## Subconjuntos de Vectores
+```{r, purl=T}
+#### Subconjuntos de Vectores
+```
+
+Si queremos extraer uno o varios valores de un vector, debemos proporcionar uno o varios índices entre corchetes. Por ejemplo:
+
+
+```{r, results="show", purl=FALSE}
+animals <- c("mouse", "rat", "dog", "cat")
+animals[2]
+animals[c(3, 2)]
+```
+
+También podemos repetir los índices para crear un objeto con más elementos que el original:
+
+
+```{r, results="show", purl=FALSE}
+more_animals <- animals[c(1, 2, 3, 2, 1, 4)]
+more_animals
+```
+
+Los índices en R comienzan en 1. Lenguajes de programación como Fortran, MATLAB, Julia y R comienzan a contar desde 1, porque así es como lo hacen típicamente los seres humanos. Los lenguajes de la familia C (incluyendo C++, Java, Perl y Python) cuentan desde 0 porque eso es más simple para los ordenadores.
+
+
+### Subconjuntos condicionales
+
+Otra forma común de hacer subconjuntos es utilizando un vector lógico. `TRUE` seleccionará el elemento con el mismo índice, mientras que `FALSE` no lo hará:
+
+
+```{r, results="show", purl=FALSE}
+weight_g <- c(21, 34, 39, 54, 55)
+weight_g[c(TRUE, FALSE, FALSE, TRUE, TRUE)]
+```
+
+Típicamente, estos vectores lógicos no se escriben a mano, sino que son el resultado de otras funciones o pruebas lógicas. Por ejemplo, si quisieras seleccionar solo los valores superiores a 50:
+
+
+```{r, results="show", purl=FALSE}
+weight_g > 50    # devolverá lógicos con TRUE para los índices que cumplen con la condición
+## así que podemos usar esto para seleccionar solo los valores superiores a 50
+weight_g[weight_g > 50]
+```
+
+Puedes combinar múltiples pruebas utilizando `&` (ambas condiciones son verdaderas, Y) o `|` (al menos una de las condiciones es verdadera, O):
+
+
+```{r, results="show", purl=FALSE}
+weight_g[weight_g > 30 & weight_g < 50]
+weight_g[weight_g <= 30 | weight_g == 55]
+weight_g[weight_g >= 30 & weight_g == 21]
+```
+
+Aquí, `>` significa "mayor que", `<` significa "menor que", `<=` significa "menor o igual que" y `==` significa "igual a". El doble signo igual `==` es una prueba de igualdad numérica entre los lados izquierdo y derecho, y no debe confundirse con el signo `=`, que realiza la asignación de variables (similar a `<-`).
+
+Una tarea común es buscar ciertas cadenas en un vector. Se podría usar el operador "o" `|` para probar la igualdad con múltiples valores, pero esto puede volverse tedioso rápidamente. La función `%in%` permite comprobar si alguno de los elementos de un vector de búsqueda se encuentra:
+
+```{r, results="show", purl=FALSE}
+animales <- c("ratón", "rata", "perro", "gato", "gato")
+
+# devuelve tanto la rata como el gato
+animales[animales == "gato" | animales == "rata"]
+
+# devuelve un vector lógico que es TRUE para los elementos dentro de animales
+# que se encuentran en el vector de caracteres y FALSE para aquellos que no
+animales %in% c("rata", "gato", "perro", "pato", "cabra", "pájaro", "pez")
+
+# utiliza el vector lógico creado por %in% para devolver elementos de animales
+# que se encuentran en el vector de caracteres
+animales[animales %in% c("rata", "gato", "perro", "pato", "cabra", "pájaro", "pez")]
+```
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+### Desafío
+
+Probemos cuánto sentido ha hecho esta lección de subsetting.
+
+- Usando nuestro vector `weight_g`, ¿puedes extraer solo los valores que son menores o iguales a 34?
+
+```r
+weight_g <- c(21, 34, 39, 54, 55)
+
+# Tu código aquí para extraer los valores que son menores o iguales a 34
+```
+
+::::::: solution
+
+```
+weight_g[weight_g<=34]
+```
+
+::::::::::::::::
+
+- Usando nuestro vector `weight_g` y la función `mean`, calcula el peso promedio **sin incluir** los valores 21 y 55. 
+  
+::::::: solution
+
+```
+ mean(weight_g[weight_g>21 & weight_g<55])
+```
+
+::::::::::::::::
+
+- Usando nuestro vector `animals`, devuelve los valores que son iguales a ratón, perro o gato.
+
+
+::::::: solution
+
+```
+animals[animals%in%c('rat','dog,'cat')]
+```
+
+### Desafío Opcional (opcional)
+
+- ¿Puedes averiguar por qué `"four" > "five"` devuelve `TRUE`?
+
+::::::: solución
+
+Cuando se utiliza ">" o "<" en cadenas de texto, R compara su orden alfabético. Aquí, "four" viene después de "five", y por lo tanto es "mayor que" ella.
+
+::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r, echo=FALSE, purl=TRUE}
+### Desafío (opcional)
+##
+## * ¿Puedes averiguar por qué `"four" > "five"` devuelve `TRUE`?
+```
+```{r, echo=FALSE, purl=TRUE}
+## ### Desafío
+## 1. Usando nuestro vector `weight_g`, ¿puedes seleccionar solo los valores que son menores o iguales a 34?
+weight_g <- c(21, 34, 39, 54, 55)
+##
+## 2. Usando nuestro `weights_g` y la función `mean`, calcula el peso promedio excluyendo los valores 21 y 55.
+##
+## 3. Usando nuestro vector `animals`, devuelve los valores que son iguales a rat, dog o cat.
+animals <- c("mouse", "rat", "dog", "cat", "cat")
+```
+
+## Datos faltantes
+
+```{r, echo=FALSE,purl=TRUE}
+## Datos faltantes
+```
+
+
+A medida que R fue diseñado para analizar conjuntos de datos, incluye el concepto de datos faltantes (lo cual es poco común en otros lenguajes de programación). Los datos faltantes se representan en vectores como `NA`.
+
+Al realizar operaciones con números, la mayoría de las funciones devolverán `NA` si los datos con los que está trabajando incluyen valores faltantes. Esta característica hace que sea más difícil pasar por alto los casos en los que se trata con datos faltantes. Puede agregar el argumento `na.rm = TRUE` para calcular el resultado como si los valores faltantes se hubieran eliminado primero (`rm` significa Removido).
+
+```{r, purl=FALSE}
+heights <- c(2, 4, 4, NA, 6)
+mean(heights)
+max(heights)
+mean(heights, na.rm = TRUE)
+max(heights, na.rm = TRUE)
+```
+
+Si sus datos incluyen valores faltantes, es posible que desee familiarizarse con las funciones `is.na()`, `na.omit()` y `complete.cases()`. Vea a continuación ejemplos.
+
+```{r, purl=FALSE}
+## Extraer aquellos elementos que no son valores faltantes.
+heights[!is.na(heights)]
+
+## Devuelve el objeto con los casos incompletos eliminados.
+# El objeto devuelto es un vector de tipo `"numeric"` (o `"double"`).
+na.omit(heights)
+
+## Extraer aquellos elementos que son casos completos.
+# El objeto devuelto es un vector de tipo `"numeric"` (o `"double"`).
+heights[complete.cases(heights)]
+```
+
+Recuerde que puede usar la función `typeof()` para encontrar el tipo de su vector.
+
+:::::::::::::::::::::::::::::::::::::::  desafío
+
+### Desafío (revisar juntos)
+
+1. Usando este vector de alturas en pulgadas, crea un nuevo vector, `heights_no_na`, con los NAs eliminados.
+
+  ```r
+  heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+```
+2. Usa la función `median()` para calcular la mediana del vector `heights`.
+
+3. Usa R para averiguar cuántas personas en el conjunto son más altas que 67 pulgadas.
+
+:::::::: solución
+
+```{r, purl=FALSE}
+heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+
+# 1.
+heights_no_na <- heights[!is.na(heights)]
+# o
+heights_no_na <- na.omit(heights)
+# o
+heights_no_na <- heights[complete.cases(heights)]
+
+# 2.
+median(heights, na.rm = TRUE)
+
+# 3.
+heights_above_67 <- heights_no_na[heights_no_na > 67]
+length(heights_above_67)
+```
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r, echo=FALSE, purl=TRUE}
+## ### Desafío
+## 1. Usando este vector de alturas en pulgadas, crea un nuevo vector con los NAs eliminados.
+##
+heights <- c(63, 69, 60, 65, NA, 68, 61, 70, 61, 59, 64, 69, 63, 63, NA, 72, 65, 64, 70, 63, 65)
+##
+## 2. Usa la función `median()` para calcular la mediana del vector `heights`.
+##
+## 3. Usa R para averiguar cuántas personas en el conjunto son más altas que 67 pulgadas.
+```
+
+Ahora que hemos aprendido cómo escribir scripts y los conceptos básicos de las estructuras de datos en R, estamos listos para comenzar a trabajar con el conjunto de datos de Portal que hemos estado utilizando en las otras lecciones y aprender sobre los data frames.
+
+
+::::::::::::::::::::::::::::::::::::: puntos clave
+
+- `<-` se utiliza para asignar valores a la derecha a objetos a la izquierda.
+- El código debe guardarse en el panel de Fuente en RStudio para ayudarte a regresar a tu código más tarde.
+- '#' se puede usar para agregar comentarios a tu código.
+- Las funciones pueden automatizar conjuntos de comandos más complicados y requieren argumentos como entradas.
+- Los vectores están compuestos por una serie de valores y pueden adoptar muchas formas.
+- Las estructuras de datos en R incluyen 'vector', 'lista', 'matriz', 'data.frame', 'factor' y 'array'.
+- Los vectores se pueden subestimar mediante índices o a través de vectores lógicos.
+- Existen muchas funciones para eliminar datos faltantes de las estructuras de datos.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+```{r, purl=TRUE}
+
+
+################## *NOTA* ######################
+# Antes de comenzar el siguiente capítulo, quiero que todos se aseguren de haber creado una carpeta `data` en su directorio de trabajo.
+# ¿Este código devuelve el valor TRUE?
+
+length(list.files(pattern='data'))>0
+#################################################
+
+```

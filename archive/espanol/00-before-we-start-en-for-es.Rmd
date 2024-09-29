@@ -1,0 +1,319 @@
+---
+title: Antes de empezar
+author: Data Carpentry contributors
+minutes: 30
+editor_options:
+  markdown:
+    wrap: 80
+---
+
+```{r, echo=FALSE, purl=FALSE, message=FALSE}
+#source("setup.R")
+knitr::opts_chunk$set(results='hide', # fig.path='img/R-ecology-',
+                      comment = "#>", purl = FALSE)
+```
+
+```{r,echo=FALSE, purl=TRUE}
+################################################
+# Lección 00 - Antes de empezar
+################################################
+
+```
+***
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- ¿Qué es R y RStudio?  
+- ¿Qué es un directorio de trabajo?  
+- ¿Cómo puedo obtener ayuda con las funciones de R?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objetivos
+
+- Explicar qué son R y RStudio, para qué se utilizan y cómo se relacionan entre sí.  
+- Describir el propósito de los paneles de Script, Consola, Entorno y Gráficos en RStudio.  
+- Organizar archivos y directorios para un conjunto de análisis como un Proyecto de R y entender el propósito del directorio de trabajo.  
+- Utilizar la interfaz de ayuda integrada de RStudio para buscar más información sobre las funciones de R.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+***
+
+## ¿Qué es R? ¿Qué es RStudio?
+
+El término "`R`" se utiliza para referirse tanto al lenguaje de programación como al software que interpreta los scripts.
+
+[RStudio](https://rstudio.com) es una forma popular de escribir scripts en R e interactuar con el software de R. Para que RStudio funcione correctamente, se necesita R, por lo que ambos deben estar instalados en tu computadora.
+
+## ¿Por qué aprender R?
+
+### R no implica hacer muchos clics, ¡y eso es algo bueno!
+
+R es un lenguaje de programación. Los resultados de tu análisis no dependen de recordar la secuencia de puntos y clics, sino de una serie de comandos. ¡Y eso es bueno! Si deseas rehacer tu análisis, no tienes que recordar el orden de botones que clickeaste. Ejecutas tu script y obtienes tus resultados. Los resultados son los mismos cada vez.
+
+Trabajar con scripts deja claros los pasos que utilizaste en tu análisis. El código que escribes puede ser entendido y usado por otra persona.
+
+Trabajar con scripts te ayuda a comprender mejor y más rápidamente lo que estás haciendo y tus métodos.
+
+### El código en R es excelente para la reproducibilidad
+
+La reproducibilidad significa que alguien más (incluyéndote a ti mismo en el futuro) puede obtener los mismos resultados con el mismo conjunto de datos utilizando el mismo análisis.
+
+R se integra con otras herramientas para generar manuscritos a partir de tu código. Si recopilas más datos o corriges un error en tu conjunto de datos, las figuras y las pruebas estadísticas en tu manuscrito se actualizan automáticamente.
+
+Un número creciente de revistas y agencias financiadoras espera que los análisis sean reproducibles, por lo que conocer R te ayudará a cumplir con estos requisitos.
+
+### R es interdisciplinario y extensible
+
+Con decenas de miles de paquetes para extender sus capacidades, R proporciona un marco para combinar enfoques estadísticos de muchas disciplinas científicas y ajustar el marco analítico que necesitas para analizar tus datos. Por ejemplo, R tiene paquetes para analizar imágenes, GIS, series de tiempo, genética de poblaciones y mucho más.
+
+### R funciona con datos de todos los tamaños y formas
+
+Las habilidades que aprendes con R escalan fácilmente con el tamaño de tu conjunto de datos. Ya sea que tu conjunto de datos tenga cientos o millones de líneas, no importa.
+
+R está diseñado para el análisis de datos. Viene con estructuras y tipos de datos especiales que pueden manejar fácilmente datos faltantes y factores estadísticos.
+
+R puede leer datos de muchos tipos de archivos diferentes, incluidos datos geoespaciales, y conectarse a bases de datos locales y remotas.
+
+### R produce gráficos de alta calidad
+
+R tiene capacidades de gráficos bien desarrolladas, y el paquete `ggplot2` es uno de los software de gráficos más potentes disponibles hoy en día. Comenzaremos a aprender a usar `ggplot2` en nuestra última lección del día.
+
+### R tiene una comunidad amplia y acogedora
+
+Miles de personas usan R a diario. Muchas de ellas están dispuestas a ayudarte a través de comunidades en línea y sitios web como [Stack Overflow](https://stackoverflow.com/), o en la [comunidad de RStudio](https://community.rstudio.com/).
+
+Dado que R es muy popular entre los investigadores, la mayoría de los materiales de ayuda y aprendizaje están orientados hacia otros investigadores. Python es un lenguaje similar a R y puede realizar muchas de las mismas tareas, pero es ampliamente utilizado por desarrolladores de software e ingenieros de software, por lo que los recursos y comunidades de Python no están tan orientados a los investigadores.
+
+### No solo R es gratuito, también es de código abierto y multiplataforma
+
+Cualquiera puede ver tu código fuente y ver cómo funciona R. Debido a esto, hay menos posibilidades de cometer errores, y si alguien encuentra un error, puede informar y corregir fallos.
+
+## Navegando por RStudio
+
+Usaremos el entorno de desarrollo integrado (IDE) de RStudio para escribir código en scripts, ejecutar código en R, navegar archivos en nuestra computadora, inspeccionar los objetos que creamos en R y observar los gráficos que hacemos. RStudio tiene muchas otras funciones que pueden ayudar con cosas como el control de versiones, el desarrollo de paquetes de R y la creación de aplicaciones Shiny, pero no las cubriremos hoy.
+
+![Captura de pantalla de RStudio mostrando los 4 "paneles"](fig/rstudio-screenshot.png){alt='Captura de pantalla de RStudio mostrando los 4 "paneles".'}
+
+En la captura de pantalla anterior, podemos ver 4 "paneles" en la disposición predeterminada:
+
+- Arriba a la izquierda: el panel **Source** que muestra scripts y otros archivos.  
+  - Si solo tienes 3 paneles y el panel de la Consola está en la parte superior izquierda, presiona <kbd>Shift+Cmd+N</kbd> (Mac) o <kbd>Shift+Ctrl+N</kbd> (Windows) para abrir un script en blanco de R, lo que debería hacer que aparezca el panel de Source.
+- Arriba a la derecha: el panel **Environment/History**, que muestra todos los objetos en tu sesión actual de R (Entorno) y tu historial de comandos (Historial).  
+  - Hay otras pestañas aquí, incluidas Conexiones, Build, Tutorial y posiblemente Git.
+- Abajo a la izquierda: el panel **Console**, donde puedes interactuar directamente con una consola de R, que interpreta los comandos de R y muestra los resultados.  
+  - También hay pestañas para Terminal y Jobs.
+- Abajo a la derecha: el panel **Files/Plots/Help/Viewer** para navegar archivos o ver gráficos y páginas de ayuda.
+
+Puedes personalizar la disposición de estos paneles, así como muchas configuraciones como el esquema de color de RStudio, la fuente e incluso los atajos de teclado. Puedes acceder a estas configuraciones yendo a la barra de menús y haciendo clic en Tools → Global Options.
+
+RStudio pone la mayoría de las cosas que necesitas en una sola ventana, e incluye características como atajos de teclado, autocompletado de código y resaltado de sintaxis (diferentes tipos de código tienen diferentes colores, lo que facilita la navegación por tu código).
+
+
+## Configuración inicial
+
+Es una buena práctica organizar tus proyectos en carpetas independientes desde el principio. Un proyecto bien organizado es más fácil de navegar, más reproducible y más fácil de compartir con otros. Tu proyecto debe comenzar con una carpeta de nivel superior que contenga todo lo necesario para el proyecto, incluidos los datos, scripts e imágenes, todo organizado en subcarpetas.
+
+RStudio proporciona una función llamada "Proyectos" que puede facilitar el trabajo en proyectos individuales en R. Vamos a crear un proyecto donde guardaremos todo lo necesario para este taller.
+
+1. Inicia RStudio (deberías ver una vista similar a la captura de pantalla anterior).
+2. En la parte superior derecha, verás un cubo azul 3D y las palabras "Project: (None)". Haz clic en este icono.
+3. Haz clic en **Nuevo Proyecto** en el menú desplegable.
+4. Haz clic en **Nuevo Directorio**, luego **Nuevo Proyecto**.
+5. Escribe un nombre para el proyecto, recomendamos `R-Ecology-Workshop`.
+6. Elígelo en una ubicación conveniente usando la sección "Crear proyecto como subdirectorio de:". Recomendamos que sea en tu `Escritorio`. Siempre puedes mover el proyecto a otro lugar más tarde, ya que será independiente.
+7. Haz clic en **Crear Proyecto** y tu nuevo proyecto se abrirá.
+
+```{r, echo=FALSE, purl=TRUE}
+# 1. Inicia RStudio (deberías ver una vista similar a la captura de pantalla anterior).
+# 2. En la parte superior derecha, verás un cubo azul 3D y las palabras "Project: (None)". Haz clic en este icono.
+# 3. Haz clic en **Nuevo Proyecto** en el menú desplegable.
+# 4. Haz clic en **Nuevo Directorio**, luego **Nuevo Proyecto**.
+# 5. Escribe un nombre para el proyecto, recomendamos `R-Ecology-Workshop`.
+# 6. Elígelo en una ubicación conveniente usando la sección "Crear proyecto como subdirectorio de:". Recomendamos que sea en tu `Escritorio`. Siempre puedes mover el proyecto a otro lugar más tarde, ya que será independiente.
+# 7. Haz clic en **Crear Proyecto** y tu nuevo proyecto se abrirá.
+
+
+```
+
+Uno de los beneficios de usar Proyectos de RStudio es que automáticamente establecen el **directorio de trabajo** en la carpeta de nivel superior del proyecto. El directorio de trabajo es la carpeta donde R está trabajando, por lo que ve la ubicación de todos los archivos (incluidos datos y scripts) como relativos al directorio de trabajo. Es posible que encuentres scripts que incluyan algo como `setwd("/Usuarios/TuNombreDeUsuario/MiProyecto")`, lo que establece directamente un directorio de trabajo. Esto es menos fácil de compartir, ya que ese directorio puede no estar en la computadora de otra persona (probablemente no tengan el mismo nombre de usuario que tú). Usar Proyectos de RStudio significa que no tenemos que establecer manualmente el directorio de trabajo.
+
+Hay algunas configuraciones que necesitaremos ajustar para mejorar la reproducibilidad de nuestro trabajo. Ve a la barra de menú, luego haz clic en Herramientas → Opciones Globales para abrir la ventana de Opciones.
+
+![](fig/rstudio-preferences.png){alt="Establecer 'Guardar espacio de trabajo en .RData al salir' a 'Nunca'"}
+
+
+### Organizando tu directorio de trabajo
+
+Para este taller, necesitaremos `data/` para cuando aprendamos a exportar datos como archivos CSV.
+
+Ahora quiero que crees un directorio (carpeta) llamado **data**.
+
+- Bajo la pestaña `Archivos` en la parte derecha de la pantalla, haz clic en `Nueva Carpeta` y
+  crea una carpeta llamada `data` dentro de tu recién creado directorio de trabajo
+  (por ejemplo, `~/Intro_to_R_NRN_2024`). (Alternativamente, escribe `dir.create("data")`
+  en tu consola de R).
+
+Mantendremos el script en la raíz de nuestro directorio de trabajo porque
+solo vamos a usar un archivo. Más adelante, cuando crees proyectos más
+complejos, quizás quieras crear más subdirectorios.
+
+Tu directorio de trabajo debería verse así ahora:
+
+```{r, results="markup", fig.cap="Cómo debería verse al inicio de esta lección", echo=FALSE, purl=FALSE, out.width="100%", fig.align="center"}
+knitr::include_graphics("fig/r-starting-how-it-should-look-like.png")
+```
+
+### El directorio de trabajo
+
+El directorio de trabajo es un concepto importante de entender. Es el lugar desde donde R buscará y guardará los archivos. Cuando escribes código para tu proyecto, debería referirse a los archivos en relación con la raíz de tu directorio de trabajo.
+
+RStudio te ayuda en esto y configura automáticamente el directorio de trabajo en la carpeta donde has colocado tu proyecto.
+Si necesitas verificarlo, puedes usar `getwd()`. Si tu directorio de trabajo no es el correcto, puedes cambiarlo en la interfaz de RStudio navegando en el explorador de archivos hasta donde debería estar tu directorio de trabajo, y haciendo clic en el ícono azul de engranaje "Más", y selecciona "Establecer como Directorio de Trabajo". Alternativamente, puedes usar `setwd("/ruta/al/directorio/de/trabajo")` para restablecer tu directorio de trabajo. Sin embargo, tus scripts no deberían incluir esta línea porque fallará en la computadora de otra persona.
+
+----------------------
+
+## Interactuando con R
+
+## Trabajando en R y RStudio
+
+La base de la programación es que escribimos instrucciones para que la computadora las siga, y luego le decimos a la computadora que siga esas instrucciones. Escribimos estas instrucciones en forma de *código*, que es un lenguaje común entendido tanto por la computadora como por los humanos. Llamamos a estas instrucciones *comandos*, y le decimos a la computadora que siga las instrucciones *ejecutando* (también llamado *corriendo*) los comandos.
+
+### Consola vs. script
+
+Puedes ejecutar comandos directamente en la consola de R, o puedes escribirlos en un script de R. Puede ayudarte pensar en trabajar en la consola versus trabajar en un script como algo similar a cocinar. La consola es como inventar una nueva receta, pero sin escribir la receta. Puedes llevar a cabo una serie de pasos y producir un plato delicioso al final. Sin embargo, como no escribiste nada, es más difícil recordar lo que hiciste y en qué orden.
+
+Escribir un script es como tomar buenas notas mientras cocinas: puedes ajustar y editar la receta, puedes regresar en 6 meses y probarla de nuevo, y no tienes que recordar qué funcionó bien y qué no. ¡Es más fácil que cocinar, ya que puedes presionar un botón y la computadora "cocina" toda la receta por ti!
+
+Un beneficio adicional de los scripts es que puedes dejar **comentarios** para ti mismo u otras personas. Las líneas que comienzan con `#` son consideradas comentarios y no serán interpretadas como código de R.
+
+
+#### Consola
+
+- La consola de R es donde se ejecuta el código.
+- El **símbolo de aviso**, que es el símbolo `>`, es donde puedes escribir comandos.
+- Al presionar <kbd>Enter</kbd>, R ejecutará esos comandos y mostrará el resultado.
+- Puedes trabajar aquí, y tu historial se guarda en el panel de Historial, pero no podrás acceder a él en el futuro.
+
+#### Script
+
+- Un script es un registro de comandos que se envían a R, preservado en un archivo de texto plano con una extensión `.R`.
+- Puedes crear un nuevo script de R haciendo clic en `Archivo → Nuevo Archivo → Script de R`, haciendo clic en el botón verde `+` en la esquina superior izquierda de RStudio, o presionando <kbd>Shift+Cmd+N</kbd> (Mac) o <kbd>Shift+Ctrl+N</kbd> (Windows). Estará sin guardar y se llamará "Sin título1".
+- Si escribes líneas de código R en un script, puedes enviarlas a la consola de R para que sean evaluadas.
+  - <kbd>Cmd+Enter</kbd> (Mac) o <kbd>Ctrl+Enter</kbd> (Windows) ejecutarán la línea de código en la que está tu cursor.
+  - Si seleccionas múltiples líneas de código, puedes ejecutar todas ellas presionando <kbd>Cmd+Enter</kbd> (Mac) o <kbd>Ctrl+Enter</kbd> (Windows).
+  - Al preservar comandos en un script, puedes editarlos y volver a ejecutarlos rápidamente, guardarlos para más tarde y compartirlos con otros.
+  - Puedes dejar comentarios para ti mismo comenzando una línea con un `#`.
+
+#### Ejemplo
+
+Intentemos ejecutar un poco de código en la consola y en un script. Primero, haz clic en el panel de Consola y escribe `1+1`. Presiona <kbd>Enter</kbd> para ejecutar el código. Deberías ver tu código impreso y luego el valor de `2` devuelto.
+
+Ahora haz clic en tu script en blanco y escribe `1+1`. Con tu cursor en esa línea, presiona <kbd>Cmd+Enter</kbd> (Mac) o <kbd>Ctrl+Enter</kbd> (Windows) para ejecutar el código. Verás que tu código fue enviado desde el script a la consola, donde devolvió un valor de `2`, como cuando ejecutaste tu código directamente en la consola.
+
+También observa que R tiene un símbolo `>` cuando ha terminado con los comandos. Mostrará un `+` siempre que esté esperando recibir comandos. Esto generalmente significa que no has completado una declaración o un paréntesis.
+
+Escribamos `1+` y veamos qué sucede:
+
+```{r purl=F,eval=F}
+1+
+```
+
+R está esperando el resto del comando. Necesita saber qué agregar a 1. Una vez que completamos la declaración, obtenemos el símbolo `>`. ¡Primer problema resuelto!
+
+---------------------
+
+## Buscando ayuda
+
+### Buscando la documentación de funciones con `?` y `??`
+
+Si necesitas ayuda con una función específica, digamos `mean()`, puedes escribir `?mean`. Si estás buscando una función para realizar una tarea particular, pero no conoces el nombre de la función, puedes usar el doble signo de interrogación `??`, por ejemplo `??kruskall`. Ambos comandos abrirán archivos de ayuda en el panel de ayuda de RStudio en la esquina inferior derecha. También puedes buscar directamente en el panel de ayuda.
+
+![](fig/rstudiohelp.png){alt="Panel de ayuda de RStudio. Al escribir una palabra en el campo de búsqueda, mostrará sugerencias relacionadas."}
+
+
+### Autocompletado de código
+
+Cuando escribes código en RStudio, puedes utilizar su autocompletado de código para recordar el nombre o los argumentos de una función. Comienza a escribir el nombre de la función y observa las sugerencias. Usa las flechas arriba y abajo para seleccionar una sugerencia de autocompletado y <kbd>Tab</kbd> para aplicarla. También puedes usar el autocompletado para completar los nombres de los argumentos de la función, nombres de objetos y nombres de archivos. Incluso funciona si no escribes la ortografía al 100% correctamente.
+
+### Encontrando más funciones y paquetes
+
+La ayuda de RStudio solo busca en los paquetes que tienes instalados en tu máquina, pero hay muchos más disponibles en [CRAN](https://cran.r-project.org/) y [GitHub](https://github.com/). Para buscar en todos los paquetes de R disponibles, puedes usar el sitio web [rdocumentation.org](https://www.rdocumentation.org). A menudo, una búsqueda en Google de "R \<tarea>" te llevará a la documentación del paquete apropiado o a un foro donde alguien ya ha hecho tu pregunta. Muchos paquetes también tienen sitios web con ayuda adicional, tutoriales, noticias y más (por ejemplo, [tidyverse.org](https://www.tidyverse.org/)).
+
+### Tratando con mensajes de error
+
+¡No te desanimes si tu código no se ejecuta de inmediato! Los mensajes de error son comunes al programar, y corregir errores es parte del trabajo diario de un programador. A menudo, el problema es un pequeño error tipográfico en el nombre de una variable o un paréntesis faltante. Presta atención a las x rojas junto a tu código en RStudio. Estas pueden proporcionar pistas útiles sobre la fuente del problema.
+
+Encontrar errores es muy común para todos. Nos encontraremos con errores mientras trabajamos juntos hoy. Intentaré comentarlos cuando nos encontremos con ellos.
+
+![](fig/rstudioredx.png){alt="RStudio muestra una x roja junto a una línea de código que R no entiende."}
+
+
+Si no puedes corregir un error, comienza buscándolo en Google. Algunos mensajes de error son demasiado genéricos para entender el problema (por ejemplo, "subscript out of bounds"). En ese caso, puede ser útil incluir el nombre de la función o paquete que estás utilizando en tu búsqueda.
+
+### Pidiendo ayuda
+
+Si tu búsqueda en Google no tiene éxito, puede que desees preguntar a otros usuarios de R por ayuda. Hay diferentes lugares donde puedes pedir ayuda. Durante este taller, no dudes en hablar con tu vecino, comparar tus respuestas y pedir ayuda. También podrías estar interesado en organizar reuniones regulares después del taller para seguir aprendiendo unos de otros. Si tienes un amigo o colega con más experiencia que tú, también podría estar dispuesto y ser capaz de ayudarte.
+
+¡Cuando tengas dudas, siempre busca en Google! Y en algún momento puede que necesites hacer una pregunta en una de las muchas comunidades de R. La clave para recibir ayuda de alguien es que ellos comprendan rápidamente tu problema. Puedes leer más en la lección extra 07: `07-extra-make-reproducible-examples`.
+
+## ¿Cómo aprender más después del taller?
+
+El material que cubrimos durante este taller te dará una idea de cómo puedes usar R para analizar datos para tu propia investigación. Sin embargo, para hacer cosas avanzadas, como limpiar tu conjunto de datos, utilizar métodos estadísticos o crear gráficos bonitos, necesitarás aprender más.
+
+La mejor manera de volverte competente y eficiente en R, como con cualquier otra herramienta, es usarla para responder tus preguntas de investigación reales. Como principiante, puede parecer aterrador escribir un script desde cero. Muchas personas hacen disponible su código en línea. Si modificas código existente, puede ayudarte a obtener experiencia práctica usando R para tu propio trabajo. Esto puede ayudarte a sentirte más cómodo escribiendo tus propios scripts.
+
+## Más recursos
+
+#### Más sobre R
+
+Después de que este taller termine, con suerte estarás listo para abordar el aprendizaje de R por tu cuenta. Algunos de ustedes pueden sentirse lo suficientemente seguros como para comenzar su propio proyecto. Otros pueden sentir que necesitan un repaso. Aquí hay algunos pasos útiles:
+
+**Útiles**
+
+- ¡Lee estas lecciones por tu cuenta! Sugeriría que todos revisen las lecciones después de que terminemos aquí. Utiliza ese tiempo para probar cosas que no tuviste tiempo durante la clase. Revisa las lecciones 'extra' también.
+
+- Revisa una lección de Data o Software Carpentry en línea:
+  - [R para Análisis Científicos Reproducibles (Software Carpentry)](https://swcarpentry.github.io/r-novice-gapminder-es/)
+  - [Data Analysis and Visualization in R for Ecologists (Data Carpentry)](https://datacarpentry.org/R-ecology-lesson/)
+  
+- `Swirl` - Un paquete de R que te ayudará a aprender conceptos básicos de R. ¡Realmente lo ejecutas **dentro** de R! Es genial para personas que sienten que no pudieron entender los conceptos al final de la clase, o solo necesitan un repaso. Simplemente instala el paquete en R:
+
+```{r purl=FALSE, eval=F}
+install.packages("swirl")
+library("swirl")
+swirl()
+
+```
+
+- **R para Ciencia de Datos** - aprendizaje de nivel intermedio. Este es un
+  ebook escrito por el mismo autor de muchos de los paquetes
+  que vamos a usar hoy. Está dirigido a alguien que desea aprender los detalles avanzados de R. Hay muchos consejos, trucos y 
+  secretos útiles en el ebook. Lo recomiendo en algún momento
+  de tu aprendizaje de R. [R para Ciencia de Datos](https://r4ds.hadley.nz/)  
+- ¡Consigue un proyecto y comienza a experimentar con R!
+
+**Menos Útil**
+
+- La [Introducción a R](https://cran.r-project.org/doc/manuals/R-intro.pdf)
+  puede ser difícil de entender para personas con poca experiencia en programación, pero es un
+  buen lugar para comprender el funcionamiento interno del lenguaje R.  
+- Las [Preguntas Frecuentes sobre R](https://cran.r-project.org/doc/FAQ/R-FAQ.html) son densas y
+  técnicas, pero están llenas de información útil.  
+- Coursera - Puede ser difícil de entender para alguien que no ha aprendido a programar
+antes, sin embargo, después de este curso deberías estar equipado para aprender rápidamente. Su estilo de aprendizaje es más como una lección escolar, lo que a algunas personas puede gustarles.  
+- Hay muchos ebooks que se centran en R que puedes encontrar en línea.  
+```{r kitten-img, results="markup", echo=FALSE, purl=FALSE, out.width="400px", fig.align="center"}
+knitr::include_graphics("fig/kitten-try-things.jpg")
+```
+
+# Puntos Clave
+::::::::::::::::::::::::::::::::::::: keypoints
+
+- R es un lenguaje de programación y RStudio es el IDE que asiste en el uso de R. 
+- Hay muchos beneficios al aprender R, incluyendo la escritura de código reproducible, la capacidad de usar una variedad de conjuntos de datos y una amplia comunidad de practicantes de código abierto. 
+- Los archivos relacionados con el análisis deben estar organizados dentro de un solo directorio de trabajo. 
+- R utiliza comandos que contienen funciones para decirle a la computadora qué hacer. 
+- La documentación para cada función está disponible dentro de RStudio, o los usuarios pueden pedir ayuda en uno de los muchos foros en línea, hojas de trucos o listas de correo.  
+
+::::::::::::::::::::::::::::::::::::::::::::::::

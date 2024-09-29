@@ -1,0 +1,633 @@
+---
+title: "Data visualization with ggplot2"
+teaching: 90
+exercises: 4
+---
+
+:::::::::::::::::::::::::::::::::::::: preguntas
+
+- ¿Cómo se crean gráficos en R?
+- ¿Cómo se personalizan y modifican los gráficos?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objetivos
+
+- Producir gráficos de dispersión y diagramas de caja utilizando `ggplot2`.
+- Representar variables de datos con componentes del gráfico.
+- Modificar las escalas de los componentes del gráfico.
+- Construir y modificar iterativamente gráficos de `ggplot2` añadiendo capas.
+- Cambiar la apariencia de gráficos existentes de `ggplot2` utilizando temas prediseñados y personalizados.
+- Describir qué es el faceting y aplicar faceting en `ggplot2`.
+- Guardar gráficos como archivos de imagen.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+```{r,echo=FALSE, purl=TRUE}
+################################################
+# Lección 04 - Visualización de datos con ggplot2
+################################################
+
+
+
+
+
+
+```
+## Setup
+
+```{r setup, include=FALSE,purl=FALSE}
+knitr::opts_chunk$set(dpi = 200, out.height = 600, out.width = 600, R.options = list(max.print = 100))
+```
+
+Anteriormente, tuviste que **instalar** el paquete `ggplot2` ejecutando `install.packages("ggplot2")`. Eso instaló el paquete en tu computadora para que R pueda acceder a él. Para usarlo en nuestra sesión actual, tenemos que **cargar** el paquete usando la función `library()`.
+
+
+::::::::::::::::::::::::::::: callout
+
+Si no tienes `ggplot2` instalado, puedes ejecutar `install.packages("ggplot2")` en la **consola**.
+
+:::::::::::::::::::::::::::::::::::::
+
+```{r load-tidyverse-package, message=FALSE,purl=TRUE,echo=FALSE}
+library(ggplot2)
+```
+
+
+```{r load-ratdat-package,message=FALSE,purl=TRUE,echo=FALSE}
+library(ratdat)
+surveys_complete <- complete_old
+# surveys_complete <- read.csv("data/portal_surveys_complete.csv")
+```
+
+```{r, echo=FALSE, purl=TRUE}
+
+### Graficando con ggplot2
+```
+
+**`ggplot2`** es un paquete poderoso que te permite crear gráficos complejos a partir de datos tabulares (datos en un formato de tabla con filas y columnas). El **`gg`** en **`ggplot2`** significa "gramática de gráficos", y el paquete utiliza un vocabulario consistente para crear gráficos de diversos tipos. Por lo tanto, solo necesitamos realizar pequeños cambios en nuestro código si los datos subyacentes cambian o decidimos hacer un diagrama de caja en lugar de un gráfico de dispersión. Este enfoque te ayuda a crear gráficos de calidad publicable con un ajuste y modificación mínimos.
+
+**`ggplot2`** es parte de la serie de paquetes **`tidyverse`**.
+
+Los gráficos **`ggplot`** se construyen paso a paso al agregar nuevas capas, lo que permite una gran flexibilidad y personalización de los gráficos.
+
+Para construir un gráfico, utilizaremos una plantilla básica que se puede usar para diferentes tipos de gráficos:
+  
+
+```{r, purl=TRUE,echo=FALSE}
+# Para cada gráfico utilizamos la siguiente estructura: 
+# ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) + <GEOM_FUNCTION>()
+
+```
+
+Usamos la función `ggplot()` para crear un gráfico. Para indicarle qué datos usar, necesitamos especificar el **argumento** `data`. Un argumento es una entrada que toma una función, y se establecen argumentos utilizando el signo `=`.
+
+```{r bare-plot, purl=FALSE}
+ggplot(data = surveys_complete)
+```
+Obtenemos un gráfico en blanco porque no le hemos indicado a `ggplot()` qué variables queremos que correspondan a las partes del gráfico. Podemos especificar la "asignación" de variables a los elementos del gráfico, como las coordenadas x/y, tamaño o forma, utilizando la función `aes()`. También añadiremos un comentario, que es cualquier línea que comienza con un `#`. Es una buena idea usar comentarios para organizar tu código o aclarar lo que estás haciendo.
+
+```{r plot-with-axes, purl=FALSE}
+# agregando una asignación a los ejes x e y
+
+ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length))
+```
+Ahora tenemos un gráfico con ejes x e y correspondientes a variables de `surveys_complete`. Sin embargo, no hemos especificado cómo queremos que se muestren los datos. Hacemos esto utilizando funciones `geom_`, que especifican el tipo de `geom`etría que deseamos, como puntos, líneas o barras. Podemos agregar una capa `geom_point()` a nuestro gráfico utilizando el signo `+`. Indentamos en una nueva línea para que sea más fácil de leer, y debemos **terminar** la primera línea con el signo `+`.
+
+```{r scatter-plot, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point()
+```
+
+:::::::::::::::::::::::::::::
+## Cambiando la estética
+
+Construir gráficos **`ggplot`** es a menudo un proceso iterativo, así que continuaremos desarrollando el gráfico de dispersión que acabamos de hacer. Puede que hayas notado que partes de nuestro gráfico de dispersión tienen muchos puntos superpuestos, lo que dificulta ver todos los datos. Podemos ajustar la transparencia de los puntos utilizando el argumento `alpha`, que toma un valor entre 0 y 1:
+
+```{r change-alpha, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point(alpha = 0.2)
+```
+
+También podemos cambiar el color de los puntos:
+
+
+```{r change-color, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point(alpha = 0.2, color = "blue")
+```
+
+::::::::::::::::::::::::::::: aviso
+
+Dos problemas comunes que podrías encontrar al trabajar en R son olvidar un paréntesis de cierre o una comilla de cierre. Veamos qué hace cada uno.
+
+
+:::::::::::::::::::::::::::::
+```{r purl=TRUE,echo=FALSE}
+### Agregando otra variable
+
+```
+### Agregando otra variable
+
+Intentemos colorear nuestros puntos de acuerdo con el tipo de parcela de muestreo (la parcela aquí se refiere al área física donde se muestrearon los roedores y no tiene nada que ver con hacer gráficos). Dado que ahora estamos asignando una variable (`plot_type`) a un componente del gráfico de ggplot2 (`color`), necesitamos colocar el argumento dentro de `aes()`:
+
+
+```{r color-plot-type, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length, color = plot_type)) +
+  geom_point(alpha = 0.2)
+```
+
+::::::::::::::::::::::::::::::::::::: desafío 
+
+## Desafío 1: Modificar gráficos
+
+```{r modifying-challenge, echo=FALSE, eval=FALSE, purl=TRUE}
+### Desafío 1: Modificar gráficos:
+##
+## 1. Intenta modificar el gráfico para que la `forma` del punto varíe según el `sex`.
+## Establecerás la `forma` de la misma manera que estableciste el `color`.
+
+## ¿Crees que esta es una buena manera de representar el `sex` con estos datos?
+
+## ##
+## 2. Ahora intenta cambiar el gráfico para que el `color` de los puntos varíe según el `year`.
+## ¿Notas alguna diferencia en la escala de color en comparación con cambiar el color 
+## según el tipo de parcela? ¿Por qué crees que sucedió esto?
+```
+1. Intenta modificar el gráfico para que la `forma` del punto varíe según el `sex`. Establecerás la `forma` de la misma manera que estableciste el `color`.
+
+¿Crees que esta es una buena manera de representar el `sex` con estos datos?
+
+
+:::::::::::::::::::::::: solution 
+
+```{r modify-points-challenge-answer, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, 
+       mapping = aes(x = weight, y = hindfoot_length, shape = sex)) +
+  geom_point(alpha = 0.2)
+```
+
+::::::::::::::::::::::::
+
+2. Ahora intenta cambiar el gráfico para que el `color` de los puntos varíe según el `year`. ¿Notas alguna diferencia en la escala de color en comparación con cambiar el color según el tipo de parcela? ¿Por qué crees que sucedió esto?
+
+
+:::::::::::::::::::::::: solution 
+
+```{r modify-color-challenge-answer, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, 
+       mapping = aes(x = weight, y = hindfoot_length, color = year)) +
+  geom_point(alpha = 0.2)
+```
+- Para la Parte 2, la escala de color es diferente en comparación con el uso de `color = plot_type` porque `plot_type` y `year` son diferentes tipos de variables. `plot_type` es una variable categórica, por lo que `ggplot2` usa por defecto una escala de color **discreta**, mientras que `year` es una variable numérica, así que `ggplot2` utiliza una escala de color **continua**.
+
+
+::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Cambiando escalas
+
+La escala de color discreta predeterminada no siempre es ideal: no es amigable para los espectadores con daltonismo y no se traduce bien a escala de grises. Sin embargo, **`ggplot2`** viene con varias otras escalas de color, incluidas las fantásticas escalas `viridis`, que están diseñadas para ser amigables con el daltonismo y la escala de grises. Podemos cambiar las escalas agregando funciones `scale_` a nuestros gráficos:
+
+
+```{r scale-viridis, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length, color = plot_type)) +
+  geom_point(alpha = 0.2) +
+  scale_color_viridis_d()
+```
+
+Las escalas no solo se aplican a los colores; cualquier componente del gráfico que coloques dentro de `aes()` puede ser modificado con funciones `scale_`. Así como modificamos la escala utilizada para mapear `plot_type` a `color`, podemos modificar la forma en que `weight` se mapea al eje `x` utilizando la función `scale_x_log10()`:
+
+
+```{r scale-log, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = weight, y = hindfoot_length, color = plot_type)) +
+  geom_point(alpha = 0.2) +
+  scale_x_log10()
+```
+Una ventaja de `ggplot` y del `tidyverse` en general es que los grupos de funciones que hacen cosas similares tienen nombres similares. Cualquier función que modifique una escala de `ggplot` comienza con `scale_`, lo que facilita la búsqueda de la función adecuada.
+
+
+
+```{r purl=TRUE,echo=FALSE}
+## Boxplot
+
+
+```
+## Boxplot
+
+Intentemos hacer un tipo de gráfico completamente diferente. Comenzaremos con nuestros mismos bloques de construcción básicos utilizando `ggplot()` y `aes()`.
+
+
+```{r blank-boxplot, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length))
+```
+
+Esta vez, intentemos hacer un diagrama de caja, que tendrá `plot_type` en el eje x y `hindfoot_length` en el eje y. Podemos hacer esto agregando `geom_boxplot()` a nuestro `ggplot()`:
+
+
+```{r boxplot, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot()
+```
+
+Al igual que coloreamos los puntos antes, también podemos colorear nuestro diagrama de caja según `plot_type`:
+
+
+```{r boxplot-color, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length, color = plot_type)) +
+  geom_boxplot()
+```
+
+Parece que `color` solo ha afectado los contornos del diagrama de caja, no las porciones rectangulares. Esto se debe a que `color` solo impacta las partes unidimensionales de un `ggplot`: puntos y líneas. Para cambiar el color de las partes bidimensionales de un gráfico, usamos `fill`:
+
+
+```{r boxplot-fill, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length, fill = plot_type)) +
+  geom_boxplot()
+```
+
+::::::::::::::::::::::::::::: callout
+
+Una cosa que puedes notar es que las etiquetas de los ejes se superponen entre sí, dependiendo de cuán ancho sea tu visor de gráficos. Una forma de ayudar a que sean más legibles es **ajustar** el texto. Podemos hacer eso modificando las **etiquetas** para la escala del eje `x`.
+
+
+Usamos la función `scale_x_discrete()` porque tenemos un eje discreto, y modificamos el argumento `labels`. La función `label_wrap_gen()` ajustará el texto de las etiquetas para que sean más legibles.
+
+
+```{r boxplot-label-wrap, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length, fill = plot_type)) +
+  geom_boxplot() +
+  scale_x_discrete(labels = label_wrap_gen(width = 10))
+```
+
+:::::::::::::::::::::::::::::
+
+```{r purl=TRUE,echo=FALSE}
+## Agregando `geoms`
+
+
+```
+## Agregando `geoms`
+Uno de los aspectos más poderosos de **`ggplot`** es la forma en que podemos agregar componentes a un gráfico en capas sucesivas. Aunque los diagramas de caja pueden ser muy útiles para resumir datos, a menudo es útil mostrar también los datos en bruto. Con **`ggplot`**, podemos agregar fácilmente otro `geom_` a nuestro gráfico para mostrar los datos en bruto.
+
+Agreguemos `geom_point()` para visualizar los datos en bruto. Modificaremos el argumento `alpha` para ayudar a evitar la superposición de puntos.
+
+```{r boxplot-points, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot() +
+  geom_point(alpha = 0.2)
+```
+
+Uh oh... todos nuestros puntos para una categoría dada del eje `x` caen exactamente en una línea, lo cual no es muy útil. Podemos cambiar a usar `geom_jitter()`, que añadirá puntos con un poco de ruido aleatorio a las posiciones para prevenir que esto suceda.
+
+
+```{r boxplot-jitter, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot() +
+  geom_jitter(alpha = 0.2)
+```
+
+Es posible que hayas notado que algunos de nuestros puntos de datos ahora aparecen en nuestro gráfico dos veces: los valores atípicos se trazan como puntos negros de `geom_boxplot()`, pero también se trazan con `geom_jitter()`. Dado que no queremos representar estos datos múltiples veces en la misma forma (puntos), podemos evitar que `geom_boxplot()` los trace. Hacemos esto configurando el argumento `outlier.shape` a `NA`, lo que significa que los valores atípicos no tienen una forma para ser trazados.
+
+
+```{r boxplot-outliers, warning = F, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(alpha = 0.2)
+```
+
+Al igual que antes, podemos mapear `plot_type` a `color` colocándolo dentro de `aes()`.
+
+
+```{r global-color, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length, color = plot_type)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(alpha = 0.2)
+```
+
+Notice that both the color of the points and the color of the boxplot lines changed. Any time we specify an `aes()` mapping inside our initial `ggplot()` function, that mapping will apply to all our `geom`s.
+
+If we want to limit the mapping to a single `geom`, we can put the mapping into the specific `geom_` function, like this:
+
+```{r geom-color, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2)
+```
+
+Ahora nuestros puntos están coloreados según `plot_type`, pero los diagramas de caja son todos del mismo color. Una cosa que podrías notar es que incluso con `alpha = 0.2`, los puntos oscurecen partes del diagrama de caja. Esto se debe a que la capa `geom_point()` viene después de la capa `geom_boxplot()`, lo que significa que los puntos se trazan encima de las cajas. Para poner los diagramas de caja en la parte superior, cambiamos el orden de las capas:
+
+
+```{r reverse-layers, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(outlier.shape = NA)
+```
+
+¡Ahora tenemos el problema opuesto! El relleno blanco de los diagramas de caja oscurece completamente algunos de los puntos. Para abordar este problema, podemos eliminar el `fill` de los diagramas de caja por completo, dejando solo las líneas negras. Para hacer esto, configuramos `fill` a `NA`:
+
+
+```{r fill-na, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(outlier.shape = NA, fill = NA)
+```
+
+Ahora podemos ver todos los datos en bruto y nuestros diagramas de caja en la parte superior.
+
+
+::::::::::::::::::::::::::::::::::::: challenge 
+```{r change-geoms-challenge, echo=FALSE, eval=FALSE, purl=TRUE}
+### Desafío 2: Modificando gráficos:
+##
+## 1. Los gráficos de violín son similares a los diagramas de caja; intenta hacer uno usando `plot_type` 
+## y `hindfoot_length` como las variables en los ejes x e y. Recuerda que todas las funciones geom
+## comienzan con `geom_`, seguidas del tipo de geom.
+
+## A menudo es útil buscar `R nombre_del_paquete cosas que deseas buscar`.
+## Así que para este ejemplo podríamos buscar `R ggplot2 gráfico de violín`.
+
+## ##
+## 2. Haz que el color de los puntos y los contornos de los gráficos de violín varíen según
+## `plot_type`, y establece el relleno de los gráficos de violín en blanco. Intenta jugar con
+## el orden de las capas para ver qué se ve mejor.
+
+```
+## Desafío 2: Cambiar `geom`s
+
+Los gráficos de violín son similares a los diagramas de caja; intenta hacer uno usando `plot_type` y `hindfoot_length` como las variables en los ejes x e y. Recuerda que todas las funciones geom comienzan con `geom_`, seguidas del tipo de geom.
+
+Este también podría ser un buen lugar para probar tus habilidades de búsqueda en Internet. A menudo es útil buscar `R nombre_del_paquete cosas que deseas buscar`. Así que para este ejemplo podríamos buscar `R ggplot2 gráfico de violín`.
+
+:::::::::::::::::::::::: solution 
+
+```{r violin-challenge-answer, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, 
+       mapping = aes(x = plot_type, 
+                     y = hindfoot_length,
+                     color = plot_type)) +
+  geom_jitter(alpha = 0.2) +
+  geom_violin(fill = "white")
+```
+
+::::::::::::::::::::::::
+
+Para un *desafío extra*, haz que el color de los puntos y los contornos de los gráficos de violín varíen según `plot_type`, y establece el relleno de los gráficos de violín en blanco. Intenta jugar con el orden de las capas para ver qué se ve mejor.
+
+:::::::::::::::::::::::: solution 
+
+```{r violin-challenge-answer-2, warning=FALSE, purl=FALSE}
+ggplot(data = surveys_complete, 
+       mapping = aes(x = plot_type, 
+                     y = hindfoot_length,
+                     color = plot_type)) +
+  geom_jitter(alpha = 0.2) +
+  geom_violin(fill = "white")
+```
+
+::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r purl=TRUE,echo=FALSE}
+## Cambiando temas
+
+
+```
+
+## Cambiando temas
+Hasta ahora, hemos estado cambiando la apariencia de las partes de nuestro gráfico relacionadas con nuestros datos y las funciones `geom_`, pero también podemos cambiar muchos de los componentes no relacionados con los datos de nuestro gráfico.
+
+En este punto, estamos bastante contentos con el diseño básico de nuestro gráfico, por lo que podemos **asignarlo** a un gráfico a un **objeto** con nombre. Hacemos esto utilizando la **flecha de asignación** `<-`. Lo que estamos haciendo aquí es tomar el resultado del código en el lado derecho de la flecha y asignarlo a un objeto cuyo nombre está en el lado izquierdo de la flecha.
+
+Crearemos un objeto llamado `myplot`. Si ejecutas el nombre del objeto `ggplot2`, mostrará el gráfico, al igual que si ejecutaras el código por sí mismo.
+
+```{r, purl=FALSE}
+myplot <- ggplot(data = surveys_complete, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_jitter(aes(color = plot_type), alpha = 0.2) +
+  geom_boxplot(outlier.shape = NA, fill = NA)
+
+myplot
+```
+Este proceso de asignar algo a un **objeto** no es específico de `ggplot2`, sino que es una característica general de R. Lo utilizaremos mucho en el resto de esta lección. Ahora podemos trabajar con el objeto `myplot` como si fuera un bloque de código `ggplot2`, lo que significa que podemos usar `+` para agregar nuevos componentes a él.
+
+Podemos cambiar la apariencia general utilizando funciones `theme_`. Intentemos un tema en blanco y negro agregando `theme_bw()` a nuestro gráfico:
+
+
+```{r theme-bw, warning=FALSE, purl=FALSE}
+myplot + theme_bw()
+```
+Como puedes ver, varias partes del gráfico han cambiado. Las funciones `theme_` generalmente controlan muchos aspectos de la apariencia de un gráfico a la vez, por conveniencia. Para cambiar partes individuales de un gráfico, podemos usar la función `theme()`, que puede aceptar muchos argumentos diferentes para modificar aspectos como el texto, las líneas de la cuadrícula, el color de fondo y más. Intentemos cambiar el tamaño del texto en los títulos de nuestros ejes. Podemos hacer esto especificando que `axis.title` debe ser un `element_text()` con el `size` establecido en 14.
+
+
+```{r text-size, warning=FALSE, purl=FALSE}
+myplot +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14))
+```
+
+Otro cambio que podríamos querer hacer es eliminar las líneas de la cuadrícula vertical. Dado que nuestro eje x es categórico, esas líneas de la cuadrícula no son útiles. Para hacer esto, dentro de `theme()`, cambiaremos `panel.grid.major.x` a `element_blank()`.
+
+
+```{r element-blank, warning=FALSE, purl=FALSE}
+myplot +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank())
+```
+
+Otro cambio útil podría ser eliminar la leyenda de color, ya que esa información ya está en nuestro eje x. Para esto, estableceremos `legend.position` en "none".
+
+
+```{r legend-remove, warning=FALSE, purl=FALSE}
+myplot +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), 
+        panel.grid.major.x = element_blank(), 
+        legend.position = "none")
+
+```
+::::::::::::::::::::::::::::: callout
+
+Debido a que hay tantos posibles argumentos para la función `theme()`, a veces puede ser difícil encontrar el adecuado. Aquí hay algunos consejos para averiguar cómo modificar un elemento del gráfico:
+
+- escribe `theme()`, coloca el cursor entre los paréntesis y presiona <kbd>Tab</kbd> para mostrar una lista de argumentos
+    - puedes desplazarte por los argumentos o empezar a escribir, lo que acortará la lista de posibles coincidencias
+- como muchas cosas en el `tidyverse`, los argumentos similares comienzan con nombres similares
+    - hay argumentos de `axis`, `legend`, `panel`, `plot` y `strip`
+- los argumentos tienen jerarquía
+    - `text` controla todo el texto en todo el gráfico
+    - `axis.title` controla el texto para los títulos de los ejes
+    - `axis.title.x` controla el texto para el título del eje x
+
+:::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::: callout
+
+Puede que hayas notado que hemos utilizado 3 enfoques diferentes para deshacernos de algo en `ggplot`:
+
+- `outlier.shape = NA` para eliminar los valores atípicos de nuestro boxplot
+- `panel.grid.major.x = element_blank()` para eliminar las líneas de la cuadrícula x
+- `legend.position = "none"` para eliminar nuestra leyenda
+:::::::::::::::::::::::::::::
+
+
+```{r purl=TRUE,echo=FALSE}
+
+## Cambiando etiquetas
+
+```
+## Cambiando etiquetas
+Nuestro gráfico se está formando muy bien ahora. Sin embargo, probablemente queramos hacer que los títulos de los ejes sean más atractivos y, tal vez, agregar un título principal al gráfico. Podemos hacer esto usando la función `labs()`:
+
+```{r labels, warning=FALSE, purl=FALSE}
+myplot +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), 
+        legend.position = "none") +
+  labs(title = "Rodent size by plot type",
+       x = "Plot type",
+       y = "Hindfoot length (mm)")
+```
+
+Eliminamos nuestra leyenda de este gráfico, pero también puedes cambiar los títulos de varias leyendas usando `labs()`. Por ejemplo, `labs(color = "Tipo de parcela")` cambiaría el título de una leyenda de escala de color a "Tipo de parcela".
+
+
+::::::::::::::::::::::::::::::::::::: Desafío  
+```{r customizing-challenge, echo=FALSE, eval=FALSE, purl=TRUE}
+### Desafío 3: Personalizando un gráfico:
+##
+## 1. Modifica el gráfico anterior añadiendo un subtítulo descriptivo. 
+## Aumenta el tamaño de fuente del título del gráfico y hazlo negrita.
+
+## **Sugerencia**: "negrita" se refiere a un "estilo" de fuente.
+
+
+```
+## Desafío 3: Personalizando un gráfico
+
+Modifica el gráfico anterior añadiendo un subtítulo descriptivo. Aumenta el tamaño de fuente del título del gráfico y hazlo negrita.
+
+**Sugerencia**: "negrita" se refiere a un "estilo" de fuente.
+
+:::::::::::::::::::::::: solution 
+
+```{r customizing-challenge-answer, warning=FALSE, purl=FALSE}
+myplot +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), legend.position = "none",
+        plot.title = element_text(face = "bold", size = 20)) +
+  labs(title = "Rodent size by plot type",
+       subtitle = "Long-term dataset from Portal, AZ",
+       x = "Plot type",
+       y = "Hindfoot length (mm)")
+```
+
+::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r purl=TRUE,echo=FALSE}
+## Faceting
+
+```
+## Faceting
+Una de las características más poderosas de **`ggplot`** es la capacidad de dividir rápidamente un gráfico en múltiples gráficos más pequeños basados en una variable categórica, lo que se llama **faceting**.
+
+Hasta ahora, hemos mapeado variables en el eje x, el eje y y el color, pero intentar agregar una cuarta variable se vuelve difícil. Cambiar la forma de un punto podría funcionar, pero solo para muy pocas categorías, y aun así, puede ser difícil distinguir las diferencias entre las formas de puntos pequeños.
+
+En lugar de abarrotar una variable más en un solo gráfico, utilizaremos la función `facet_wrap()` para generar una serie de gráficos más pequeños, divididos por `sex`. También usamos `ncol` para especificar que queremos que se dispongan en una sola columna:
+
+```{r facet-wrap, warning=FALSE, purl=FALSE}
+myplot +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), 
+        legend.position = "none", 
+        panel.grid.major.x = element_blank()) +
+  labs(title = "Rodent size by plot type",
+       x = "Plot type",
+       y = "Hindfoot length (mm)",
+       color = "Plot type") +
+  facet_wrap(vars(sex), ncol = 1)
+```
+
+::::::::::::::::::::::::::::: callout
+
+El`faceting` es útil en muchas situaciones. Puede ser beneficioso cuando:
+
+- una variable categórica tiene demasiados niveles para diferenciarse por color (como un conjunto de datos con 20 países)
+- tus datos se superponen mucho, oscureciendo categorías
+- deseas mostrar más de 3 variables a la vez
+- quieres ver cada categoría en aislamiento, mientras permites comparaciones generales entre categorías
+
+:::::::::::::::::::::::::::::::::::::
+
+
+```{r purl=TRUE,echo=FALSE}
+## Exportando gráficos
+
+
+
+```
+## Exportando gráficos
+
+Una vez que estemos satisfechos con nuestro gráfico final, podemos asignar todo a un nuevo objeto, al que podemos llamar `finalplot`.
+
+
+```{r assign-finalplot, purl=FALSE}
+finalplot <- myplot +
+  theme_bw() +
+  theme(axis.title = element_text(size = 14), 
+        legend.position = "none", 
+        panel.grid.major.x = element_blank()) +
+  labs(title = "Rodent size by plot type",
+       x = "Plot type",
+       y = "Hindfoot length (mm)",
+       color = "Plot type") +
+  facet_wrap(vars(sex), ncol = 1)
+```
+
+Después de esto, podemos ejecutar `ggsave()` para guardar nuestro gráfico. El primer argumento que proporcionamos es la ruta al archivo que queremos guardar, incluyendo la extensión correcta del archivo. Este código creará una imagen llamada `rodent_size_plots.jpg` en el directorio de trabajo de nuestro proyecto actual. Estamos guardando en formato `.jpg`, pero también puedes guardar en formatos `.pdf`, `.tiff`, y otros. A continuación, le indicamos el nombre del objeto gráfico que queremos guardar. También podemos especificar cosas como el ancho y la altura del gráfico en pulgadas.
+
+
+```{r save-plot, eval=FALSE, purl=FALSE}
+ggsave(filename = "rodent_size_plots.jpg", plot = finalplot,
+       height = 6, width = 8)
+```
+
+::::::::::::::::::::::::::::::::::::: challenge 
+```{r make-your-own-challenge, echo=FALSE, eval=FALSE, purl=TRUE}
+### Challenge 4: ¡Crea tu propio gráfico!
+
+¡Intenta hacer tu propio gráfico! Puedes ejecutar `str(surveys_complete)` o `?surveys_complete` para explorar las variables que podrías usar en tu nuevo gráfico. Siéntete libre de usar variables que ya hemos visto o algunas que no hemos explorado aún.
+
+Aquí hay un par de ideas para ayudarte a comenzar:
+
+- Haz un histograma de una de las variables numéricas.
+- Intenta usar un `scale_` de color diferente.
+- Intenta cambiar el tamaño de los puntos o el grosor de las líneas en un `geom`.
+
+
+```
+
+## Desafío 4: ¡Crea tu propio gráfico!
+
+¡Intenta hacer tu propio gráfico! Puedes ejecutar `str(surveys_complete)` o `?surveys_complete` para explorar las variables que podrías usar en tu nuevo gráfico. Siéntete libre de usar variables que ya hemos visto o algunas que no hemos explorado aún.
+
+Aquí hay un par de ideas para ayudarte a comenzar:
+
+- Haz un histograma de una de las variables numéricas.
+- Intenta usar un `scale_` de color diferente.
+- Intenta cambiar el tamaño de los puntos o el grosor de las líneas en un `geom`.
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+::::::::::::::::::::::::::::::::::::: keypoints 
+
+- La función `ggplot()` inicia un gráfico, y las funciones `geom_` añaden representaciones de tus datos.
+- Usa `aes()` cuando mapees una variable de los datos a una parte del gráfico.
+- Utiliza funciones `scale_` para modificar las escalas usadas para representar variables.
+- Usa funciones `theme_` predefinidas para cambiar la apariencia de forma general, y la función `theme()` para ajustar detalles específicos.
+- Comienza simple y construye tus gráficos de manera iterativa.
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::

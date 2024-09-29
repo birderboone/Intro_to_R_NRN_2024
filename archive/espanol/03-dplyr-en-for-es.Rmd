@@ -1,0 +1,617 @@
+---
+author: Data Carpentry contributors
+minutes: 45
+---
+
+```{r, echo=FALSE, purl=FALSE, message=FALSE}
+#source("setup.R")
+knitr::opts_chunk$set(results='hide', # fig.path='img/R-ecology-',
+                      comment = "#>", purl = FALSE)
+surveys <- read.csv("data/portal_data_joined.csv")
+# suppressWarnings(surveys$date <- lubridate::ymd(paste(surveys$year,
+#                                                       surveys$month,
+#                                                       surveys$day,
+#                                                       sep = "-")))
+```
+```{r,echo=FALSE, purl=TRUE}
+################################################
+# Lección 03 - Manipulación, análisis y exportación de datos con tidyverse
+################################################
+
+
+
+
+```
+:::::::::::::::::::::::::::::::::::::::  objetivos
+
+- Describe el propósito de los paquetes **`dplyr`** y **`tidyr`**.
+- Selecciona ciertas columnas en un *data frame* con la función `select` de **`dplyr`**.
+- Extrae ciertas filas en un *data frame* de acuerdo a condiciones lógicas (booleanas) con la función `filter` de **`dplyr`**.
+- Vincula la salida de una función de **`dplyr`** a la entrada de otra función con el operador 'pipe' `%>%`.
+- Agrega nuevas columnas a un *data frame* que son funciones de columnas existentes con `mutate`.
+- Usa el concepto de dividir-aplicar-combinar para el análisis de datos.
+- Usa `summarize`, `group_by` y `count` para dividir un *data frame* en grupos de observaciones, aplicar estadísticas resumidas para cada grupo y luego combinar los resultados.
+- Describe el concepto de formato de tabla ancha y larga y para qué propósito son útiles esos formatos.
+- Describe qué son los pares clave-valor.
+- Exporta un *data frame* a un archivo .csv.
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::: preguntas
+
+- ¿Qué son dplyr y tidyr?
+- ¿Cómo puedo seleccionar filas y/o columnas específicas de un *data frame*?
+- ¿Cómo puedo combinar múltiples comandos en un solo comando?
+- ¿Cómo puedo crear nuevas columnas o eliminar columnas existentes de un *data frame*?
+
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+# Cargando paquetes 
+Los paquetes en R son básicamente conjuntos de funciones adicionales que te permiten hacer más cosas. Las funciones que hemos estado usando hasta ahora, como `round()`, `sqrt()`, o `c()`, vienen integradas en R. Los paquetes te dan acceso a funciones adicionales más allá de R base. Antes de usar un paquete por primera vez, necesitas instalarlo en tu máquina y luego deberías importarlo en cada sesión de R subsiguiente cuando lo necesites.
+
+Los paquetes son simplemente conjuntos relacionados de funciones 'empaquetadas' en un solo lugar.
+
+Para instalar el paquete **`tidyverse`**, podemos escribir `install.packages("tidyverse")` directamente en la consola. De hecho, es mejor escribir esto en la consola que en nuestro script para cualquier paquete, ya que no hay necesidad de reinstalar paquetes cada vez que ejecutamos el script. Luego, para cargar el paquete, escribe:
+
+```{r, message=FALSE, purl=FALSE}
+## Cargar los paquetes tidyverse, incluyendo dplyr
+
+library(tidyverse)
+```
+
+Ahora podemos usar las funciones del paquete **`tidyverse`**.
+
+# Manipulación de datos usando **`dplyr`** y **`tidyr`**
+
+La selección con corchetes es útil, pero puede ser engorrosa y difícil de leer, especialmente para operaciones complicadas. Aquí entra **`dplyr`**. **`dplyr`** es un paquete que ayuda con la manipulación de datos tabulares.
+
+El paquete **`tidyverse`** es un "paquete paraguas" que instala **`tidyr`**, **`dplyr`** y varios otros paquetes útiles para el análisis de datos, como **`ggplot2`**, **`tibble`**, etc.
+
+El paquete **`tidyverse`** intenta abordar 3 problemas comunes que surgen al hacer análisis de datos en R:
+
+1. Los resultados de una función de R base a veces dependen del tipo de datos.
+2. Las expresiones en R se utilizan de una manera no estándar, lo que puede ser confuso para los nuevos aprendices.
+3. La existencia de argumentos ocultos que tienen operaciones predeterminadas de las que los nuevos aprendices no son conscientes.
+
+Ya deberías haber instalado y cargado el paquete **`tidyverse`**. Si no lo has hecho, puedes escribir `install.packages("tidyverse")` directamente en la consola. Luego, escribe `library(tidyverse)` para cargar el paquete.
+
+## ¿Qué es **`dplyr`**?
+
+```{r, echo=FALSE, purl=TRUE}
+
+### ¿Qué es **`dplyr`**?
+```
+
+El paquete **`dplyr`** proporciona herramientas auxiliares para las tareas más comunes de manipulación de datos. Está diseñado para trabajar directamente con data frames, optimizando muchas tareas comunes. Una característica adicional es la capacidad de trabajar directamente con datos almacenados en una base de datos externa. Los beneficios de hacer esto son que los datos pueden ser gestionados de forma nativa en una base de datos relacional, se pueden realizar consultas en esa base de datos y solo se devuelven los resultados de la consulta.
+
+Esto aborda un problema común con R, ya que todas las operaciones se realizan en memoria y, por lo tanto, la cantidad de datos con los que puedes trabajar está limitada por la memoria disponible. Las conexiones a bases de datos esencialmente eliminan esa limitación, ya que puedes conectarte a una base de datos de varios cientos de GB, realizar consultas directamente en ella y obtener solo lo que necesitas para el análisis.
+
+Para aprender más sobre **`dplyr`** después del taller, puedes consultar esta [útil hoja de trucos de transformación de datos con **`dplyr`**](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf). ¡También está en la pestaña de Ayuda -> Hoja de trucos en RStudio ahora!
+
+```{purl=T}
+## Puedes aprender más sobre transformaciones visitando la hoja de trucos de **`dplyr`**:  
+# [Hoja de trucos de dplyr](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf)
+
+
+```
+
+Como antes, leeremos nuestros datos utilizando la función `read.csv()` del paquete **`readr`** del **tidyverse**.
+
+```{r, results="hide", purl=FALSE}
+surveys <- read.csv("data/portal_data_joined.csv")
+```
+
+```{r, results="hide", purl=FALSE}
+## Inspeccionar los datos
+
+str(surveys)
+```
+
+```{r, eval=FALSE, purl=FALSE}
+## Vista previa de los datos
+
+view(surveys)
+```
+A continuación, vamos a aprender algunas de las funciones más comunes de **`dplyr`**:
+
+- `select()`: seleccionar columnas
+- `filter()`: filtrar filas según condiciones
+- `mutate()`: crear nuevas columnas utilizando información de otras columnas
+- `group_by()` y `summarize()`: crear estadísticas resumidas sobre datos agrupados
+- `arrange()`: ordenar resultados
+- `count()`: contar valores discretos
+
+## Seleccionando columnas y filtrando filas
+
+<!-- Revisa esto lentamente y asegúrate de que la gente entienda -->
+Para seleccionar columnas de un data frame, utiliza `select()`. El primer argumento de esta función es el data frame (`surveys`), y los argumentos posteriores son las columnas que deseas conservar.
+
+```{r, results="hide", purl=FALSE}
+select(surveys, plot_id, species_id, weight)
+```
+
+Para seleccionar todas las columnas *excepto* ciertas, coloca un "-" delante de la variable que deseas excluir.
+
+
+```{r, results="hide", purl=FALSE}
+select(surveys, -record_id, -species_id)
+```
+
+Esto seleccionará todas las variables en `surveys`, excepto `record_id` y `species_id`.
+
+Para elegir filas basadas en un criterio específico, utiliza `filter()`:
+
+
+```{r, purl=FALSE}
+filter(surveys, year == 1995)
+```
+
+## Pipes
+```{r, echo=FALSE, purl=TRUE}
+
+### Pipes
+```
+
+¿Qué sucede si deseas seleccionar y filtrar al mismo tiempo? Hay tres formas de hacerlo: usar pasos intermedios, funciones anidadas o tuberías.
+
+Con pasos intermedios, creas un marco de datos temporal y usas eso como entrada para la siguiente función, así:
+
+
+```{r, purl=FALSE}
+surveys2 <- filter(surveys, weight < 5)
+surveys_sml <- select(surveys2, species_id, sex, weight)
+```
+
+Esto es legible, pero puede desordenar tu espacio de trabajo con muchos objetos que tienes que nombrar individualmente. Con múltiples pasos, puede ser difícil mantener el control.
+
+También puedes anidar funciones (es decir, una función dentro de otra), así:
+
+
+```{r, purl=FALSE}
+surveys_sml <- select(filter(surveys, weight < 5), species_id, sex, weight)
+```
+
+Esto es útil, pero puede ser difícil de leer si hay demasiadas funciones anidadas, ya que R evalúa la expresión de adentro hacia afuera (en este caso, filtrando y luego seleccionando).
+
+La última opción, *tuberías* (pipes), es una adición reciente a R. Las tuberías te permiten tomar la salida de una función y enviarla directamente a la siguiente, lo cual es útil cuando necesitas hacer muchas cosas al mismo conjunto de datos. Las tuberías en R tienen el formato `%>%` y están disponibles a través del paquete **`magrittr`**, que se instala automáticamente con **`dplyr`**. Si usas RStudio, puedes escribir la tubería con <kbd>Ctrl</kbd>
+
+- <kbd>Shift</kbd> + <kbd>M</kbd> si tienes un PC o <kbd>Cmd</kbd> +
+  <kbd>Shift</kbd> + <kbd>M</kbd> si tienes un Mac.
+
+
+```{r, purl=FALSE}
+surveys %>%
+  filter(weight < 5) %>%
+  select(species_id, sex, weight)
+```
+
+En el código anterior, utilizamos la tubería para enviar el conjunto de datos `surveys` primero a través de `filter()` para mantener las filas donde `weight` es menor que 5, y luego a través de `select()` para conservar solo las columnas `species_id`, `sex` y `weight`. Dado que `%>%` toma el objeto a su izquierda y lo pasa como el primer argumento a la función a su derecha, ya no necesitamos incluir explícitamente el marco de datos como un argumento para las funciones `filter()` y `select()`.
+
+Algunos pueden encontrar útil leer la tubería como la palabra "entonces". Por ejemplo, en el ejemplo anterior, tomamos el marco de datos `surveys`, *entonces* filtramos para filas con `weight < 5`, *entonces* seleccionamos las columnas `species_id`, `sex` y `weight`. Las funciones de **`dplyr`** por sí solas son algo simples, pero al combinarlas en flujos de trabajo lineales con la tubería, podemos lograr manipulaciones más complejas de los marcos de datos.
+
+Si queremos crear un nuevo objeto con esta versión más pequeña de los datos, podemos asignarle un nuevo nombre:
+
+
+```{r, purl=FALSE}
+surveys_sml <- surveys %>%
+  filter(weight < 5) %>%
+  select(species_id, sex, weight)
+
+surveys_sml
+```
+
+Nota que el marco de datos final es la parte más a la izquierda de esta expresión.
+
+:::::::::::::::::::::::::::::::::::::::  desafío
+
+### Desafío {.challenge}
+
+Usando tuberías, submuestra los datos de `surveys` para incluir animales recolectados antes de 1995 y retiene solo las columnas `year`, `sex` y `weight`.
+
+
+:::::::: solution
+
+```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+surveys %>%
+    filter(year < 1995) %>%
+    select(year, sex, weight)
+```
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+## Desafío de Tuberías:
+##  Usando tuberías, submuestra los datos para incluir animales recolectados
+##  antes de 1995 y retiene las columnas `year`, `sex` y `weight`.
+
+```
+
+### Mutate
+```{r, echo=FALSE, purl=TRUE}
+
+### Mutate
+```
+
+Frecuentemente querrás crear nuevas columnas basadas en los valores de las columnas existentes, por ejemplo, para hacer conversiones de unidades o para encontrar la razón de los valores en dos columnas. Para esto, utilizaremos `mutate()`.
+
+Para crear una nueva columna de peso en kg:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  mutate(weight_kg = weight / 1000)
+```
+
+También puedes crear una segunda nueva columna basada en la primera nueva columna dentro de la misma llamada a `mutate()`:
+
+```{r, purl=FALSE}
+surveys %>%
+  mutate(weight_kg = weight / 1000,
+         weight_lb = weight_kg * 2.2)
+```
+
+Si esto se sale de la pantalla y solo quieres ver las primeras filas, puedes usar un pipe para ver el `head()` de los datos. (Los pipes funcionan con funciones que no son de **`dplyr`** también, siempre y cuando el paquete **`dplyr`** o `magrittr` esté cargado).
+
+
+```{r, purl=FALSE}
+surveys %>%
+  mutate(weight_kg = weight / 1000) %>%
+  head()
+```
+
+Las primeras filas de la salida están llenas de `NA`s, así que si quisiéramos eliminar esos, podríamos insertar un `filter()` en la cadena:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  filter(!is.na(weight)) %>%
+  mutate(weight_kg = weight / 1000) %>%
+  head()
+```
+
+`is.na()` es una función que determina si algo es un `NA`. El símbolo `!` niega el resultado, así que estamos pidiendo cada fila donde el peso *no es* un `NA`.
+
+
+:::::::::::::::::::::::::::::::::::::::  challenge
+
+### Challenge {.challenge}
+
+Crea un nuevo marco de datos a partir de los datos de `surveys` que cumpla con los siguientes criterios: contiene solo la columna `species_id` y una nueva columna llamada `hindfoot_cm` que contenga los valores de `hindfoot_length` (actualmente en mm) convertidos a centímetros. En esta columna `hindfoot_cm`, no hay `NA`s y todos los valores son menores a 3.
+
+**Sugerencia**: ¡piensa en cómo deben ordenarse los comandos para producir este marco de datos!
+
+:::::::: solution
+
+
+```{r, answer=TRUE, eval=FALSE, purl=FALSE}
+surveys_hindfoot_cm <- surveys %>%
+    filter(!is.na(hindfoot_length)) %>%
+    mutate(hindfoot_cm = hindfoot_length / 10) %>%
+    filter(hindfoot_cm < 3) %>%
+    select(species_id, hindfoot_cm)
+```
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+## Mutate Challenge:
+## Crea un nuevo marco de datos a partir de los datos de `surveys` que cumpla con los siguientes
+## criterios: contiene solo la columna `species_id` y una nueva columna llamada
+## `hindfoot_cm` que contenga los valores de `hindfoot_length` convertidos a centímetros.
+## En esta columna `hindfoot_cm`, no hay `NA`s y todos los valores son menores a 3.
+
+## Sugerencia: ¡piensa en cómo deben ordenarse los comandos para producir este marco de datos!
+
+```
+
+### Análisis de datos split-apply-combine y la función `summarize()`
+
+```{r, echo=FALSE, purl=TRUE}
+
+### Split-apply-combine data analysis
+```
+
+Muchas tareas de análisis de datos se pueden abordar utilizando el paradigma *split-apply-combine*: dividir los datos en grupos, aplicar algún análisis a cada grupo y luego combinar los resultados. Las funciones clave de **`dplyr`** para este flujo de trabajo son `group_by()` y `summarize()`.
+
+#### Las funciones `group_by()` y `summarize()`
+
+`group_by()` se utiliza a menudo junto con `summarize()`, que colapsa cada grupo en un resumen de una sola fila de ese grupo. `group_by()` toma como argumentos los nombres de las columnas que contienen las variables **categóricas** para las cuales deseas calcular las estadísticas resumen. Así que, para calcular el peso medio (`weight`) por sexo (`sex`):
+
+```{r, purl=FALSE}
+surveys %>%
+  group_by(sex) %>%
+  summarize(mean_weight = mean(weight, na.rm = TRUE))
+```
+
+También habrás notado que la salida de estas llamadas ya no se extiende fuera de la pantalla. Es una de las ventajas de `tbl_df` sobre el data frame.
+
+También puedes agrupar por múltiples columnas:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  group_by(sex, species_id) %>%
+  summarize(mean_weight = mean(weight, na.rm = TRUE)) %>%
+  tail()
+```
+
+Aquí, usamos `tail()` para ver las últimas seis filas de nuestro resumen. Antes, habíamos usado `head()` para observar las primeras seis filas. Podemos ver que la columna `sex` contiene valores `NA` porque algunos animales escaparon antes de que se pudiera determinar su sexo y peso corporal. La columna resultante `mean_weight` no contiene `NA`, sino `NaN` (que se refiere a "Not a Number") porque `mean()` se llamó sobre un vector de valores `NA` mientras se configuraba `na.rm = TRUE`. Para evitar esto, podemos eliminar los valores faltantes para el peso antes de intentar calcular las estadísticas resumidas sobre el peso. Dado que los valores faltantes se eliminan primero, podemos omitir `na.rm = TRUE` al calcular la media:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  filter(!is.na(weight)) %>%
+  group_by(sex, species_id) %>%
+  summarize(mean_weight = mean(weight))
+```
+
+Aquí, nuevamente, la salida de estas llamadas ya no se desborda de la pantalla. Si deseas mostrar más datos, puedes usar la función `print()` al final de tu cadena con el argumento `n` especificando el número de filas a mostrar:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  filter(!is.na(weight)) %>%
+  group_by(sex, species_id) %>%
+  summarize(mean_weight = mean(weight)) %>%
+  print(n = 15)
+```
+
+Una vez que los datos están agrupados, también puedes resumir múltiples variables al mismo tiempo (y no necesariamente en la misma variable). Por ejemplo, podríamos agregar una columna que indique el peso mínimo de cada especie para cada sexo:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  filter(!is.na(weight)) %>%
+  group_by(sex, species_id) %>%
+  summarize(mean_weight = mean(weight),
+            min_weight = min(weight))
+```
+
+A veces es útil reorganizar el resultado de una consulta para inspeccionar los valores. Por ejemplo, podemos ordenar por `min_weight` para poner primero las especies más ligeras:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  filter(!is.na(weight)) %>%
+  group_by(sex, species_id) %>%
+  summarize(mean_weight = mean(weight),
+            min_weight = min(weight)) %>%
+  arrange(min_weight)
+```
+
+Para ordenar en orden descendente, necesitamos añadir la función `desc()`. Si queremos ordenar los resultados por el peso medio en orden decreciente:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  filter(!is.na(weight)) %>%
+  group_by(sex, species_id) %>%
+  summarize(mean_weight = mean(weight),
+            min_weight = min(weight)) %>%
+  arrange(desc(mean_weight))
+```
+
+#### Contar
+```{r, echo=FALSE, purl=TRUE}
+
+### Contar
+```
+
+Cuando trabajamos con datos, a menudo queremos saber el número de observaciones encontradas para cada factor o combinación de factores. Para esta tarea, **`dplyr`** proporciona `count()`. Por ejemplo, si quisiéramos contar el número de filas de datos para cada sexo, haríamos:
+
+
+```{r, purl=FALSE}
+surveys %>%
+    count(sex)
+```
+
+La función `count()` es una forma abreviada de algo que ya hemos visto: agrupar por una variable y resumirla contando el número de observaciones en ese grupo. En otras palabras, `surveys %>% count()` es equivalente a:
+
+
+```{r, purl=FALSE}
+surveys %>%
+    group_by(sex) %>%
+    summarize(count = n())
+```
+
+Para mayor comodidad, `count()` proporciona el argumento `sort`:
+
+
+```{r, purl=FALSE}
+surveys %>%
+    count(sex, sort = TRUE)
+```
+
+El ejemplo anterior muestra el uso de `count()` para contar el número de filas/observaciones para *un* factor (es decir, `sex`). 
+Si quisiéramos contar *combinaciones de factores*, como `sex` y `species`, especificaríamos el primer y el segundo factor como los argumentos de `count()`:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  count(sex, species)
+```
+
+Con el código anterior, podemos proceder con `arrange()` para ordenar la tabla de acuerdo con varios criterios, de modo que tengamos una mejor comparación. Por ejemplo, podríamos querer organizar la tabla anterior en (i) un orden alfabético de los niveles de las especies y (ii) en orden descendente del conteo:
+
+
+```{r, purl=FALSE}
+surveys %>%
+  count(sex, species) %>%
+  arrange(species, desc(n))
+```
+A partir de la tabla anterior, podemos aprender que, por ejemplo, hay 75 observaciones de la especie *albigula* cuyo sexo no está especificado (es decir, `NA`).
+
+:::::::::::::::::::::::::::::::::::::::  desafío
+
+### Desafío {.challenge}
+
+1. ¿Cuántos animales fueron capturados en cada `plot_type` encuestado?
+
+:::::::: solución
+
+```{r, answer=TRUE, purl=FALSE}
+surveys %>%
+    count(plot_type)
+```
+
+:::::::::::::::::
+
+2. Utiliza `group_by()` y `summarize()` para encontrar la media, el mínimo y el máximo de la longitud del pie trasero para cada especie (utilizando `species_id`). También agrega el número de observaciones (sugerencia: consulta `?n`).
+
+
+:::::::: solución
+
+```{r, answer=TRUE, purl=FALSE}
+surveys %>%
+    filter(!is.na(hindfoot_length)) %>%
+    group_by(species_id) %>%
+    summarize(
+        mean_hindfoot_length = mean(hindfoot_length),
+        min_hindfoot_length = min(hindfoot_length),
+        max_hindfoot_length = max(hindfoot_length),
+        n = n()
+    )
+```
+
+:::::::::::::::::
+
+3. ¿Cuál fue el animal más pesado medido en cada año? Devuelve las columnas `year`, `genus`, `species_id` y `weight`.
+
+:::::::: solución
+
+
+```{r, answer=TRUE, purl=FALSE}
+surveys %>%
+    filter(!is.na(weight)) %>%
+    group_by(year) %>%
+    filter(weight == max(weight)) %>%
+    select(year, genus, species, weight) %>%
+    arrange(year)
+```
+
+:::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+## Desafíos de conteo:
+##  1. ¿Cuántos animales fueron capturados en cada `plot_type` encuestado?
+
+##  2. Usa `group_by()` y `summarize()` para encontrar la media, el mínimo y el máximo
+## de la longitud del pie trasero para cada especie (usando `species_id`). También añade el número de
+## observaciones (sugerencia: consulta `?n`).
+
+##  3. ¿Cuál fue el animal más pesado medido en cada año? Devuelve las
+##  columnas `year`, `genus`, `species_id` y `weight`.
+
+```
+
+
+## Exportando datos
+```{r, echo=FALSE, purl=TRUE}
+
+### Exportando datos
+```
+
+Ahora que has aprendido a usar **`dplyr`** para extraer información o resumir tus datos sin procesar, es posible que desees exportar estos nuevos conjuntos de datos para compartirlos con tus colaboradores o para archivarlos.
+
+De manera similar a la función `read.csv()` que se utiliza para leer archivos CSV en R, existe una función `write.csv()` que genera archivos CSV a partir de marcos de datos.
+
+Para este taller, vamos a guardar las cosas en la misma carpeta: `data`, pero recuerda que es una buena práctica mantenerlos por separado. Idealmente, deberías crear una carpeta `data_raw` que solo contenga los datos sin procesar y sin alterar. De modo que, incluso si los archivos que contiene son eliminados, siempre podamos regenerarlos.
+
+Cuando estés listo para guardar un conjunto de datos, usaremos `write.csv()`, que solo tiene 2 argumentos obligatorios:  
+- El objeto de datos que queremos guardar  
+- Dónde queremos guardarlo (utilizando rutas de archivos completas o relativas)
+
+Tomemos nuestro último resultado y guardémoslo como un objeto, luego escríbelo en un CSV:
+```r
+surveys_max_wt <- surveys %>%
+    filter(!is.na(weight)) %>%
+    group_by(year) %>%
+    filter(weight == max(weight)) %>%
+    select(year, genus, species, weight) %>%
+    arrange(year)
+
+write.csv(surveys_max_wt,'data/portal_surveys_max_wt.csv')
+
+```
+### Desafío final *juntos*
+
+En preparación para nuestra próxima lección sobre gráficos, vamos a utilizar una versión depurada de nuestro conjunto de datos del portal. En la lección, leeremos un conjunto de datos depurado para que todos tengan la misma copia, pero quiero mostrarte cómo se puede crear el conjunto de datos.
+
+Comencemos eliminando las observaciones de animales para los cuales faltan `weight` y `hindfoot_length`, o no se ha determinado el `sex`:
+
+```{r, purl=FALSE}
+surveys_complete <- surveys %>%
+  filter(!is.na(weight),           # remove missing weight
+         !is.na(hindfoot_length),  # remove missing hindfoot_length
+         !is.na(sex))                # remove missing sex
+```
+
+Estamos interesados en graficar **cómo han cambiado las abundancias de especies a lo largo del tiempo**, por lo que también vamos a eliminar las observaciones de especies raras (es decir, que se han observado menos de 50 veces). Haremos esto en dos pasos: primero, vamos a crear un conjunto de datos que cuente cuántas veces se ha observado cada especie, y filtraremos las especies raras; luego, extraeremos solo las observaciones de estas especies más comunes:
+
+
+```{r purl=T}
+# Estamos interesados en graficar **cómo han cambiado las abundancias de especies a lo largo del tiempo**, 
+# por lo que también vamos a eliminar las observaciones de especies raras (es decir, que se han observado 
+# menos de 50 veces). Haremos esto en dos pasos: primero, vamos a crear un conjunto de datos que cuente 
+# cuántas veces se ha observado cada especie, y filtraremos las especies raras; luego, extraeremos solo 
+# las observaciones de estas especies más comunes:
+
+```
+
+
+```{r, purl=TRUE}
+## Extract the most common species_id
+species_counts <- surveys_complete %>%
+    count(species_id) %>%
+    filter(n >= 50)
+
+## Only keep the most common species
+surveys_complete <- surveys_complete %>%
+  filter(species_id %in% species_counts$species_id)
+```
+
+```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+### Create the dataset for exporting:
+##  Start by removing observations for which the `species_id`, `weight`,
+##  `hindfoot_length`, or `sex` data are missing:
+surveys_complete <- surveys %>%
+    filter(species_id != "",        # remove missing species_id
+           !is.na(weight),                 # remove missing weight
+           !is.na(hindfoot_length),        # remove missing hindfoot_length
+           sex != "")                      # remove missing sex
+
+##  Now remove rare species in two steps. First, make a list of species which
+##  appear at least 50 times in our dataset:
+species_counts <- surveys_complete %>%
+    count(species_id) %>%
+    filter(n >= 50) %>%
+    select(species_id)
+
+##  Second, keep only those species:
+surveys_complete <- surveys_complete %>%
+    filter(species_id %in% species_counts$species_id)
+```
+
+Ahora que nuestro conjunto de datos está listo, podríamos guardarlo como un archivo CSV en nuestra carpeta `data`.
+
+```{r, purl=T, eval=FALSE}
+write.csv(surveys_complete, file = "data/portal_surveys_complete.csv")
+```
+
+
+::::::::::::::::::::::::::::::::::::: puntosclave
+
+- Usa el paquete `dplyr` para manipular marcos de datos.
+- Usa `select()` para elegir variables de un marco de datos.
+- Usa `filter()` para seleccionar datos basados en valores.
+- Usa `mutate()` para crear nuevas variables.
+- Usa `group_by()` y `summarize()` para trabajar con subconjuntos de datos.
+
+
+::::::::::::::::::::::::::::::::::::::::::::::::

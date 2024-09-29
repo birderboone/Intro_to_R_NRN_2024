@@ -1,0 +1,553 @@
+---
+title: ## Comenzando con Datos
+author: Data Carpentry contributors
+minutes: 45
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+```{r, echo=FALSE, purl=FALSE, message=FALSE}
+#source("setup.R")
+knitr::opts_chunk$set(results='hide', # fig.path='img/R-ecology-',
+                      comment = "#>", purl = FALSE)
+```
+```{r,echo=FALSE, purl=TRUE}
+################################################
+# Lesson 02 - ## Comenzando con Datos
+################################################
+
+
+
+
+
+```
+::::::::::::::::::::::::::::::::::::::: objetivos
+-   Cargar datos externos desde un archivo .csv en un data frame.
+-   Instalar y cargar paquetes.
+-   Describir qué es un data frame.
+-   Resumir el contenido de un data frame.
+-   Usar indexación para subestimar partes específicas de los data frames.
+-   Describir qué es un factor.
+-   Convertir entre cadenas y factores.
+-   Reordenar y renombrar factores.
+-   Cambiar cómo se manejan las cadenas de caracteres en un data frame.
+-   Formatear fechas.
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::: preguntas
+-   ¿Qué es un data.frame?
+-   ¿Cómo puedo leer un archivo csv completo en R?
+-   ¿Cómo puedo obtener información básica de resumen sobre mi conjunto de datos?
+-   ¿Cómo puedo extraer información específica de un data frame?
+-   ¿Qué son los factores y cómo son diferentes de otros tipos de datos?
+-   ¿Cómo puedo renombrar factores?
+-   ¿Cómo se representan las fechas en R y cómo puedo cambiar el formato?
+:::::::::::::::::::::::::::::::::::::::::::::::::::
+
+## Cargando los datos de la encuesta
+
+```{r, echo=FALSE, purl=TRUE}
+### Cargando los datos de la encuesta
+```
+
+Estamos investigando la diversidad de especies animales y los pesos encontrados dentro de parcelas en nuestro sitio de estudio. El conjunto de datos se almacena como un archivo de valores separados por comas (CSV). Cada fila contiene información sobre un único animal, y las columnas representan:
+
+| Columna         | Descripción                                   |
+|-----------------|-----------------------------------------------|
+| record_id       | ID único para la observación                  |
+| month           | mes de la observación                         |
+| day             | día de la observación                         |
+| year            | año de la observación                         |
+| plot_id         | ID de una parcela experimental particular      |
+| species_id      | código de 2 letras                            |
+| sex             | sexo del animal ("M", "F")                    |
+| hindfoot_length | longitud del pie trasero en mm                |
+| weight          | peso del animal en gramos                     |
+| genus           | género del animal                             |
+| species         | especie del animal                            |
+| taxon           | p.ej. Roedor, Reptil, Ave, Conejo            |
+| plot_type       | tipo de parcela                               |
+
+### Cargando los datos
+
+Creamos la carpeta que almacenará los datos descargados (`data`) en el capítulo ["Antes de empezar"](https://datacarpentry.org/R-ecology-lesson/00-before-we-start.html#Organizing_your_working_directory). Si te saltaste esa parte, puede ser una buena idea revisarla ahora, para asegurarte de que tu directorio de trabajo esté configurado correctamente.
+
+Vamos a utilizar la función de R `read.csv()` para cargar el contenido del archivo CSV en R.
+
+**\<note>** verifica aquí que todos tengan este archivo si prefieres usar el método de descarga 
+
+```{r echo=F,purl=F}
+download.file(url = "https://ndownloader.figshare.com/files/2292169",
+              destfile = "data/portal_data_joined.csv")
+```
+
+O cárgalo a través del paquete ratdat
+
+```{r}
+library(ratdat)
+complete_old
+```
+**\</note>**
+
+
+### Leyendo los datos en R
+```{r, echo=FALSE, purl=TRUE}
+### Leyendo los datos en R
+```
+
+El archivo ahora ha sido descargado en el destino que especificaste, pero R aún no ha cargado los datos del archivo en la memoria. Para hacer esto, podemos usar la función `read.csv()`.
+
+
+
+```{r, purl=TRUE}
+surveys <- read.csv("data/portal_data_joined.csv")
+str(surveys)
+```
+
+Cuando ejecutas `read.csv` en un archivo de datos, busca a través de las primeras 1000 filas de cada columna y adivina su tipo de dato. Por ejemplo, en este conjunto de datos, `read.csv()` lee `weight` como `integer` (un tipo de dato numérico) y `species` como `character`. Tienes la opción de especificar el tipo de dato para una columna manualmente usando el argumento `colClasses` en `read.csv`.
+
+
+::: callout
+### Read CSV
+```{r, echo=FALSE, purl=TRUE}
+### Read CSV
+```
+
+`read.csv()` asume que los campos están delimitados por comas. Sin embargo, en varios países, la coma se utiliza como separador decimal y el punto y coma (;) se utiliza como delimitador de campo. Si deseas leer archivos con otras estructuras, consulta `?read.table` para más información.
+
+**\<nota>** Puedes omitir la siguiente sección en clase, pero déjala en las notas para que otros la lean más tarde.
+
+Además de las versiones anteriores del formato csv, debes desarrollar el hábito de observar y registrar algunos parámetros de tus archivos csv. Por ejemplo, la codificación de caracteres, los caracteres de control utilizados para el final de línea, el formato de fecha (si la fecha no está dividida en tres variables), y la presencia de [nuevas líneas](https://en.wikipedia.org/wiki/Newline) inesperadas son características importantes de tus archivos de datos. Estos parámetros facilitarán el paso de importación de tus datos en R.
+:::
+**\</nota>**
+
+Podemos ver el contenido de las primeras líneas de los datos escribiendo su nombre: `surveys`. Por defecto, esto te mostrará tantas filas y columnas de los datos como quepan en tu pantalla. Si deseas las primeras 50 filas, puedes escribir `print(surveys, n = 50)`.
+
+También podemos extraer las primeras líneas de estos datos utilizando la función `head()`: 
+
+
+```{r, results="show", purl=FALSE}
+head(surveys)
+```
+
+A diferencia de la función `print()`, `head()` devuelve los datos extraídos. Puedes usarla para asignar las primeras 100 filas de `surveys` a un objeto utilizando `surveys_sample <- head(surveys, 100)`. Esto puede ser útil si deseas probar cálculos complejos en un subconjunto de tus datos antes de aplicarlos a todo el conjunto de datos. Hay una función similar que te permite extraer las últimas líneas del conjunto de datos. Se llama (como podrías haber adivinado) `tail()`.
+
+Para abrir el conjunto de datos en el Visor de Datos de RStudio, utiliza la función `view()`, o simplemente haz clic en el símbolo de hoja de cálculo en el panel de Entorno:
+
+
+```{r, eval=FALSE, purl=FALSE}
+view(surveys)
+```
+
+
+## ¿Qué son los data frames?
+```{r, echo=FALSE, purl=TRUE}
+### Data frames
+```
+
+Cuando cargamos los datos en R, se almacenaron como un objeto de clase `data frame`. Los data frames son la estructura de datos *de facto* para la mayoría de los datos tabulares y lo que utilizamos para estadísticas y gráficos. Los data frames pueden ser creados a mano, pero más comúnmente son generados por funciones como `read.csv()`; en otras palabras, al importar hojas de cálculo desde su disco duro o la web.
+
+Un data frame es la representación de datos en el formato de una tabla donde las columnas son vectores que todos tienen la misma longitud. Debido a que las columnas son vectores, cada columna debe contener un único tipo de datos (por ejemplo, caracteres, enteros, factores). Por ejemplo, aquí hay una figura que representa un data frame que comprende un vector numérico, un vector de caracteres y un vector lógico.
+
+![](./fig/data-frame.svg)
+
+
+También podemos ver esto al inspeccionar la <b>str</b>uctura de un data frame con la función `str()`:
+
+
+```{r, purl=FALSE}
+str(surveys)
+```
+
+Esta información también se puede ver al mirar en el marco del entorno de RStudio y haciendo clic en el botón de flecha. También puedes abrir y ver el data.frame haciendo clic en el ícono de hoja de cálculo.
+
+## Inspeccionando data frames
+
+Ya vimos cómo las funciones `head()` y `str()` pueden ser útiles para verificar el contenido y la estructura de un data frame. Aquí hay una lista no exhaustiva de funciones para tener una idea del contenido/estructura de los datos. ¡Intentémoslas!
+
+-   Tamaño:
+
+    -   `dim(surveys)` - devuelve un vector con el número de filas en el primer elemento y el número de columnas como el segundo elemento (las **dim**ensiones del objeto)
+    -   `nrow(surveys)` - devuelve el número de filas
+    -   `ncol(surveys)` - devuelve el número de columnas
+
+-   Contenido:
+
+    -   `head(surveys)` - muestra las primeras 6 filas
+    -   `tail(surveys)` - muestra las últimas 6 filas
+
+-   Nombres:
+
+    -   `names(surveys)` - devuelve los nombres de las columnas (sinónimo de `colnames()` para objetos `data.frame`)
+    -   `rownames(surveys)` - devuelve los nombres de las filas
+
+-   Resumen:
+
+    -   `str(surveys)` - estructura del objeto e información sobre la clase, longitud y contenido de cada columna
+    -   `summary(surveys)` - estadísticas resumidas para cada columna
+
+Nota: la mayoría de estas funciones son "genéricas", pueden ser utilizadas en otros tipos de objetos además de `data.frame`.
+```{r, echo=F,purl=T}
+##################################
+# Funciones para inspeccionar data.frames
+##################################
+#-   Tamaño:
+#
+#    -   `dim(surveys)` - devuelve un vector con el número de filas en el
+#        primer elemento y el número de columnas como el segundo elemento
+#        (las **dim**ensiones del objeto)
+#    -   `nrow(surveys)` - devuelve el número de filas
+#     -   `ncol(surveys)` - devuelve el número de columnas
+# 
+# -   Contenido:
+# 
+#     -   `head(surveys)` - muestra las primeras 6 filas
+#     -   `tail(surveys)` - muestra las últimas 6 filas
+# 
+# -   Nombres:
+# 
+#     -   `names(surveys)` - devuelve los nombres de las columnas (sinónimo de
+#         `colnames()` para objetos `data.frame`)
+#     -   `rownames(surveys)` - devuelve los nombres de las filas
+# 
+# -   Resumen:
+# 
+#     -   `str(surveys)` - estructura del objeto e información sobre
+#         la clase, longitud y contenido de cada columna
+#     -   `summary(surveys)` - estadísticas resumidas para cada columna
+#################################
+```
+
+::: challenge
+### Desafío
+
+Basado en el resultado de `str(surveys)`, ¿puedes responder las siguientes preguntas?
+
+-   ¿Cuál es la clase del objeto `surveys`?
+-   ¿Cuántas filas y cuántas columnas tiene este objeto?
+
+
+::: solution
+```{r, answer=TRUE, results="markup", purl=FALSE}
+
+str(surveys)
+
+## * clase: data frame
+## * cuántas filas: 34,786, cuántas columnas: 13
+
+
+```
+:::
+:::
+
+```{r, echo=FALSE, purl=TRUE}
+
+## Desafío
+## Basado en el resultado de `str(surveys)`, ¿puedes responder las siguientes preguntas?
+
+## * ¿Cuál es la clase del objeto `surveys`?
+## * ¿Cuántas filas y cuántas columnas tiene este objeto?
+
+
+```
+
+## Indexación y subconjuntos de data frames
+
+```{r, echo=FALSE, purl=TRUE}
+
+## Indexación y subconjuntos de data frames
+
+```
+
+Nuestro data frame de encuestas tiene filas y columnas (tiene 2 dimensiones). Si queremos extraer datos específicos de él, necesitamos especificar las "coordenadas" que queremos. Los números de fila van primero, seguidos por los números de columna. Sin embargo, diferentes formas de especificar estas coordenadas pueden dar como resultado diferentes clases de objetos.
+
+```{r, eval=F,purl=FALSE}
+# Podemos extraer valores específicos especificando los índices de fila y columna
+# en el formato: 
+# data_frame[indice_fila, indice_columna]
+# Por ejemplo, para extraer la primera fila y columna de surveys:
+surveys[1, 1]
+
+# Primera fila, sexta columna:
+surveys[1, 6]   
+
+# También podemos usar atajos para seleccionar varias filas o columnas a la vez
+# Para seleccionar todas las columnas, dejamos el índice de la columna en blanco
+# Por ejemplo, para seleccionar todas las columnas de la primera fila:
+surveys[1, ]
+
+# El mismo atajo funciona para filas --
+# Para seleccionar la primera columna en todas las filas:
+surveys[, 1]
+
+# Una forma aún más corta de seleccionar la primera columna en todas las filas:
+surveys[1] # ¡Sin coma!
+
+# Para seleccionar varias filas o columnas, usamos vectores.
+# Para seleccionar las primeras tres filas de la 5ª y 6ª columna:
+surveys[c(1, 2, 3), c(5, 6)] 
+
+# Podemos usar el operador : para crear esos vectores por nosotros:
+surveys[1:3, 5:6] 
+
+# Esto es equivalente a head_surveys <- head(surveys)
+head_surveys <- surveys[1:6, ]
+
+# Como hemos visto, cuando trabajamos con *tibbles*
+# el subconjunto con corchetes simples ("[]") siempre devuelve un *data frame*.
+# Si quieres un vector, usa corchetes dobles ("[[]]")
+
+# Por ejemplo, para obtener la primera columna como vector:
+surveys[[1]]
+
+# Para obtener el primer valor de nuestro *data frame*:
+surveys[[1, 1]]
+
+```
+
+El operador : es una función especial que crea vectores numéricos de enteros en orden ascendente o descendente. Prueba 1:10 y 10:1, por ejemplo.
+
+También puedes excluir ciertos índices de un data frame usando el signo "-":
+
+```{r, eval=F, purl=FALSE}
+surveys[, -1]                 # Todo el data frame, excepto la primera columna
+surveys[-(7:nrow(surveys)), ] # Equivalente a head(surveys)
+
+```
+
+Los data frames pueden ser subdivididos llamando a los índices (como se mostró anteriormente), pero también llamando directamente a los nombres de las columnas:
+
+```{r, eval=FALSE, purl=FALSE}
+# Como antes, usar corchetes simples devuelve un data frame:
+surveys["species_id"]
+surveys[, "species_id"]
+
+# Los corchetes dobles devuelven un vector:
+surveys[["species_id"]]
+
+# También podemos usar el operador $ con los nombres de las columnas en lugar de corchetes dobles
+# Esto devuelve un vector:
+surveys$species_id
+
+```
+
+En RStudio, puedes usar la función de autocompletado para obtener los nombres completos y correctos de las columnas.
+
+::: desafío
+### Desafío
+
+1.  Crea un `data.frame` (`surveys_200`) que contenga solo los datos de la fila 200 del conjunto de datos `surveys`.
+
+2.  Nota cómo `nrow()` te dio el número de filas en un `data.frame`.
+
+-   Usa ese número para extraer solo la última fila del conjunto de datos `surveys`.
+-   Compara eso con lo que ves como la última fila usando `tail()` para asegurarte de que cumple con las expectativas.
+-   Extrae esa última fila usando `nrow()` en lugar del número de fila.
+-   Crea un nuevo *data frame* (`surveys_last`) a partir de esa última fila.
+
+3.  Usa `nrow()` para extraer la fila que está en el medio del *data frame*. Almacena el contenido de esta fila en un objeto llamado `surveys_middle`.
+
+4.  Combina `nrow()` con la notación `-` mencionada anteriormente para reproducir el comportamiento de `head(surveys)`, manteniendo solo las primeras seis filas del conjunto de datos `surveys`.
+
+::: solution
+```{r, answer=TRUE, purl=FALSE}
+## 1.
+surveys_200 <- surveys[200, ]
+## 2.
+# Saving `n_rows` to improve readability and reduce duplication
+n_rows <- nrow(surveys)
+surveys_last <- surveys[n_rows, ]
+## 3.
+surveys_middle <- surveys[n_rows / 2, ]
+## 4.
+surveys_head <- surveys[-(7:n_rows), ]
+```
+:::
+
+```{r, echo=FALSE, purl=TRUE}
+### Desafíos:
+###
+### 1. Crea un `data.frame` (`surveys_200`) que contenga solo los
+###    datos de la fila 200 del conjunto de datos `surveys`.
+###
+### 2. Nota cómo `nrow()` te dio el número de filas en un `data.frame`?
+###
+###      * Usa ese número para extraer solo la última fila del *data frame*.
+###      * Compara eso con lo que ves como la última fila usando `tail()` para
+###        asegurarte de que cumple con las expectativas.
+###      * Extrae esa última fila usando `nrow()` en lugar del número de fila.
+###      * Crea un nuevo objeto de *data frame* (`surveys_last`) a partir de esa última fila.
+###
+### 3. Usa `nrow()` para extraer la fila que está en el medio del
+###    *data frame*. Almacena el contenido de esta fila en un objeto llamado
+###    `surveys_middle`.
+###
+### 4. Combina `nrow()` con la notación `-` mencionada anteriormente para reproducir el comportamiento de
+###    `head(surveys)`, manteniendo solo las filas de la primera a la sexta del conjunto de datos `surveys`.
+
+```
+
+## Factores
+
+```{r, echo=FALSE, purl=TRUE}
+
+### Factores
+
+```
+
+Cuando hicimos `str(surveys)`, vimos que varias de las columnas consisten en enteros. Las columnas `genus`, `species`, `sex`, `plot_type`, ... sin embargo, son de la clase `character`. Se podría argumentar que estas columnas contienen datos categóricos, es decir, pueden tomar solo un número limitado de valores.
+
+R tiene una clase especial para trabajar con datos categóricos, llamada `factor`. Los factores son muy útiles y, de hecho, contribuyen a hacer que R sea particularmente adecuado para trabajar con datos. Así que vamos a dedicar un tiempo a introducirlos.
+
+### Una nota sobre los Factores
+
+Un factor es esencialmente un carácter, pero con dos propiedades adicionales.
+
+- Tienen valores predefinidos  
+- Estos valores tienen niveles  
+- Tienen algún orden, ya sea significativo o no  
+
+```{r, echo=F, purl=T}
+
+## Los factores tienen:
+# - Valores predefinidos  
+# - Estos valores tienen niveles.  
+# - Los valores tienen algún orden, ya sea significativo o no.
+
+```
+
+Como veremos, este tipo de datos es una mezcla de programación y necesidad científica. No existen únicamente por razones de programación y no son insignificantes desde un punto de vista científico/estadístico.
+
+**Por Ejemplo.**
+
+Supongamos que tienes 3 tratamientos: Tratamiento 1, Tratamiento 2 y Tratamiento 3, y mediste resultados después de cada tratamiento.  
+Quizás herbicidas en tres parcelas diferentes.
+
+A través de una lente científica, estas son categorías claramente distintas y deben ser tratadas por separado.
+
+No hay 4 tipos diferentes de tratamientos, solo 3. No puedes analizar el tratamiento 4 porque no existe.  
+Esto satisface los criterios uno y dos.
+
+¿Tienen algún orden?
+
+Bueno, tal vez. Si fueras a graficar estos usando un gráfico de barras, ¿en qué orden querrías que se mostraran los tratamientos?
+
+¿Tratamiento 2, Tratamiento 3, Tratamiento 1?  
+¿O  
+Tratamiento 1, Tratamiento 2, Tratamiento 3?  
+
+Obviamente, 1->2->3 es estéticamente agradable.
+
+Desde un punto de vista estadístico, ¿esto es científicamente significativo?  
+No, si realizo un ANOVA en estos, no importaría cuál fuera el primero.  
+Pero si estoy graficándolo, quiero una forma de decirle al programa cuál va primero.
+
+Ahora, en algún análisis, digamos que tienes 1 parcela y 3 tratamientos y aplicaste cada tratamiento uno a la vez y mediste algún valor después de cada tratamiento.
+
+¿Es el orden significativo en esos ejemplos? Sí.
+
+La variable 'Tratamiento' aquí es un factor. Tiene niveles predeterminados y, opcionalmente, tiene un orden para esos niveles. Ya sea significativo estadísticamente o solo estéticamente.
+
+Los factores son especiales y realmente solo existen en lenguajes de programación estadística. 
+No los verás en otros lugares porque se construyen a partir de una mezcla de necesidad estadística y de programación.
+
+Así que volvamos a lo que es un factor en R...
+
+### Volviendo a los Factores
+
+Una vez creados, los factores solo pueden contener un conjunto predefinido de valores, conocidos como *niveles*. Los factores se almacenan como enteros asociados con etiquetas y pueden ser ordenados o no ordenados. Aunque los factores parecen (y a menudo se comportan) como vectores de caracteres, en realidad son tratados como vectores enteros por R. Por lo tanto, debes tener mucho cuidado al tratarlos como cadenas.
+
+Al importar un *data frame* con `read.csv()`, las columnas que contienen texto no se convierten automáticamente en el tipo de datos `factor`, pero una vez que hemos cargado los datos, podemos hacer la conversión usando la función `factor()`.
+
+
+```{r, purl=FALSE}
+surveys$sex <- factor(surveys$sex)
+```
+
+Podemos ver que la conversión ha funcionado utilizando nuevamente la función `summary()`. Esto produce una tabla con los recuentos para cada nivel del factor:
+
+```{r, purl=FALSE}
+summary(surveys$sex)
+```
+
+::: desafío
+### Desafío
+
+1.  Hemos visto cómo se crean los *data frames* al usar `read.csv()`,
+    pero también se pueden crear manualmente con la función `data.frame()`.
+    Hay algunos errores en este *data frame* hecho a mano. ¿Puedes encontrarlos y corregirlos? ¡No dudes en experimentar!
+
+
+```{r, eval=FALSE, purl=FALSE}
+animal_data <- data.frame(
+          animal = c(dog, cat, sea cucumber, sea urchin),
+          feel = c("furry", "squishy", "spiny"),
+          weight = c(45, 8 1.1, 0.8)
+          )
+```
+
+```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+## Desafío:
+##  Hay algunos errores en este *data frame* hecho a mano,
+##  ¿puedes encontrarlos y corregirlos? ¡No dudes en experimentar!
+
+animal_data <- data.frame(
+      animal = c(dog, cat, sea cucumber, sea urchin),
+      feel = c("furry", "squishy", "spiny"),
+      weight = c(45, 8 1.1, 0.8)
+      )
+```
+
+2.  ¿Puedes predecir la clase de cada una de las columnas en el siguiente
+    ejemplo? Verifica tus suposiciones usando `str(country_climate)`:
+
+-   ¿Son lo que esperabas? ¿Por qué? ¿Por qué no?
+-   ¿Qué tendrías que cambiar para asegurarte de que cada columna tuviera el
+    tipo de datos correcto?
+
+
+```{r, eval=FALSE, purl=FALSE}
+country_climate <- data.frame(
+       country = c("Canada", "Panama", "South Africa", "Australia"),
+       climate = c("cold", "hot", "temperate", "hot/temperate"),
+       temperature = c(10, 30, 18, "15"),
+       northern_hemisphere = c(TRUE, TRUE, FALSE, "FALSE"),
+       has_kangaroo = c(FALSE, FALSE, FALSE, 1)
+       )
+```
+
+```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+## Desafío:
+##   ¿Puedes predecir la clase de cada una de las columnas en el siguiente
+##   ejemplo?
+##   Verifica tus suposiciones usando `str(country_climate)`:
+##   * ¿Son lo que esperabas? ¿Por qué? ¿Por qué no?
+##   * ¿Qué tendrías que cambiar para asegurarte de que cada columna tuviera el
+##     tipo de datos correcto?
+
+country_climate <- data.frame(country = c("Canada", "Panama", "South Africa", "Australia"),
+                               climate = c("cold", "hot", "temperate", "hot/temperate"),
+                               temperature = c(10, 30, 18, "15"),
+                               northern_hemisphere = c(TRUE, TRUE, FALSE, "FALSE"),
+                               has_kangaroo = c(FALSE, FALSE, FALSE, 1))
+```
+:::
+
+La conversión automática del tipo de dato es a veces una bendición, a veces una molestia. Ten en cuenta que existe, aprende las reglas y verifica dos veces que los datos que importas en R sean del tipo correcto dentro de tu *data frame*. Si no lo son, úsalo a tu favor para detectar errores que puedan haberse introducido durante la entrada de datos (por ejemplo, una letra en una columna que solo debería contener números).
+
+::: puntos clave
+-   Usa `read.csv` para leer datos tabulares en R.
+-   Un *data frame* es la representación de datos en el formato de una tabla donde las columnas son vectores que tienen la misma longitud.
+-   `dplyr` proporciona muchos métodos para inspeccionar y resumir datos en *data frames*.
+-   Usa factores para representar datos categóricos en R.
+-   El paquete **`lubridate`** tiene muchas funciones útiles para trabajar con fechas.
+:::
+
+
+```{r eval=F, purl=TRUE}
+### Installing the tidyverse
+# Before we move onto the next lesson I want to make sure everyone has already installed the tidyverse package
+# Run this script below if you havent already
+install.packages("tidyverse")
+```
