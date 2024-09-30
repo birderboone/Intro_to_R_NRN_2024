@@ -12,7 +12,7 @@ The second half will introduce you how to manipulate data, create summary statis
 
 To ask any follow-up questions related to the workshop or general help in R, post in the [Issues](https://github.com/birderboone/Intro_to_R-NRN-2024/issues) tab.
 
-# Before the workshop begins
+# Before the workshop begins//Antes del taller
 
 ## Install R and RStudio
 
